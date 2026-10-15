@@ -21,15 +21,27 @@ export function cls(name: string, ...siblings: string[]): string {
 /**
  * Selectores de `name` en todos los módulos que lo definen. Steam compone el mismo CSS en
  * varios paneles (Acceso rápido, Decky, ajustes...) y cada copia tiene su propio nombre.
- * `suffix` se añade a cada selector (p. ej. " *" para alcanzar los hijos).
+ * `suffix` se añade a cada selector (p. ej. " *" para alcanzar los hijos) y `siblings`
+ * limita a los módulos que también definen esas clases.
  */
-export function clsAll(name: string, suffix = ""): string {
-  const names = new Set(classMap.filter((m) => typeof m?.[name] === "string").map((m) => m[name]));
+export function clsAll(name: string, suffix = "", ...siblings: string[]): string {
+  return clsList(name, ...siblings)
+    .map((c) => c + suffix)
+    .join(", ");
+}
+
+/** Como `clsAll`, pero como lista de selectores sueltos para combinarlos entre sí. */
+export function clsList(name: string, ...siblings: string[]): string[] {
+  const names = new Set(
+    classMap
+      .filter((m) => typeof m?.[name] === "string" && siblings.every((s) => typeof m[s] === "string"))
+      .map((m) => m[name]),
+  );
   if (names.size === 0) {
     missing.add(name);
-    return ".vd-missing";
+    return [".vd-missing"];
   }
-  return [...names].map((n) => `.${n}${suffix}`).join(", ");
+  return [...names].map((n) => `.${n}`);
 }
 
 /** Clases que no se encontraron (útil para detectar roturas tras una actualización de Steam). */

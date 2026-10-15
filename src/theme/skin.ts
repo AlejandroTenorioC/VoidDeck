@@ -4,6 +4,7 @@ import { statusDotsCss } from "../steam/statusDots";
 import { fontsCss } from "./fonts";
 import { footerCss } from "./footer";
 import { libraryCss } from "./library";
+import { mainMenuCss } from "./mainMenu";
 import { quickAccessCss } from "./quickAccess";
 import { tokensCss, type Theme } from "./tokens";
 
@@ -36,6 +37,9 @@ ${cls("Clock", "HeaderItem")}, ${cls("Percentage")} {
 
 /* Pistas de controles de la barra inferior */
 ${footerCss()}
+
+/* Menú principal (botón STEAM) */
+${mainMenuCss()}
 
 /* Acceso rápido */
 ${quickAccessCss()}
