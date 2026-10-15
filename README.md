@@ -62,6 +62,11 @@ working.
 > Void Deck is an independent project, not affiliated with Valve or Steam. Steam changes its interface often:
 > after an update, some screen may look half-styled until a new version of the plugin is released.
 
+## How it was made
+
+Void Deck was developed with AI assistance (Claude). The design, direction and every release are mine: as a
+software engineer, I test each change on my own Steam Deck and review the code before it ships.
+
 ## License
 
 [GPL-3.0](LICENSE). The bundled typefaces (Doto, Space Grotesk and Space Mono) are distributed under the
