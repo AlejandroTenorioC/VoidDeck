@@ -11,6 +11,7 @@ const ctx = await esbuild.context({
   outdir: here("./public/build"),
   format: "esm",
   jsx: "automatic",
+  loader: { ".woff2": "dataurl" },
   sourcemap: true,
   alias: {
     "@decky/ui": here("./stubs/decky-ui.tsx"),

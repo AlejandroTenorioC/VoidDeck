@@ -3,6 +3,12 @@ import type { ReactNode } from "react";
 
 export const staticClasses = { Title: "stub-title" } as Record<string, string>;
 
+// En el preview no hay clases minificadas: cada nombre se traduce a sí mismo.
+const identity = new Proxy({}, { get: (_t, name) => (typeof name === "string" ? name : undefined) });
+export function findClassModule(filter: (m: any) => boolean): Record<string, string> | void {
+  return filter(identity) ? (identity as Record<string, string>) : undefined;
+}
+
 export function PanelSection(props: { title?: string; children?: ReactNode }) {
   return (
     <section className="stub-section">
