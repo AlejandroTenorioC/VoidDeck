@@ -2,6 +2,11 @@
 export const homeCss = `
 .vd-home-viewport { position: absolute; inset: 0; overflow: hidden; background: var(--vd-bg, #000); }
 .vd-home-viewport { overflow: clip; }
+/* Franja bajo la barra superior de Steam (40 px CSS): el contenido desplazado se funde en negro. */
+.vd-home-viewport::after {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 48px; z-index: 1; pointer-events: none;
+  background: linear-gradient(var(--vd-bg) 75%, transparent);
+}
 .vd-home { width: 1280px; overflow: clip; color: var(--vd-ink); font-family: var(--vd-font-sans); }
 .vd-scroll { transition: transform 320ms cubic-bezier(.2, .7, .2, 1); will-change: transform; }
 

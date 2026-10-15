@@ -12,6 +12,8 @@ import { homeCss } from "./homeCss";
 
 const DESIGN_WIDTH = 1280;
 const SHELF_SIZE = 7;
+// Espacio sobre la fila enfocada al desplazarse: barra de Steam (60) + título de sección y aire.
+const ROW_TOP_SPACE = 136;
 
 const TABS: { label: string; go?: () => void }[] = [
   { label: "Inicio" },
@@ -126,7 +128,7 @@ function useScroller(viewport: RefObject<HTMLDivElement>, content: RefObject<HTM
   const scroller = useMemo(
     () => ({
       toTop: () => setOffset(0),
-      /** Centra el elemento en la ventana sin pasarse de los bordes del contenido. */
+      /** Sube la fila del elemento hasta justo debajo de la barra superior y del título de sección. */
       reveal: (el: HTMLElement) => {
         const view = viewport.current?.clientHeight ?? 0;
         const max = Math.max(0, (content.current?.offsetHeight ?? 0) - view);
@@ -134,7 +136,7 @@ function useScroller(viewport: RefObject<HTMLDivElement>, content: RefObject<HTM
         for (let n: HTMLElement | null = el; n && n !== content.current; n = n.offsetParent as HTMLElement | null) {
           top += n.offsetTop;
         }
-        setOffset(Math.min(max, Math.max(0, top + el.offsetHeight / 2 - view / 2)));
+        setOffset(Math.min(max, Math.max(0, top - ROW_TOP_SPACE)));
       },
     }),
     [viewport, content],

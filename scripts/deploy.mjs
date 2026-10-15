@@ -1,8 +1,7 @@
 // Compila y copia el plugin a la Steam Deck por SSH, luego reinicia Decky.
 // Configuración en .env.deck (ver .env.deck.example). Con `pnpm deck:setup` hecho, no pide contraseña.
 import { execSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
-import { join } from "node:path";
+import { pluginName, stagePlugin } from "./bundle.mjs";
 import { deckConfig, root, sshOptions } from "./deck.mjs";
 
 const run = (cmd) => execSync(cmd, { stdio: "inherit", cwd: root });
@@ -17,7 +16,7 @@ const succeeds = (cmd) => {
 
 const cfg = deckConfig();
 const { target, port, user } = cfg;
-const { name } = JSON.parse(readFileSync(join(root, "plugin.json"), "utf8"));
+const name = pluginName();
 const staging = `/home/${user}/.cache/voiddeck-deploy`;
 const pluginDir = `/home/${user}/homebrew/plugins/${name}`;
 
@@ -31,12 +30,7 @@ console.log("→ Compilando");
 run("pnpm build");
 
 console.log("→ Preparando paquete");
-const out = join(root, "out", name);
-rmSync(join(root, "out"), { recursive: true, force: true });
-mkdirSync(out, { recursive: true });
-for (const f of ["dist", "plugin.json", "package.json", "main.py", "LICENSE", "README.md"]) {
-  if (existsSync(join(root, f))) cpSync(join(root, f), join(out, f), { recursive: true });
-}
+const out = stagePlugin();
 
 console.log(`→ Copiando a ${target}`);
 run(`${ssh} ${target} "rm -rf ${staging} && mkdir -p ${staging}"`);

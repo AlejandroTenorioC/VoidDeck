@@ -11,7 +11,8 @@
     "preview": "node preview/server.mjs",
     "deck": "node scripts/deploy.mjs",
     "deck:setup": "node scripts/deck-setup.mjs",
-    "deck:log": "node scripts/deck-log.mjs"
+    "deck:log": "node scripts/deck-log.mjs",
+    "package": "node scripts/package.mjs"
   },
   "devDependencies": {
     "@decky/rollup": "^1.0.2",
@@ -38,5 +39,11 @@
         "react-dom"
       ]
     }
+  },
+  "license": "GPL-3.0-only",
+  "packageManager": "pnpm@12.11.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlejandroTenorioC/VoidDeck"
   }
 }
