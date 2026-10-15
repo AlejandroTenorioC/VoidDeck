@@ -1,5 +1,6 @@
 // CSS de la capa 1: aplica los tokens de Void Deck sobre las clases de Steam.
 import { cls } from "../steam/classes";
+import { statusDotsCss } from "../steam/statusDots";
 import { fontsCss } from "./fonts";
 import { tokensCss, type Theme } from "./tokens";
 
@@ -29,6 +30,9 @@ ${cls("Clock", "HeaderItem")}, ${cls("Percentage")} {
   font-family: var(--vd-font-dot) !important;
   font-weight: 800 !important;
 }
+
+/* Wifi y batería como medidores de puntos */
+${statusDotsCss()}
 
 /* Etiquetas y pistas de controles en monoespaciada */
 ${cls("Tab")}, ${cls("ActionButtonLabel")} {
