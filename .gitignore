@@ -1,0 +1,11 @@
+node_modules/
+dist/
+out/
+preview/public/build/
+*.zip
+
+# Configuración local del despliegue (IP de la Deck, usuario)
+.env.deck
+
+.DS_Store
+Thumbs.db

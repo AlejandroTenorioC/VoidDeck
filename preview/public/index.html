@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Void Deck · preview</title>
+  <!-- Solo en el preview; en la Deck las fuentes irán empaquetadas con el plugin. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Doto:wght@400;800&family=Space+Grotesk:wght@400;500&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="preview.css">
+</head>
+<body>
+  <div id="screen"></div>
+  <script type="module" src="build/main.js"></script>
+  <script>new EventSource("/esbuild").addEventListener("change", () => location.reload());</script>
+</body>
+</html>

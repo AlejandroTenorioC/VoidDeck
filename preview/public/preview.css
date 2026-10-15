@@ -1,0 +1,46 @@
+/* Marco del preview: imita la pantalla de la Deck (1280×800). No se empaqueta en el plugin. */
+html, body { margin: 0; height: 100%; background: #202020; }
+body { display: grid; place-items: center; font-family: system-ui, sans-serif; }
+
+#screen {
+  position: relative; width: 1280px; height: 800px; overflow: hidden;
+  background: var(--vd-bg, #0e141b); color: var(--vd-ink, #fff);
+  font-family: var(--vd-font-sans, system-ui);
+  outline: 1px solid #444;
+}
+
+/* Menú de Acceso rápido simulado */
+.qam {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 440px; box-sizing: border-box;
+  display: flex; flex-direction: column;
+  background: var(--vd-surface, #23262e);
+}
+.qam-title { padding: 24px 24px 8px; font-size: 24px; font-weight: 500; }
+.qam-body { flex: 1; overflow-y: auto; }
+
+/* Stubs de @decky/ui */
+.stub-section { padding: 8px 24px 16px; }
+.stub-section-title {
+  font: 14px/16px var(--vd-font-mono, monospace); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--vd-ink-muted, #aaa); padding: 8px 0;
+}
+.stub-row { padding: 4px 0; }
+.stub-toggle {
+  all: unset; box-sizing: border-box; width: 100%; display: flex; align-items: center; gap: 16px;
+  padding: 12px 16px; border-radius: var(--vd-radius-sm, 4px); cursor: pointer;
+}
+.stub-toggle:focus-visible { background: var(--vd-surface-raised, #3d4450); box-shadow: var(--vd-focus-ring, 0 0 0 2px #fff); }
+.stub-toggle[aria-disabled="true"] { opacity: .4; }
+.stub-toggle-text { flex: 1; }
+.stub-toggle-label { font-size: 16px; }
+.stub-toggle-desc { font-size: 14px; color: var(--vd-ink-muted, #aaa); margin-top: 4px; }
+.stub-switch {
+  width: 44px; height: 24px; border-radius: 999px; flex: none; position: relative;
+  border: 1.5px solid var(--vd-line-strong, #888); box-sizing: border-box;
+}
+.stub-switch::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 15px; height: 15px; border-radius: 50%;
+  background: var(--vd-line-strong, #888); transition: transform 150ms ease;
+}
+.stub-switch.is-on { background: var(--vd-ink, #fff); border-color: var(--vd-ink, #fff); }
+.stub-switch.is-on::after { transform: translateX(20px); background: var(--vd-on-ink, #000); }

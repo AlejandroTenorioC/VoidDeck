@@ -1,0 +1,11 @@
+{
+  "name": "VoidDeck",
+  "author": "AlejandroTenorioC",
+  "flags": [],
+  "api_version": 1,
+  "publish": {
+    "tags": ["theme", "ui", "home"],
+    "description": "Void Deck: una interfaz de puntos, luz y vacío para la Steam Deck.",
+    "image": ""
+  }
+}
