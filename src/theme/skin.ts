@@ -8,8 +8,9 @@ export function skinCss(theme: Theme): string {
 ${fontsCss}
 ${tokensCss(theme)}
 
-/* Tipografía: Space Grotesk para todo el texto */
-body, body * { font-family: var(--vd-font-sans) !important; }
+/* Tipografía: Space Grotesk para todo el texto (las pantallas propias gestionan la suya) */
+/* :where() deja la regla sin especificidad para que las reglas concretas (reloj, etiquetas) ganen */
+:where(body, body *:not(.vd-home-viewport *)) { font-family: var(--vd-font-sans) !important; }
 
 /* Vacío primero: fondo negro puro */
 body, ${cls("BasicUiRoot")}, ${cls("BasicHome")} {

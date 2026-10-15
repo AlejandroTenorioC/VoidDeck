@@ -1,20 +1,30 @@
-// Versión mínima de @decky/api para el preview: el CSS "de Steam" se inyecta en esta página.
-import type { DefinePluginFn } from "@decky/api/dist/types";
+// Versión mínima de @decky/api para el preview.
+import type { DefinePluginFn, RoutePatch } from "@decky/api/dist/types";
 
 export const definePlugin = (fn: DefinePluginFn) => fn;
 
-const styles = new Map<string, HTMLStyleElement>();
+// El preview muestra la pantalla de Inicio cuando hay un parche registrado en su ruta.
+const patches = new Map<string, Set<RoutePatch>>();
+const listeners = new Set<() => void>();
 
-export function injectCssIntoTab(tab: string, css: string): string {
-  const el = document.createElement("style");
-  el.dataset.tab = tab;
-  el.textContent = css;
-  document.head.appendChild(el);
-  styles.set(css, el);
-  return css;
+export const routerHook = {
+  addPatch(path: string, patch: RoutePatch) {
+    if (!patches.has(path)) patches.set(path, new Set());
+    patches.get(path)!.add(patch);
+    listeners.forEach((l) => l());
+    return patch;
+  },
+  removePatch(path: string, patch: RoutePatch) {
+    patches.get(path)?.delete(patch);
+    listeners.forEach((l) => l());
+  },
+};
+
+export function previewRoute(path: string): RoutePatch[] {
+  return [...(patches.get(path) ?? [])];
 }
 
-export function removeCssFromTab(_tab: string, css: string): void {
-  styles.get(css)?.remove();
-  styles.delete(css);
+export function onRoutesChange(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
 }

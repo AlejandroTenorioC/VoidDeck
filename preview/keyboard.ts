@@ -1,5 +1,5 @@
 // Mando simulado con teclado: flechas = D-pad, Enter = A.
-const FOCUSABLE = "button, [tabindex]:not([tabindex='-1'])";
+const FOCUSABLE = "button, [tabindex='0']";
 
 function move(step: 1 | -1) {
   const items = Array.from(document.querySelectorAll<HTMLElement>(FOCUSABLE));

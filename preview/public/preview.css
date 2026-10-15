@@ -9,9 +9,19 @@ body { display: grid; place-items: center; font-family: system-ui, sans-serif; }
   outline: 1px solid #444;
 }
 
+/* Cabecera y pie de Steam simulados (en la Deck los pone Steam por encima de la ruta) */
+.steam-header, .steam-footer { position: absolute; left: 0; right: 0; z-index: 1; }
+.steam-header { top: 0; height: 60px; }
+.steam-footer {
+  bottom: 0; height: 60px; display: flex; align-items: center; justify-content: flex-end; padding: 0 32px;
+  border-top: 1px solid var(--vd-line, #333); background: var(--vd-bg, #000); color: var(--vd-ink-muted, #999);
+  font: 13px/1 var(--vd-font-mono, monospace); letter-spacing: .08em;
+}
+.steam-home { display: grid; place-items: center; height: 100%; color: #888; }
+
 /* Menú de Acceso rápido simulado */
 .qam {
-  position: absolute; top: 0; right: 0; bottom: 0; width: 440px; box-sizing: border-box;
+  position: absolute; top: 0; right: 0; bottom: 0; width: 440px; box-sizing: border-box; z-index: 2;
   display: flex; flex-direction: column;
   background: var(--vd-surface, #23262e);
 }

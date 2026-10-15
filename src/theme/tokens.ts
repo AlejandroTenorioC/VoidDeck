@@ -57,7 +57,7 @@ const declare = (vars: Record<string, string>) =>
     .map(([name, value]) => `--vd-${name}: ${value};`)
     .join(" ");
 
-/** Bloque `:root { ... }` con todas las variables `--vd-*` del tema dado. */
-export function tokensCss(theme: Theme): string {
-  return `:root { ${declare(colors[theme])} ${declare(scale)} }`;
+/** Bloque `selector { ... }` con todas las variables `--vd-*` del tema dado. */
+export function tokensCss(theme: Theme, selector = ":root"): string {
+  return `${selector} { ${declare(colors[theme])} ${declare(scale)} }`;
 }

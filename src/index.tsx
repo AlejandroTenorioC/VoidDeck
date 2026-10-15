@@ -1,5 +1,6 @@
 import { definePlugin } from "@decky/api";
 import { staticClasses } from "@decky/ui";
+import { disableHome, enableHome } from "./home";
 import { Panel } from "./qam/Panel";
 import { applySkin, removeSkin } from "./skin";
 
@@ -22,6 +23,7 @@ function VoidIcon() {
 
 export default definePlugin(() => {
   applySkin("dark");
+  enableHome();
 
   return {
     name: "Void Deck",
@@ -29,6 +31,7 @@ export default definePlugin(() => {
     content: <Panel />,
     icon: <VoidIcon />,
     onDismount() {
+      disableHome();
       removeSkin();
     },
   };
