@@ -1,2 +1,8 @@
 allowBuilds:
   esbuild: true
+
+# Decky aporta React en tiempo de ejecución: no es una dependencia que instalar.
+peerDependencyRules:
+  ignoreMissing:
+    - react
+    - react-dom
