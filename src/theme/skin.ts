@@ -2,6 +2,8 @@
 import { cls } from "../steam/classes";
 import { statusDotsCss } from "../steam/statusDots";
 import { fontsCss } from "./fonts";
+import { footerCss } from "./footer";
+import { libraryCss } from "./library";
 import { tokensCss, type Theme } from "./tokens";
 
 export function skinCss(theme: Theme): string {
@@ -30,6 +32,12 @@ ${cls("Clock", "HeaderItem")}, ${cls("Percentage")} {
   font-family: var(--vd-font-dot) !important;
   font-weight: 800 !important;
 }
+
+/* Pistas de controles de la barra inferior */
+${footerCss()}
+
+/* Biblioteca y páginas con pestañas */
+${libraryCss()}
 
 /* Wifi y batería como medidores de puntos */
 ${statusDotsCss()}
