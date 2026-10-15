@@ -21,7 +21,14 @@ jobs:
           node-version: 24
           cache: pnpm
 
-      - run: pnpm install --frozen-lockfile
+      # Si falla, el final del registro queda como anotación (visible sin abrir el registro completo).
+      - name: Instalar dependencias
+        run: |
+          pnpm install --frozen-lockfile > install.log 2>&1 || {
+            cat install.log
+            echo "::error title=pnpm install::$(tail -n 25 install.log | tr '\n' ' ')"
+            exit 1
+          }
 
       - name: Comprobar que la etiqueta coincide con package.json
         run: |
