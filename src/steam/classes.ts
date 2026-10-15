@@ -1,6 +1,6 @@
 // Traduce nombres legibles de clases de Steam a sus versiones minificadas.
 // Steam las regenera en cada actualización, así que nunca se escriben a mano.
-import { findClassModule } from "@decky/ui";
+import { classMap, findClassModule } from "@decky/ui";
 
 const missing = new Set<string>();
 
@@ -16,6 +16,20 @@ export function cls(name: string, ...siblings: string[]): string {
     return ".vd-missing";
   }
   return "." + mod[name];
+}
+
+/**
+ * Selectores de `name` en todos los módulos que lo definen. Steam compone el mismo CSS en
+ * varios paneles (Acceso rápido, Decky, ajustes...) y cada copia tiene su propio nombre.
+ * `suffix` se añade a cada selector (p. ej. " *" para alcanzar los hijos).
+ */
+export function clsAll(name: string, suffix = ""): string {
+  const names = new Set(classMap.filter((m) => typeof m?.[name] === "string").map((m) => m[name]));
+  if (names.size === 0) {
+    missing.add(name);
+    return ".vd-missing";
+  }
+  return [...names].map((n) => `.${n}${suffix}`).join(", ");
 }
 
 /** Clases que no se encontraron (útil para detectar roturas tras una actualización de Steam). */

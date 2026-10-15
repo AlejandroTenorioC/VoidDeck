@@ -4,6 +4,7 @@ import { statusDotsCss } from "../steam/statusDots";
 import { fontsCss } from "./fonts";
 import { footerCss } from "./footer";
 import { libraryCss } from "./library";
+import { quickAccessCss } from "./quickAccess";
 import { tokensCss, type Theme } from "./tokens";
 
 export function skinCss(theme: Theme): string {
@@ -35,6 +36,9 @@ ${cls("Clock", "HeaderItem")}, ${cls("Percentage")} {
 
 /* Pistas de controles de la barra inferior */
 ${footerCss()}
+
+/* Acceso rápido */
+${quickAccessCss()}
 
 /* Biblioteca y páginas con pestañas */
 ${libraryCss()}

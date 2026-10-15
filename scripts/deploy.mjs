@@ -1,41 +1,31 @@
 // Compila y copia el plugin a la Steam Deck por SSH, luego reinicia Decky.
-// Configuración en .env.deck (ver .env.deck.example).
+// Configuración en .env.deck (ver .env.deck.example). Con `pnpm deck:setup` hecho, no pide contraseña.
 import { execSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
-
-const root = fileURLToPath(new URL("..", import.meta.url));
-
-function loadEnv() {
-  const file = join(root, ".env.deck");
-  if (!existsSync(file)) {
-    console.error("Falta .env.deck. Copia .env.deck.example y pon la IP de tu Deck.");
-    process.exit(1);
-  }
-  const env = {};
-  for (const line of readFileSync(file, "utf8").split(/\r?\n/)) {
-    const m = line.match(/^\s*([A-Z_]+)\s*=\s*(.*?)\s*$/);
-    if (m) env[m[1]] = m[2];
-  }
-  return env;
-}
+import { deckConfig, root, sshOptions } from "./deck.mjs";
 
 const run = (cmd) => execSync(cmd, { stdio: "inherit", cwd: root });
+const succeeds = (cmd) => {
+  try {
+    execSync(cmd, { stdio: "ignore", cwd: root });
+    return true;
+  } catch {
+    return false;
+  }
+};
 
-const env = loadEnv();
-const host = env.DECK_HOST;
-const user = env.DECK_USER || "deck";
-const port = env.DECK_PORT || "22";
-if (!host) {
-  console.error("DECK_HOST no está definido en .env.deck");
-  process.exit(1);
-}
-
+const cfg = deckConfig();
+const { target, port, user } = cfg;
 const { name } = JSON.parse(readFileSync(join(root, "plugin.json"), "utf8"));
-const target = `${user}@${host}`;
 const staging = `/home/${user}/.cache/voiddeck-deploy`;
 const pluginDir = `/home/${user}/homebrew/plugins/${name}`;
+
+// Sin contraseña si la clave está autorizada y el script de instalación existe en la Deck.
+const batch = succeeds(`ssh ${sshOptions(cfg, { batch: true })} -p ${port} ${target} "sudo -n -l /etc/voiddeck/deploy.sh"`);
+const ssh = `ssh ${sshOptions(cfg, { batch })} -p ${port}`;
+const scp = `scp ${sshOptions(cfg, { batch })} -P ${port}`;
+if (!batch) console.log("(Sin configuración de despliegue: se pedirá la contraseña. Ejecuta `pnpm deck:setup` una vez.)");
 
 console.log("→ Compilando");
 run("pnpm build");
@@ -49,13 +39,16 @@ for (const f of ["dist", "plugin.json", "package.json", "main.py", "LICENSE", "R
 }
 
 console.log(`→ Copiando a ${target}`);
-run(`ssh -p ${port} ${target} "rm -rf ${staging} && mkdir -p ${staging}"`);
-run(`scp -P ${port} -r "${out}" ${target}:${staging}/`);
+run(`${ssh} ${target} "rm -rf ${staging} && mkdir -p ${staging}"`);
+run(`${scp} -r "${out}" ${target}:${staging}/`);
 
-// Los plugins pertenecen a root: sudo pedirá la contraseña de la Deck.
-console.log("→ Instalando y reiniciando Decky (sudo)");
-run(
-  `ssh -t -p ${port} ${target} "sudo rm -rf ${pluginDir} && sudo cp -r ${staging}/${name} ${pluginDir} && sudo systemctl restart plugin_loader"`,
-);
+console.log("→ Instalando y reiniciando Decky");
+if (batch) {
+  run(`${ssh} ${target} "sudo -n /etc/voiddeck/deploy.sh"`);
+} else {
+  run(
+    `${ssh} -t ${target} "sudo rm -rf ${pluginDir} && sudo cp -r ${staging}/${name} ${pluginDir} && sudo systemctl restart plugin_loader"`,
+  );
+}
 
 console.log("✓ Desplegado");
