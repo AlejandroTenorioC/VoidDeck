@@ -9,7 +9,7 @@
     "watch": "rollup -c -w",
     "typecheck": "tsc --noEmit",
     "preview": "node preview/server.mjs",
-    "deploy": "node scripts/deploy.mjs"
+    "deck": "node scripts/deploy.mjs"
   },
   "devDependencies": {
     "@decky/rollup": "^1.0.2",
