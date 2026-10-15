@@ -1,120 +1,68 @@
 # Void Deck
 
-Una interfaz para Steam Deck hecha de puntos, luz y vacío. Plugin para [Decky Loader](https://decky.xyz) que
-cambia el aspecto de toda la interfaz de Steam (Game Mode): fondo negro puro, tipografías de matriz de puntos y
-una pantalla de Inicio propia, pensada para manejarse con el mando.
+A Steam Deck interface made of dots, light and void. A [Decky Loader](https://decky.xyz) plugin that restyles
+the whole Steam interface (Game Mode): pure black backgrounds, dot-matrix typography and a custom Home screen,
+designed to be driven with the controller.
 
-![Pantalla de Inicio de Void Deck](docs/screenshots/inicio.png)
+![Void Deck Home screen](docs/screenshots/inicio.png)
 
-## Qué cambia
+## What it changes
 
-**Pantalla de Inicio propia.** El juego que estabas jugando en grande, escrito en matriz de puntos, con sus horas
-y su compatibilidad con la Deck; debajo, los jugados recientemente y todos tus juegos instalados (incluidos los
-que no son de Steam: emuladores, otras tiendas...). A juega, X abre los detalles.
+**A custom Home screen.** The game you were playing, front and center in dot-matrix type, with its playtime and
+Steam Deck compatibility. Below it, your recently played games and every installed game — including non-Steam
+ones such as emulators or other stores. A plays, X opens the details.
 
-![Juegos instalados en el Inicio](docs/screenshots/instalados.png)
+![Installed games on the Home screen](docs/screenshots/instalados.png)
 
-![Biblioteca con Void Deck](docs/screenshots/biblioteca.png)
+![Library with Void Deck](docs/screenshots/biblioteca.png)
 
-**Toda la interfaz de Steam.** Biblioteca, menú principal, barras superior e inferior y el Acceso rápido toman el
-mismo lenguaje: negro puro, Space Grotesk para el texto, Space Mono para las etiquetas y Doto (matriz de puntos)
-para los números. La batería y el wifi de la barra superior se convierten en medidores de puntos, y la batería
-se pone en rojo cuando baja del 20 %.
+**The whole Steam interface.** The Library, main menu, top and bottom bars and Quick Access all share the same
+language: pure black, Space Grotesk for text, Space Mono for labels and Doto (dot matrix) for numbers. Battery and
+Wi-Fi in the top bar become dot meters, and the battery turns red below 20 %.
 
-| Acceso rápido | Menú principal |
+| Quick Access | Main menu |
 |---|---|
-| ![Acceso rápido](docs/screenshots/acceso-rapido.png) | ![Menú principal](docs/screenshots/menu.png) |
+| ![Quick Access](docs/screenshots/acceso-rapido.png) | ![Main menu](docs/screenshots/menu.png) |
 
-Brillo y volumen se muestran como filas de puntos y los interruptores como píldoras, pero funcionan igual que
-siempre: Void Deck solo cambia el aspecto, nunca cómo se usa Steam.
+Brightness and volume are shown as rows of dots and toggles as pills, but they work exactly as before: Void Deck
+only changes how Steam looks, never how it works.
 
-## Instalación
+> The plugin interface is currently in Spanish.
 
-Necesitas [Decky Loader](https://decky.xyz) instalado en la Deck.
+## Installation
 
-1. Descarga el último `VoidDeck-vX.Y.Z.zip` desde [Releases](https://github.com/AlejandroTenorioC/VoidDeck/releases/latest).
-2. En la Deck, en modo Gaming, abre el Acceso rápido (botón `···`) → pestaña de **Decky** (el enchufe) → **⚙**.
-3. En **General**, activa **Developer mode** (modo desarrollador).
-4. En la nueva sección **Developer**, usa una de estas dos opciones:
-   - **Install Plugin from URL**: pega el enlace del `.zip` de la release (clic derecho → copiar enlace en la
-     página de Releases). Es lo más cómodo: no hace falta pasar archivos a la Deck.
-   - **Install Plugin from ZIP File**: elige el `.zip` si ya lo tienes en la Deck (por ejemplo, descargado en
-     modo Escritorio a la carpeta Descargas).
-5. Acepta la instalación. Void Deck se activa al momento y aparece en la pestaña de Decky.
+You need [Decky Loader](https://decky.xyz) installed on your Steam Deck.
 
-**Actualizar:** repite los pasos con el `.zip` de la versión nueva; sustituye a la anterior.
+1. Find the latest `VoidDeck-vX.Y.Z.zip` on the [Releases](https://github.com/AlejandroTenorioC/VoidDeck/releases/latest) page.
+2. On the Deck, in Game Mode, open Quick Access (the `···` button) → the **Decky** tab (plug icon) → **⚙**.
+3. Under **General**, turn on **Developer mode**.
+4. In the new **Developer** section, choose one of:
+   - **Install Plugin from URL**: paste the link to the release `.zip` (right-click → copy link on the Releases
+     page). This is the easiest way: no need to copy files to the Deck.
+   - **Install Plugin from ZIP File**: pick the `.zip` if it is already on the Deck (for example, downloaded in
+     Desktop Mode to your Downloads folder).
+5. Confirm the installation. Void Deck applies immediately and shows up in the Decky tab.
 
-**Desinstalar:** Decky → ⚙ → **Plugins** → Void Deck → **Uninstall**. Steam vuelve a su aspecto original al
-instante.
+**Updating:** repeat the steps with the new version's `.zip`; it replaces the previous one.
 
-## Ajustes
+**Uninstalling:** Decky → ⚙ → **Plugins** → Void Deck → **Uninstall**. Steam goes back to its original look
+right away.
 
-En el Acceso rápido, pestaña de Decky → **Void Deck**:
+## Settings
 
-- **Piel global**: el estilo de Void Deck en toda la interfaz de Steam.
-- **Pantalla de Inicio**: sustituye el Inicio de Steam por el de Void Deck.
-- **Tema claro**: invierte los colores para usar la Deck en exterior.
+In Quick Access, Decky tab → **Void Deck**:
 
-Cada parte se puede apagar por separado. Si una actualización de Steam rompe algo, apaga esa parte y el resto
-sigue funcionando.
+- **Piel global** (global skin): the Void Deck style across the whole Steam interface.
+- **Pantalla de Inicio** (Home screen): replaces Steam's Home with the Void Deck one.
+- **Tema claro** (light theme): inverted colors for outdoor use.
 
-> Void Deck es un proyecto independiente, sin relación con Valve ni con Steam. Steam cambia su interfaz con
-> frecuencia: tras una actualización puede que alguna pantalla se vea a medias hasta que salga una versión nueva
-> del plugin.
+Each part can be turned off on its own. If a Steam update breaks something, turn that part off and the rest keeps
+working.
 
-## Desarrollo
+> Void Deck is an independent project, not affiliated with Valve or Steam. Steam changes its interface often:
+> after an update, some screen may look half-styled until a new version of the plugin is released.
 
-Requisitos: Node 22+ y pnpm.
+## License
 
-```sh
-pnpm install
-pnpm preview     # preview en el navegador: http://localhost:5173 (recarga al guardar)
-pnpm typecheck
-pnpm build       # genera dist/
-pnpm package     # genera out/VoidDeck-v<versión>.zip, el mismo que se publica en Releases
-```
-
-En el preview, las flechas mueven el foco (D-pad), Enter activa (A), X abre detalles, Q/E son L1/R1 y P abre el
-Acceso rápido.
-
-### Arquitectura
-
-| Capa | Qué hace | Dónde |
-|---|---|---|
-| 1 · Piel global | Inyecta los tokens del diseño en todas las ventanas de Steam | `src/skin.ts`, `src/theme/` |
-| 2 · Pantallas propias | Sustituye rutas concretas (Inicio) por pantallas en React | `src/home/` |
-| 3 · Ajustes | Panel en el Acceso rápido | `src/qam/` |
-
-Steam genera los nombres de sus clases CSS en cada actualización, así que nunca se escriben a mano:
-`src/steam/classes.ts` los traduce en tiempo de ejecución a partir de su nombre legible.
-
-### Probar en una Steam Deck
-
-1. En la Deck: Decky Loader con **Developer mode** activado y SSH habilitado
-   (`passwd` si no tienes contraseña, luego `sudo systemctl enable --now sshd`).
-2. En el PC: copia `.env.deck.example` como `.env.deck` y pon la IP de la Deck.
-3. `pnpm deck` compila, copia el plugin a la Deck y reinicia Decky.
-
-Para desplegar sin contraseña (una sola vez): crea una clave con
-`ssh-keygen -t ed25519 -f ~/.ssh/voiddeck_deck -N ""` y ejecuta `pnpm deck:setup`. Autoriza la clave e instala
-en la Deck `/etc/voiddeck/deploy.sh` y una regla de `sudo` limitada a ese script y a arrancar/parar Decky
-(`scripts/deck-setup/`). Se revierte borrando `/etc/sudoers.d/zz-voiddeck`. El script detiene Decky, espera a
-que libere su puerto (1337) y limpia procesos huérfanos antes de arrancarlo: un reinicio brusco con otro plugin
-colgado puede dejar a Decky en bucle y agotar la memoria.
-
-`pnpm deck:log` muestra los plugins instalados y el registro de Decky.
-
-Para inspeccionar la interfaz de Steam en vivo: en Decky, *⚙ → Developer → Allow Remote CEF Debugging*; después,
-en Chrome o Brave del PC, abre `chrome://inspect` y añade `IP_DE_LA_DECK:8081`.
-
-### Publicar una versión
-
-1. Sube la versión en `package.json` (por ejemplo `0.2.0`) y haz commit.
-2. Crea y sube la etiqueta: `git tag v0.2.0 && git push origin v0.2.0`.
-3. GitHub Actions compila, genera `VoidDeck-v0.2.0.zip` y crea la Release con el zip adjunto
-   (`.github/workflows/release.yml`). La etiqueta debe coincidir con la versión de `package.json`.
-
-## Licencia
-
-[GPL-3.0](LICENSE). Las tipografías incluidas (Doto, Space Grotesk y Space Mono) se distribuyen bajo la
-SIL Open Font License 1.1: ver [`third_party/fonts`](third_party/fonts).
+[GPL-3.0](LICENSE). The bundled typefaces (Doto, Space Grotesk and Space Mono) are distributed under the
+SIL Open Font License 1.1: see [`third_party/fonts`](third_party/fonts).
