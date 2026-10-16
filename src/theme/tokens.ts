@@ -31,13 +31,13 @@ const colors: Record<Theme, Record<string, string>> = {
 
 const accents: Record<Theme, Record<Accent, Record<string, string>>> = {
   dark: {
-    red: { signal: "#d71921", "signal-text": "#ff5a60", "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #ff5a60" },
+    red: { signal: "#ffffff", "signal-text": "#ffffff", "focus-ring": "0 0 0 3px #000000, 0 0 0 5px #ffffff" },
     cyan: { signal: "#00a9c7", "signal-text": "#40d9f2", "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #40d9f2" },
     amber: { signal: "#d98700", "signal-text": "#ffc45c", "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #ffc45c" },
     violet: { signal: "#7657d9", "signal-text": "#b5a0ff", "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #b5a0ff" },
   },
   light: {
-    red: { signal: "#c0121a", "signal-text": "#c0121a", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #c0121a" },
+    red: { signal: "#ffffff", "signal-text": "#ffffff", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 5px #ffffff" },
     cyan: { signal: "#007a99", "signal-text": "#007a99", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #007a99" },
     amber: { signal: "#a65a00", "signal-text": "#a65a00", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #a65a00" },
     violet: { signal: "#6d4ad6", "signal-text": "#6d4ad6", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #6d4ad6" },

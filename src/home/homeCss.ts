@@ -38,9 +38,9 @@ export const homeCss = `
   border-radius: var(--vd-radius-pill); color: var(--vd-ink-muted);
   font: 14px/16px var(--vd-font-mono); letter-spacing: .08em; text-transform: uppercase;
 }
-.vd-tab.is-active { background: var(--vd-ink); color: var(--vd-on-ink); box-shadow: inset 0 -3px 0 var(--vd-signal); }
+.vd-tab.is-active { background: var(--vd-ink); color: var(--vd-on-ink); }
 .vd-tab.is-focused { box-shadow: var(--vd-focus-ring); color: var(--vd-ink); }
-.vd-tab.is-active.is-focused { color: var(--vd-on-ink); box-shadow: var(--vd-focus-ring), inset 0 -3px 0 var(--vd-signal); }
+.vd-tab.is-active.is-focused { color: var(--vd-on-ink); box-shadow: var(--vd-focus-ring); }
 
 /* Juego destacado */
 .vd-hero { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: var(--vd-space-4); min-height: 0; }
@@ -52,12 +52,12 @@ export const homeCss = `
 }
 .vd-kicker { font: 14px/16px var(--vd-font-mono); letter-spacing: .08em; color: var(--vd-ink-muted); text-transform: uppercase; }
 .vd-gtitle {
-  position: relative; margin: 0; max-width: 900px; font: 800 96px/88px var(--vd-font-dot); letter-spacing: -.02em;
+  position: relative; margin: 0; max-width: 900px; font: 800 96px/116px var(--vd-font-dot); letter-spacing: -.02em;
   text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.vd-gtitle.is-medium { font-size: 72px; line-height: 68px; letter-spacing: 0; }
-.vd-gtitle.is-long { font-size: 52px; line-height: 52px; letter-spacing: 0; }
-.vd-gtitle.is-extra-long { font-size: 38px; line-height: 42px; letter-spacing: 0; }
+.vd-gtitle.is-medium { font-size: 72px; line-height: 88px; letter-spacing: 0; }
+.vd-gtitle.is-long { font-size: 52px; line-height: 66px; letter-spacing: 0; }
+.vd-gtitle.is-extra-long { font-size: 38px; line-height: 50px; letter-spacing: 0; }
 .vd-empty-description { position: relative; max-width: 440px; margin: calc(var(--vd-space-2) * -1) 0 0; color: var(--vd-ink-muted); font: 16px/24px var(--vd-font-sans); }
 .vd-empty-library {
   display: inline-flex; align-items: center; justify-content: center; width: max-content; height: 42px; padding: 0 var(--vd-space-5, 20px);
@@ -99,7 +99,7 @@ export const homeCss = `
 }
 .vd-tile-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .vd-tile-glyph { font: 800 72px/1 var(--vd-font-dot); color: var(--vd-ink); }
-.vd-tile-meta { display: flex; flex-direction: column; gap: 2px; padding: 0 var(--vd-space-1); opacity: 0; transition: opacity 150ms; }
+.vd-tile-meta { display: flex; flex-direction: column; gap: 2px; padding: var(--vd-space-2) var(--vd-space-1) 0; opacity: 0; transition: opacity 150ms; }
 .vd-tile-title { font: 500 16px/22px var(--vd-font-sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vd-tile-detail { font: 400 14px/20px var(--vd-font-sans); color: var(--vd-ink-muted); }
 .vd-tile.is-focused .vd-tile-art { transform: scale(1.06); box-shadow: var(--vd-focus-ring); }
