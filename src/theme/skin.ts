@@ -7,6 +7,7 @@ import { footerCss } from "./footer";
 import { libraryCss } from "./library";
 import { mainMenuCss } from "./mainMenu";
 import { quickAccessCss } from "./quickAccess";
+import { transitionsCss } from "./transitions";
 import { tokensCss, type Theme } from "./tokens";
 
 export function skinCss(theme: Theme): string {
@@ -44,6 +45,9 @@ ${mainMenuCss()}
 
 /* Acceso rápido */
 ${quickAccessCss()}
+
+/* Transición al salir del Inicio */
+${transitionsCss()}
 
 /* Ficha del juego */
 ${detailsCss()}

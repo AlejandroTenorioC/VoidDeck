@@ -1,12 +1,13 @@
 // Capa 2: pantalla de Inicio de Void Deck. Medidas en píxeles del concepto (1280×800);
 // el contenedor se escala al tamaño CSS real de la ventana de Steam.
 import { Focusable, GamepadButton, Navigation, QuickAccessTab, type GamepadEvent } from "@decky/ui";
-import { useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { skinState } from "../skin";
 import { cls } from "../steam/classes";
 import { installedGames, libraryCount, openDetails, playGame, recentGames, type Game } from "../steam/library";
 import { fontsCss } from "../theme/fonts";
 import { tokensCss } from "../theme/tokens";
+import { FROM_HOME_ATTR, FROM_HOME_MS, FROM_HOME_VALUE } from "../theme/transitions";
 import { deckCompat, glyph, playtime, shortPlaytime, since } from "./format";
 import { homeCss } from "./homeCss";
 
@@ -38,6 +39,29 @@ function useDesignScale() {
     return () => win.removeEventListener("resize", measure);
   }, []);
   return { ref, ...box };
+}
+
+/**
+ * En cuanto el Inicio empieza a salir (Steam añade `Exit` a su contenedor de transición), marca el documento
+ * para que la pantalla que entra, a la vez, use la disolución de puntos.
+ */
+function useFromHomeMark(ref: RefObject<HTMLDivElement>) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const root = el.ownerDocument.documentElement;
+    const transition = el.closest(cls("TopLevelTransition", "EnterActive"));
+    const exit = cls("Exit", "TopLevelTransition").slice(1);
+    if (!transition) return;
+    const observer = new MutationObserver(() => {
+      if (!transition.classList.contains(exit)) return;
+      observer.disconnect();
+      root.setAttribute(FROM_HOME_ATTR, FROM_HOME_VALUE);
+      setTimeout(() => root.removeAttribute(FROM_HOME_ATTR), FROM_HOME_MS);
+    });
+    observer.observe(transition, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, [ref]);
 }
 
 function Cover({ game }: { game: Game }) {
@@ -148,6 +172,7 @@ export function HomeScreen() {
   const total = useMemo(() => libraryCount(), []);
   const [hero, setHero] = useState<Game | undefined>(() => recent[0] ?? installed[0]);
   const { ref, zoom, height } = useDesignScale();
+  useFromHomeMark(ref);
   const homeRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const scroll = useScroller(homeRef, contentRef);
