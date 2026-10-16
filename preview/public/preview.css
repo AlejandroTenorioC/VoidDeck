@@ -44,6 +44,8 @@ body { display: grid; place-items: center; font-family: system-ui, sans-serif; }
 .stub-toggle-text { flex: 1; }
 .stub-toggle-label { font-size: 16px; }
 .stub-toggle-desc { font-size: 14px; color: var(--vd-ink-muted, #aaa); margin-top: 4px; }
+.stub-dropdown { box-sizing: border-box; width: 100%; display: flex; align-items: center; gap: 16px; padding: 12px 16px; }
+.stub-dropdown select { min-width: 112px; border: 1px solid var(--vd-line-strong, #888); border-radius: 6px; background: var(--vd-surface-raised, #3d4450); color: inherit; padding: 6px; }
 .stub-switch {
   width: 44px; height: 24px; border-radius: 999px; flex: none; position: relative;
   border: 1.5px solid var(--vd-line-strong, #888); box-sizing: border-box;

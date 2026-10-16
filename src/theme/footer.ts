@@ -1,28 +1,23 @@
 // Bottom control-hint bar (the design's ButtonHint).
 // Steam draws A/B/X/Y as directional images: s = A, e = B, w = X, n = Y.
+import type { ButtonStyle } from "../preferences";
 import { cls } from "../steam/classes";
+import { buttonGlyphs } from "virtual:voiddeck-button-assets";
 
-const FACE_BUTTONS: [direction: string, letter: string][] = [
-  ["s", "A"],
-  ["e", "B"],
-  ["w", "X"],
-  ["n", "Y"],
-];
+const directions = { s: "a", e: "b", w: "x", n: "y" } as const;
 
-export function footerCss(): string {
+export function footerCss(buttonStyle: ButtonStyle): string {
   const glyph = cls("ActionButtonGlyph", "ActionButtonLabel");
   const label = cls("ActionButtonLabel", "ActionButtonGlyph");
   const face = `${glyph}:has(img[src*="shared_buttons_"])`;
 
   return `
-/* A/B/X/Y: circle with the letter; filled A (primary action) */
+/* A/B/X/Y: bundled controller glyphs, selected in Void Deck settings */
 ${face} img { display: none !important; }
 ${face}::after {
-  display: inline-grid; place-items: center; width: 19px; height: 19px; box-sizing: border-box; border-radius: 50%;
-  border: 1px solid var(--vd-line-strong); color: var(--vd-ink); font: 700 9px/1 var(--vd-font-mono);
+  content: ""; display: inline-block; width: 21px; height: 21px; background: center / contain no-repeat;
 }
-${glyph}:has(img[src*="shared_buttons_s"])::after { background: var(--vd-ink); border-color: var(--vd-ink); color: var(--vd-on-ink); }
-${FACE_BUTTONS.map(([dir, letter]) => `${glyph}:has(img[src*="shared_buttons_${dir}"])::after { content: "${letter}"; }`).join("\n")}
+${Object.entries(directions).map(([dir, button]) => `${glyph}:has(img[src*="shared_buttons_${dir}"])::after { background-image: url("${buttonGlyphs[buttonStyle][button]}"); }`).join("\n")}
 
 /* STEAM, Options…: Steam's white pills become outlined pills */
 ${glyph} svg { filter: invert(1); border-radius: 999px; outline: 1px solid var(--vd-line-strong); outline-offset: -1px; }

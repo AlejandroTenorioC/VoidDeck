@@ -124,3 +124,37 @@ export function ToggleField(props: {
     </button>
   );
 }
+
+type DropdownOption = { data: any; label: ReactNode };
+
+export function DropdownItem(props: {
+  label?: ReactNode;
+  description?: ReactNode;
+  rgOptions: DropdownOption[];
+  selectedOption: any;
+  onChange?: (option: DropdownOption) => void;
+}) {
+  return (
+    <label className="stub-dropdown">
+      <span className="stub-toggle-text">
+        <div className="stub-toggle-label">{props.label}</div>
+        {props.description && <div className="stub-toggle-desc">{props.description}</div>}
+      </span>
+      <select value={props.selectedOption} onChange={(e) => props.onChange?.(props.rgOptions.find((o) => o.data === e.target.value) ?? props.rgOptions[0])}>
+        {props.rgOptions.map((option) => <option key={String(option.data)} value={option.data}>{option.label}</option>)}
+      </select>
+    </label>
+  );
+}
+
+export function ButtonItem(props: { label?: ReactNode; description?: ReactNode; children?: ReactNode; onClick?: () => void }) {
+  return (
+    <button type="button" className="stub-toggle" onClick={props.onClick}>
+      <span className="stub-toggle-text">
+        <div className="stub-toggle-label">{props.label}</div>
+        {props.description && <div className="stub-toggle-desc">{props.description}</div>}
+      </span>
+      {props.children && <span>{props.children}</span>}
+    </button>
+  );
+}

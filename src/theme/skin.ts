@@ -7,11 +7,12 @@ import { libraryCss } from "./library";
 import { mainMenuCss } from "./mainMenu";
 import { quickAccessCss } from "./quickAccess";
 import { tokensCss, type Theme } from "./tokens";
+import type { Accent, ButtonStyle } from "../preferences";
 
-export function skinCss(theme: Theme): string {
+export function skinCss(theme: Theme, accent: Accent = "red", buttonStyle: ButtonStyle = "steam"): string {
   return `
 ${fontsCss}
-${tokensCss(theme)}
+${tokensCss(theme, ":root", accent)}
 
 /* Typography: Space Grotesk for all text (custom screens manage their own) */
 /* :where() keeps this rule at zero specificity so specific rules (clock, labels) win */
@@ -36,7 +37,7 @@ ${cls("Clock", "HeaderItem")}, ${cls("Percentage")} {
 }
 
 /* Bottom-bar control hints */
-${footerCss()}
+${footerCss(buttonStyle)}
 
 /* Main menu (STEAM button) */
 ${mainMenuCss()}

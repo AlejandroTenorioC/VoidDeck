@@ -30,6 +30,10 @@ export function setLanguage(next: Language): void {
   listeners.forEach((listener) => listener());
 }
 
+export function resetLanguage(): void {
+  setLanguage("en");
+}
+
 function subscribe(listener: () => void): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);
@@ -51,7 +55,15 @@ const copy = {
     globalSkinDescription: "Apply Void Deck colors and typefaces across the whole interface.",
     homeScreen: "Home screen", homeScreenDescription: "Replace Steam Home with Void Deck Home.",
     lightTheme: "Light theme", lightThemeDescription: "For outdoor use.",
-    spanishLanguage: "Spanish language", spanishLanguageDescription: "Use Spanish in Void Deck. English is the default.",
+    language: "Language", languageDescription: "Choose the language used by Void Deck.",
+    accentColor: "Accent color", accentColorDescription: "Sets the focus ring and alert color.",
+    controllerGlyphs: "Controller glyphs", controllerGlyphsDescription: "Choose the button prompts used in Void Deck control hints.",
+    steamDeck: "Steam Deck", xbox: "Xbox", rogAlly: "ASUS ROG Ally",
+    density: "Home layout density", densityDescription: "Choose cover and grid spacing on the Home screen.",
+    comfortable: "Comfortable", compact: "Compact", red: "Red", cyan: "Cyan", amber: "Amber", violet: "Violet",
+    noInstalledGames: "No installed games", noInstalledGamesDescription: "Install a game from your Library to see it here.",
+    openLibrary: "Open Library", resetDefaults: "Reset to defaults", resetDefaultsDescription: "Restore English, Steam Deck prompts, red accents, comfortable density, and enabled screens.",
+    version: "Version", versionDescription: "View the latest release notes and download.", releaseNotes: "Open release notes",
   },
   es: {
     home: "Inicio", library: "Biblioteca", store: "Tienda", friends: "Amigos", downloads: "Descargas",
@@ -63,7 +75,15 @@ const copy = {
     globalSkinDescription: "Aplica los colores y tipografías de Void Deck a toda la interfaz.",
     homeScreen: "Pantalla de Inicio", homeScreenDescription: "Sustituye el Inicio de Steam por el de Void Deck.",
     lightTheme: "Tema claro", lightThemeDescription: "Para uso en exterior.",
-    spanishLanguage: "Idioma español", spanishLanguageDescription: "Usa español en Void Deck. El inglés es el idioma predeterminado.",
+    language: "Idioma", languageDescription: "Elige el idioma que usa Void Deck.",
+    accentColor: "Color de acento", accentColorDescription: "Define el anillo de foco y el color de alerta.",
+    controllerGlyphs: "Iconos del mando", controllerGlyphsDescription: "Elige los indicadores de botones de los controles de Void Deck.",
+    steamDeck: "Steam Deck", xbox: "Xbox", rogAlly: "ASUS ROG Ally",
+    density: "Densidad de Inicio", densityDescription: "Elige el tamaño de portadas y espaciado en Inicio.",
+    comfortable: "Cómoda", compact: "Compacta", red: "Rojo", cyan: "Cian", amber: "Ámbar", violet: "Violeta",
+    noInstalledGames: "No hay juegos instalados", noInstalledGamesDescription: "Instala un juego desde tu Biblioteca para verlo aquí.",
+    openLibrary: "Abrir Biblioteca", resetDefaults: "Restablecer valores predeterminados", resetDefaultsDescription: "Restaura inglés, iconos de Steam Deck, acentos rojos, densidad cómoda y pantallas activadas.",
+    version: "Versión", versionDescription: "Consulta las notas y descarga de la última versión.", releaseNotes: "Abrir notas de versión",
   },
 } as const;
 

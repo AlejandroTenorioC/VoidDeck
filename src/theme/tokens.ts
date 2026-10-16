@@ -1,4 +1,5 @@
 // Void Deck tokens as CSS variables. Source of truth: the design (tokens.json).
+import type { Accent } from "../preferences";
 
 export type Theme = "dark" | "light";
 
@@ -13,10 +14,6 @@ const colors: Record<Theme, Record<string, string>> = {
     "ink-muted": "#9a9a9a",
     "ink-faint": "#4a4a4a",
     "on-ink": "#000000",
-    signal: "#d71921",
-    "signal-text": "#ff5a60",
-    "on-signal": "#ffffff",
-    "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #ffffff",
   },
   light: {
     bg: "#f2f2f2",
@@ -28,10 +25,21 @@ const colors: Record<Theme, Record<string, string>> = {
     "ink-muted": "#5e5e5e",
     "ink-faint": "#b5b5b5",
     "on-ink": "#ffffff",
-    signal: "#d71921",
-    "signal-text": "#c0121a",
-    "on-signal": "#ffffff",
-    "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #000000",
+  },
+};
+
+const accents: Record<Theme, Record<Accent, Record<string, string>>> = {
+  dark: {
+    red: { signal: "#d71921", "signal-text": "#ff5a60", "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #ff5a60" },
+    cyan: { signal: "#00a9c7", "signal-text": "#40d9f2", "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #40d9f2" },
+    amber: { signal: "#d98700", "signal-text": "#ffc45c", "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #ffc45c" },
+    violet: { signal: "#7657d9", "signal-text": "#b5a0ff", "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #b5a0ff" },
+  },
+  light: {
+    red: { signal: "#c0121a", "signal-text": "#c0121a", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #c0121a" },
+    cyan: { signal: "#007a99", "signal-text": "#007a99", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #007a99" },
+    amber: { signal: "#a65a00", "signal-text": "#a65a00", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #a65a00" },
+    violet: { signal: "#6d4ad6", "signal-text": "#6d4ad6", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #6d4ad6" },
   },
 };
 
@@ -58,6 +66,6 @@ const declare = (vars: Record<string, string>) =>
     .join(" ");
 
 /** A `selector { ... }` block with every `--vd-*` variable for the given theme. */
-export function tokensCss(theme: Theme, selector = ":root"): string {
-  return `${selector} { ${declare(colors[theme])} ${declare(scale)} }`;
+export function tokensCss(theme: Theme, selector = ":root", accent: Accent = "red"): string {
+  return `${selector} { ${declare({ ...colors[theme], ...accents[theme][accent] })} ${declare(scale)} }`;
 }

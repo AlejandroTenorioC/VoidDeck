@@ -31,8 +31,8 @@ only changes how Steam looks, never how it works.
 
 You need [Decky Loader](https://decky.xyz) installed on your Steam Deck.
 
-1. Download `VoidDeck-v0.1.2.zip` from the [v0.1.2 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v0.1.2), or copy its direct URL:
-   `https://github.com/endoflineservice/VoidDeck/releases/download/v0.1.2/VoidDeck-v0.1.2.zip`
+1. Download `VoidDeck-v0.2.0.zip` from the [v0.2.0 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v0.2.0), or copy its direct URL:
+   `https://github.com/endoflineservice/VoidDeck/releases/download/v0.2.0/VoidDeck-v0.2.0.zip`
 2. On the Deck, in Game Mode, open Quick Access (the `···` button) → the **Decky** tab (plug icon) → **⚙**.
 3. Under **General**, turn on **Developer mode**.
 4. In the new **Developer** section, choose one of:
@@ -54,7 +54,12 @@ In Quick Access, Decky tab → **Void Deck**:
 - **Global skin**: the Void Deck style across the whole Steam interface.
 - **Home screen**: replaces Steam's Home with the Void Deck one.
 - **Light theme**: inverted colors for outdoor use.
-- **Spanish language**: changes Void Deck's interface to Spanish. It is off by default, so Void Deck starts in English.
+- **Language**: select English (the default) or Spanish. The selector is ready for more languages in future releases.
+- **Accent color**: choose red, cyan, amber, or violet for focus rings and alerts.
+- **Controller glyphs**: choose bundled Steam Deck (the default), Xbox, or ASUS ROG Ally button prompts.
+- **Home layout density**: choose Comfortable or Compact game-cover spacing.
+- **Reset to defaults**: restore English, Steam Deck prompts, red accents, comfortable density, and enabled screens.
+- **Version**: shows the installed plugin version and opens the latest release notes.
 
 Each part can be turned off on its own. If a Steam update breaks something, turn that part off and the rest keeps
 working.
@@ -88,4 +93,6 @@ software engineer, I test each change on my own Steam Deck and review the code b
 ## License
 
 [GPL-3.0](LICENSE). The bundled typefaces (Doto, Space Grotesk and Space Mono) are distributed under the
-SIL Open Font License 1.1: see [`third_party/fonts`](third_party/fonts).
+SIL Open Font License 1.1: see [`third_party/fonts`](third_party/fonts). Controller prompt assets are from
+[Kenney Input Prompts](https://kenney.nl/assets/input-prompts), licensed CC0; see
+[`third_party/KENNEY-INPUT-PROMPTS-CC0.txt`](third_party/KENNEY-INPUT-PROMPTS-CC0.txt).
