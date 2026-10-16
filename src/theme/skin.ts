@@ -1,6 +1,7 @@
 // CSS de la capa 1: aplica los tokens de Void Deck sobre las clases de Steam.
 import { cls } from "../steam/classes";
 import { statusDotsCss } from "../steam/statusDots";
+import { detailsCss } from "./details";
 import { fontsCss } from "./fonts";
 import { footerCss } from "./footer";
 import { libraryCss } from "./library";
@@ -43,6 +44,9 @@ ${mainMenuCss()}
 
 /* Acceso rápido */
 ${quickAccessCss()}
+
+/* Ficha del juego */
+${detailsCss()}
 
 /* Biblioteca y páginas con pestañas */
 ${libraryCss()}
