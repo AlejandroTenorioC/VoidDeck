@@ -42,7 +42,15 @@ jobs:
 
       - run: pnpm package
 
+      # Notas en .github/release-notes/<etiqueta>.md si existen; si no, las que genera GitHub.
+      - name: Elegir notas de la versión
+        id: notes
+        run: |
+          file=".github/release-notes/${GITHUB_REF_NAME}.md"
+          if [ -f "$file" ]; then echo "body_path=$file" >> "$GITHUB_OUTPUT"; fi
+
       - uses: softprops/action-gh-release@v2
         with:
           files: out/VoidDeck-${{ github.ref_name }}.zip
-          generate_release_notes: true
+          body_path: ${{ steps.notes.outputs.body_path }}
+          generate_release_notes: ${{ steps.notes.outputs.body_path == '' }}
