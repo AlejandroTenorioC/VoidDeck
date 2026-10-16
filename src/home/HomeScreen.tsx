@@ -3,7 +3,6 @@
 import { Focusable, GamepadButton, Navigation, QuickAccessTab, type GamepadEvent } from "@decky/ui";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { strings, useLanguage, type Language } from "../i18n";
-import { useAppearance } from "../preferences";
 import { skinState } from "../skin";
 import { cls } from "../steam/classes";
 import { installedGames, libraryCount, openDetails, playGame, recentGames, type Game } from "../steam/library";
@@ -178,7 +177,6 @@ function useScroller(viewport: RefObject<HTMLDivElement>, content: RefObject<HTM
 
 export function HomeScreen() {
   const language = useLanguage();
-  const { accent, density } = useAppearance();
   const copy = strings(language);
   const navigationTabs = tabs(language);
   const recent = useMemo(() => recentGames(SHELF_SIZE), []);
@@ -193,10 +191,10 @@ export function HomeScreen() {
   // Local tokens and fonts let the screen work even with the global skin turned off.
   const css = useMemo(
     () =>
-      `${fontsCss}\n${tokensCss(skinState().theme, ".vd-home-viewport", accent)}\n${homeCss}\n` +
+      `${fontsCss}\n${tokensCss(skinState().theme, ".vd-home-viewport")}\n${homeCss}\n` +
       // Steam Home enabled the top bar (clock, battery); without it, it stays transparent.
       `${cls("Header", "OverrideHeaderBackground")} { opacity: 1 !important; }`,
-    [accent],
+    [],
   );
 
   const onBumper = (e: GamepadEvent) => {
@@ -206,7 +204,7 @@ export function HomeScreen() {
   return (
     <div className="vd-home-viewport" ref={ref}>
       <style>{css}</style>
-      <Focusable className={`vd-home is-${density}`} ref={homeRef} style={{ zoom, height }} onButtonDown={onBumper}>
+      <Focusable className="vd-home" ref={homeRef} style={{ zoom, height }} onButtonDown={onBumper}>
         <div className="vd-scroll" ref={contentRef} style={{ transform: `translateY(${-scroll.offset}px)` }}>
           <div className="vd-page" style={{ height }}>
             <Focusable className="vd-tabs" flow-children="horizontal">

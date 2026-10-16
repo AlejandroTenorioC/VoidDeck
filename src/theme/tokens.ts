@@ -1,5 +1,6 @@
 // Void Deck tokens as CSS variables. Source of truth: the design (tokens.json).
-import type { Accent } from "../preferences";
+
+type Accent = "red" | "cyan" | "amber" | "violet";
 
 export type Theme = "dark" | "light";
 
@@ -66,6 +67,6 @@ const declare = (vars: Record<string, string>) =>
     .join(" ");
 
 /** A `selector { ... }` block with every `--vd-*` variable for the given theme. */
-export function tokensCss(theme: Theme, selector = ":root", accent: Accent = "red"): string {
-  return `${selector} { ${declare({ ...colors[theme], ...accents[theme][accent] })} ${declare(scale)} }`;
+export function tokensCss(theme: Theme, selector = ":root"): string {
+  return `${selector} { ${declare({ ...colors[theme], ...accents[theme].red })} ${declare(scale)} }`;
 }

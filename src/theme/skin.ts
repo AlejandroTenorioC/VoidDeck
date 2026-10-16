@@ -9,12 +9,11 @@ import { mainMenuCss } from "./mainMenu";
 import { quickAccessCss } from "./quickAccess";
 import { transitionsCss } from "./transitions";
 import { tokensCss, type Theme } from "./tokens";
-import type { Accent, ButtonStyle } from "../preferences";
 
-export function skinCss(theme: Theme, accent: Accent = "red", buttonStyle: ButtonStyle = "steam"): string {
+export function skinCss(theme: Theme): string {
   return `
 ${fontsCss}
-${tokensCss(theme, ":root", accent)}
+${tokensCss(theme)}
 
 /* Typography: Space Grotesk for all text (custom screens manage their own) */
 /* :where() keeps this rule at zero specificity so specific rules (clock, labels) win */
@@ -39,7 +38,7 @@ ${cls("Clock", "HeaderItem")}, ${cls("Percentage")} {
 }
 
 /* Bottom-bar control hints */
-${footerCss(buttonStyle)}
+${footerCss()}
 
 /* Main menu (STEAM button) */
 ${mainMenuCss()}

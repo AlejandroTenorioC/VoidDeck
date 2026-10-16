@@ -3,10 +3,9 @@ import { ButtonItem, DropdownItem, Navigation, PanelSection, PanelSectionRow, To
 import { useState } from "react";
 import { disableHome, enableHome, homeEnabled } from "../home";
 import { resetLanguage, setLanguage, strings, useLanguage, type Language } from "../i18n";
-import { resetAppearance, setAccent, setButtonStyle, setDensity, useAppearance, type Accent, type ButtonStyle, type Density } from "../preferences";
 import { applySkin, removeSkin, skinState } from "../skin";
 
-const VERSION = "0.2.3";
+const VERSION = "0.2.4";
 const RELEASE_URL = "https://github.com/endoflineservice/VoidDeck/releases/latest";
 
 export function Panel() {
@@ -14,7 +13,6 @@ export function Panel() {
   const [light, setLight] = useState(() => skinState().theme === "light");
   const [homeOn, setHomeOn] = useState(homeEnabled);
   const language = useLanguage();
-  const { accent, density, buttonStyle } = useAppearance();
   const copy = strings(language);
 
   const updateSkin = (on: boolean, isLight: boolean) => {
@@ -27,22 +25,11 @@ export function Panel() {
   const updateHome = (on: boolean) => {
     setHomeOn(on);
     if (on) enableHome();
-    else disableHome();
-  };
-
-  const updateAccent = (next: Accent) => {
-    setAccent(next);
-    if (skinOn) applySkin(light ? "light" : "dark");
-  };
-
-  const updateButtonStyle = (next: ButtonStyle) => {
-    setButtonStyle(next);
-    if (skinOn) applySkin(light ? "light" : "dark");
+    else disableHome(true);
   };
 
   const resetDefaults = () => {
     resetLanguage();
-    resetAppearance();
     setSkinOn(true);
     setLight(false);
     setHomeOn(true);
@@ -87,37 +74,6 @@ export function Panel() {
           ]}
           selectedOption={language}
           onChange={({ data }) => setLanguage(data as Language)}
-        />
-      </PanelSectionRow>
-      <PanelSectionRow>
-        <DropdownItem
-          label={copy.controllerGlyphs}
-          description={copy.controllerGlyphsDescription}
-          rgOptions={[
-            { label: copy.steamDeck, data: "steam" },
-            { label: copy.xbox, data: "xbox" },
-            { label: copy.rogAlly, data: "ally" },
-          ]}
-          selectedOption={buttonStyle}
-          onChange={({ data }) => updateButtonStyle(data as ButtonStyle)}
-        />
-      </PanelSectionRow>
-      <PanelSectionRow>
-        <DropdownItem
-          label={copy.accentColor}
-          description={copy.accentColorDescription}
-          rgOptions={(["red", "cyan", "amber", "violet"] as Accent[]).map((value) => ({ label: copy[value], data: value }))}
-          selectedOption={accent}
-          onChange={({ data }) => updateAccent(data as Accent)}
-        />
-      </PanelSectionRow>
-      <PanelSectionRow>
-        <DropdownItem
-          label={copy.density}
-          description={copy.densityDescription}
-          rgOptions={(["comfortable", "compact"] as Density[]).map((value) => ({ label: copy[value], data: value }))}
-          selectedOption={density}
-          onChange={({ data }) => setDensity(data as Density)}
         />
       </PanelSectionRow>
       <PanelSectionRow>

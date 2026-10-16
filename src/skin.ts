@@ -3,7 +3,6 @@ import { removeStatusDots, unwatchBattery, updateStatusDots, watchBattery } from
 import { steamDocuments } from "./steam/windows";
 import { skinCss } from "./theme/skin";
 import type { Theme } from "./theme/tokens";
-import { appearanceState } from "./preferences";
 
 const STYLE_ID = "voiddeck-skin";
 // Steam creates new windows (overlays, popups) on demand and Wi-Fi changes, so check periodically.
@@ -29,8 +28,7 @@ function sync(): void {
 
 export function applySkin(next: Theme): void {
   theme = next;
-  const appearance = appearanceState();
-  css = skinCss(next, appearance.accent, appearance.buttonStyle);
+  css = skinCss(next);
   sync();
   timer ??= setInterval(sync, RESYNC_MS);
   watchBattery(sync);
