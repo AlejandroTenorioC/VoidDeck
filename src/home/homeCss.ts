@@ -53,7 +53,8 @@ export const homeCss = `
 .vd-kicker { font: 14px/16px var(--vd-font-mono); letter-spacing: .08em; color: var(--vd-ink-muted); text-transform: uppercase; }
 .vd-gtitle {
   position: relative; margin: 0; max-width: 900px; font: 800 96px/116px var(--vd-font-dot); letter-spacing: -.02em;
-  text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  /* Doto's dot cells extend below the font's nominal box. Do not clip their last row. */
+  text-transform: uppercase; white-space: nowrap; overflow: visible;
 }
 .vd-gtitle.is-medium { font-size: 72px; line-height: 88px; letter-spacing: 0; }
 .vd-gtitle.is-long { font-size: 52px; line-height: 66px; letter-spacing: 0; }
