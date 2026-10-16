@@ -36,7 +36,10 @@ function useDesignScale() {
     if (!el) return;
     const measure = () => {
       const zoom = el.clientWidth / DESIGN_WIDTH;
-      setBox({ zoom, height: el.clientHeight / zoom });
+      const height = el.clientHeight / zoom;
+      // Steam can emit a layout-driven resize while React is committing. Avoid scheduling
+      // another render when its dimensions did not actually change.
+      setBox((previous) => (previous.zoom === zoom && previous.height === height ? previous : { zoom, height }));
     };
     measure();
     const win = el.ownerDocument.defaultView ?? window;
@@ -155,7 +158,7 @@ function useScroller(viewport: RefObject<HTMLDivElement>, content: RefObject<HTM
   const [offset, setOffset] = useState(0);
   const scroller = useMemo(
     () => ({
-      toTop: () => setOffset(0),
+      toTop: () => setOffset((previous) => (previous === 0 ? previous : 0)),
       /** Move the item's row to just below the top bar and section title. */
       reveal: (el: HTMLElement) => {
         const view = viewport.current?.clientHeight ?? 0;
@@ -164,7 +167,8 @@ function useScroller(viewport: RefObject<HTMLDivElement>, content: RefObject<HTM
         for (let n: HTMLElement | null = el; n && n !== content.current; n = n.offsetParent as HTMLElement | null) {
           top += n.offsetTop;
         }
-        setOffset(Math.min(max, Math.max(0, top - ROW_TOP_SPACE)));
+        const next = Math.min(max, Math.max(0, top - ROW_TOP_SPACE));
+        setOffset((previous) => (previous === next ? previous : next));
       },
     }),
     [viewport, content],
@@ -256,7 +260,7 @@ export function HomeScreen() {
                       first={i === 0}
                       language={language}
                       onFocus={() => {
-                        setHero(g);
+                        setHero((current) => (current?.appid === g.appid ? current : g));
                         scroll.toTop();
                       }}
                     />
@@ -279,7 +283,7 @@ export function HomeScreen() {
                     game={g}
                     language={language}
                     onFocus={(el) => {
-                      setHero(g);
+                      setHero((current) => (current?.appid === g.appid ? current : g));
                       scroll.reveal(el);
                     }}
                   />

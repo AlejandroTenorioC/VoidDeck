@@ -6,7 +6,7 @@ import { resetLanguage, setLanguage, strings, useLanguage, type Language } from 
 import { resetAppearance, setAccent, setButtonStyle, setDensity, useAppearance, type Accent, type ButtonStyle, type Density } from "../preferences";
 import { applySkin, removeSkin, skinState } from "../skin";
 
-const VERSION = "0.2.1";
+const VERSION = "0.2.2";
 const RELEASE_URL = "https://github.com/endoflineservice/VoidDeck/releases/latest";
 
 export function Panel() {
