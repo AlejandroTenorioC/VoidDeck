@@ -2,12 +2,15 @@
 import { PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
 import { useState } from "react";
 import { disableHome, enableHome, homeEnabled } from "../home";
+import { setLanguage, strings, useLanguage } from "../i18n";
 import { applySkin, removeSkin, skinState } from "../skin";
 
 export function Panel() {
   const [skinOn, setSkinOn] = useState(() => skinState().on);
   const [light, setLight] = useState(() => skinState().theme === "light");
   const [homeOn, setHomeOn] = useState(homeEnabled);
+  const language = useLanguage();
+  const copy = strings(language);
 
   const updateSkin = (on: boolean, isLight: boolean) => {
     setSkinOn(on);
@@ -26,27 +29,35 @@ export function Panel() {
     <PanelSection title="VOID DECK">
       <PanelSectionRow>
         <ToggleField
-          label="Global skin"
-          description="Apply Void Deck colors and typefaces across the whole interface."
+          label={copy.globalSkin}
+          description={copy.globalSkinDescription}
           checked={skinOn}
           onChange={(on) => updateSkin(on, light)}
         />
       </PanelSectionRow>
       <PanelSectionRow>
         <ToggleField
-          label="Home screen"
-          description="Replace Steam Home with Void Deck Home."
+          label={copy.homeScreen}
+          description={copy.homeScreenDescription}
           checked={homeOn}
           onChange={updateHome}
         />
       </PanelSectionRow>
       <PanelSectionRow>
         <ToggleField
-          label="Light theme"
-          description="For outdoor use."
+          label={copy.lightTheme}
+          description={copy.lightThemeDescription}
           checked={light}
           disabled={!skinOn}
           onChange={(isLight) => updateSkin(skinOn, isLight)}
+        />
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <ToggleField
+          label={copy.spanishLanguage}
+          description={copy.spanishLanguageDescription}
+          checked={language === "es"}
+          onChange={(spanish) => setLanguage(spanish ? "es" : "en")}
         />
       </PanelSectionRow>
     </PanelSection>

@@ -2,6 +2,7 @@
 // the container scales to the actual CSS size of the Steam window.
 import { Focusable, GamepadButton, Navigation, QuickAccessTab, type GamepadEvent } from "@decky/ui";
 import { useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { strings, useLanguage, type Language } from "../i18n";
 import { skinState } from "../skin";
 import { cls } from "../steam/classes";
 import { installedGames, libraryCount, openDetails, playGame, recentGames, type Game } from "../steam/library";
@@ -15,13 +16,16 @@ const SHELF_SIZE = 7;
 // Space above the focused row when scrolling: Steam bar (60) + section title and padding.
 const ROW_TOP_SPACE = 136;
 
-const TABS: { label: string; go?: () => void }[] = [
-  { label: "Home" },
-  { label: "Library", go: () => Navigation.NavigateToLibraryTab() },
-  { label: "Store", go: () => Navigation.NavigateToSteamWeb("https://store.steampowered.com/") },
-  { label: "Friends", go: () => Navigation.OpenQuickAccessMenu(QuickAccessTab.Friends) },
-  { label: "Downloads", go: () => Navigation.Navigate("/downloads") },
-];
+const tabs = (language: Language): { label: string; go?: () => void }[] => {
+  const copy = strings(language);
+  return [
+    { label: copy.home },
+    { label: copy.library, go: () => Navigation.NavigateToLibraryTab() },
+    { label: copy.store, go: () => Navigation.NavigateToSteamWeb("https://store.steampowered.com/") },
+    { label: copy.friends, go: () => Navigation.OpenQuickAccessMenu(QuickAccessTab.Friends) },
+    { label: copy.downloads, go: () => Navigation.Navigate("/downloads") },
+  ];
+};
 
 /** Scale content so 1280 design pixels fill the actual window width. */
 function useDesignScale() {
@@ -53,8 +57,8 @@ function Cover({ game }: { game: Game }) {
   );
 }
 
-function Tile(props: { game: Game; first?: boolean; onFocus: (el: HTMLDivElement) => void }) {
-  const { game, first, onFocus } = props;
+function Tile(props: { game: Game; first?: boolean; language: Language; onFocus: (el: HTMLDivElement) => void }) {
+  const { game, first, language, onFocus } = props;
   const ref = useRef<HTMLDivElement>(null);
   const focus = () => ref.current && onFocus(ref.current);
   return (
@@ -66,24 +70,25 @@ function Tile(props: { game: Game; first?: boolean; onFocus: (el: HTMLDivElement
       preferredFocus={first}
       onActivate={() => playGame(game)}
       onSecondaryButton={() => openDetails(game)}
-      onOKActionDescription="Play"
-      onSecondaryActionDescription="Details"
+      onOKActionDescription={strings(language).play}
+      onSecondaryActionDescription={strings(language).details}
       onGamepadFocus={focus}
       onFocus={focus}
     >
       <Cover game={game} />
       <div className="vd-tile-meta">
         <span className="vd-tile-title">{game.name}</span>
-        <span className="vd-tile-detail">{shortPlaytime(game.minutes)}</span>
+        <span className="vd-tile-detail">{shortPlaytime(game.minutes, language)}</span>
       </div>
     </Focusable>
   );
 }
 
-function Hero({ game, onFocus }: { game: Game; onFocus: () => void }) {
-  const time = playtime(game.minutes);
-  const last = since(game.lastPlayed);
-  const compat = deckCompat(game.deckCompat);
+function Hero({ game, language, onFocus }: { game: Game; language: Language; onFocus: () => void }) {
+  const copy = strings(language);
+  const time = playtime(game.minutes, language);
+  const last = since(game.lastPlayed, language);
+  const compat = deckCompat(game.deckCompat, language);
   const button = (variant: string, glyphLabel: string, label: string, action: () => void) => (
     <Focusable
       className={`vd-btn vd-btn-${variant}`}
@@ -100,7 +105,7 @@ function Hero({ game, onFocus }: { game: Game; onFocus: () => void }) {
   return (
     <section className="vd-hero">
       <div className="vd-field" aria-hidden />
-      <span className="vd-kicker">{last ? `Continue · played ${last}` : "Ready to play"}</span>
+      <span className="vd-kicker">{last ? `${copy.continue} · ${copy.played} ${last}` : copy.ready}</span>
       <h1 className={game.name.length > 14 ? "vd-gtitle is-long" : "vd-gtitle"}>{game.name}</h1>
       <div className="vd-meta">
         {time && (
@@ -111,8 +116,8 @@ function Hero({ game, onFocus }: { game: Game; onFocus: () => void }) {
         {compat && <span>{compat}</span>}
       </div>
       <Focusable className="vd-actions" flow-children="horizontal">
-        {button("primary", "A", "Play", () => playGame(game))}
-        {button("secondary", "X", "Details", () => openDetails(game))}
+        {button("primary", "A", copy.play, () => playGame(game))}
+        {button("secondary", "X", copy.details, () => openDetails(game))}
       </Focusable>
     </section>
   );
@@ -145,6 +150,9 @@ function useScroller(viewport: RefObject<HTMLDivElement>, content: RefObject<HTM
 }
 
 export function HomeScreen() {
+  const language = useLanguage();
+  const copy = strings(language);
+  const navigationTabs = tabs(language);
   const recent = useMemo(() => recentGames(SHELF_SIZE), []);
   const installed = useMemo(() => installedGames(), []);
   const total = useMemo(() => libraryCount(), []);
@@ -163,7 +171,7 @@ export function HomeScreen() {
   );
 
   const onBumper = (e: GamepadEvent) => {
-    if (e.detail.button === GamepadButton.BUMPER_RIGHT) TABS[1].go?.();
+    if (e.detail.button === GamepadButton.BUMPER_RIGHT) navigationTabs[1].go?.();
   };
 
   return (
@@ -174,7 +182,7 @@ export function HomeScreen() {
           <div className="vd-page" style={{ height }}>
             <Focusable className="vd-tabs" flow-children="horizontal">
               <span className="vd-trigger">L1</span>
-              {TABS.map((t, i) => (
+              {navigationTabs.map((t, i) => (
                 <Focusable
                   key={t.label}
                   className={i === 0 ? "vd-tab is-active" : "vd-tab"}
@@ -191,11 +199,11 @@ export function HomeScreen() {
             </Focusable>
 
             {hero ? (
-              <Hero game={hero} onFocus={scroll.toTop} />
+              <Hero game={hero} language={language} onFocus={scroll.toTop} />
             ) : (
               <section className="vd-hero">
                 <div className="vd-field" aria-hidden />
-                <span className="vd-kicker">Library empty</span>
+                <span className="vd-kicker">{copy.emptyLibrary}</span>
                 <h1 className="vd-gtitle">VOID</h1>
               </section>
             )}
@@ -203,8 +211,8 @@ export function HomeScreen() {
             {recent.length > 0 && (
               <section>
                 <div className="vd-shelf-h">
-                  <h2>Recently played</h2>
-                  {total > 0 && <span className="vd-kicker">{`${recent.length} of ${total}`}</span>}
+                  <h2>{copy.recentlyPlayed}</h2>
+                  {total > 0 && <span className="vd-kicker">{`${recent.length} ${copy.of} ${total}`}</span>}
                 </div>
                 <Focusable className="vd-shelf" flow-children="horizontal">
                   {recent.map((g, i) => (
@@ -212,6 +220,7 @@ export function HomeScreen() {
                       key={g.appid}
                       game={g}
                       first={i === 0}
+                      language={language}
                       onFocus={() => {
                         setHero(g);
                         scroll.toTop();
@@ -226,14 +235,15 @@ export function HomeScreen() {
           {installed.length > 0 && (
             <section className="vd-installed">
               <div className="vd-shelf-h">
-                <h2>Installed</h2>
-                <span className="vd-kicker">{`${installed.length} games`}</span>
+                <h2>{copy.installed}</h2>
+                <span className="vd-kicker">{`${installed.length} ${copy.games}`}</span>
               </div>
               <Focusable className="vd-grid" flow-children="grid">
                 {installed.map((g) => (
                   <Tile
                     key={g.appid}
                     game={g}
+                    language={language}
                     onFocus={(el) => {
                       setHero(g);
                       scroll.reveal(el);

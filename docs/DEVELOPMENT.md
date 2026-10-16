@@ -14,6 +14,19 @@ pnpm package     # generates out/VoidDeck-v<version>.zip, the same ZIP published
 In the preview, the arrow keys move focus (D-pad), Enter activates (A), X opens details, Q/E are L1/R1, and P
 opens Quick Access.
 
+## Command reference
+
+| Command | Purpose |
+|---|---|
+| `pnpm install` | Install the locked project dependencies. |
+| `pnpm preview` | Build the preview and watch for changes at `http://localhost:5173`. |
+| `pnpm typecheck` | Run TypeScript checks without writing build output. |
+| `pnpm build` | Create the Decky bundle in `dist/`. |
+| `pnpm package` | Build and create the installable `out/VoidDeck-v<version>.zip`. |
+| `pnpm deck:setup` | Configure one-time, password-free SSH deployment to a Deck. |
+| `pnpm deck` | Build, copy, install, and restart Void Deck on the configured Deck. |
+| `pnpm deck:log` | Show the installed plugins and recent Decky logs. |
+
 ## Architecture
 
 | Layer | Purpose | Location |

@@ -31,7 +31,8 @@ only changes how Steam looks, never how it works.
 
 You need [Decky Loader](https://decky.xyz) installed on your Steam Deck.
 
-1. Find the latest `VoidDeck-vX.Y.Z.zip` on the [Releases](https://github.com/endoflineservice/VoidDeck/releases/latest) page.
+1. Download `VoidDeck-v0.1.2.zip` from the [v0.1.2 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v0.1.2), or copy its direct URL:
+   `https://github.com/endoflineservice/VoidDeck/releases/download/v0.1.2/VoidDeck-v0.1.2.zip`
 2. On the Deck, in Game Mode, open Quick Access (the `···` button) → the **Decky** tab (plug icon) → **⚙**.
 3. Under **General**, turn on **Developer mode**.
 4. In the new **Developer** section, choose one of:
@@ -53,9 +54,28 @@ In Quick Access, Decky tab → **Void Deck**:
 - **Global skin**: the Void Deck style across the whole Steam interface.
 - **Home screen**: replaces Steam's Home with the Void Deck one.
 - **Light theme**: inverted colors for outdoor use.
+- **Spanish language**: changes Void Deck's interface to Spanish. It is off by default, so Void Deck starts in English.
 
 Each part can be turned off on its own. If a Steam update breaks something, turn that part off and the rest keeps
 working.
+
+## Commands
+
+Run these from a clone of the repository with Node 22+ and pnpm installed:
+
+```sh
+pnpm install        # install project dependencies
+pnpm preview        # start the browser preview at http://localhost:5173
+pnpm typecheck      # check TypeScript without writing output
+pnpm build          # build dist/index.js
+pnpm package        # build and create out/VoidDeck-v<version>.zip
+pnpm deck           # build and deploy to a configured Steam Deck over SSH
+pnpm deck:setup     # one-time setup for password-free deployment
+pnpm deck:log       # show installed plugins and the Decky log
+```
+
+For Deck deployment, copy `.env.deck.example` to `.env.deck`, set `DECK_HOST`, then run `pnpm deck:setup` once.
+See [the development guide](docs/DEVELOPMENT.md) for the full setup and publishing instructions.
 
 > Void Deck is an independent project, not affiliated with Valve or Steam. Steam changes its interface often:
 > after an update, some screen may look half-styled until a new version of the plugin is released.
