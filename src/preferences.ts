@@ -21,6 +21,13 @@ function read<T extends string>(key: string, values: readonly T[], fallback: T):
 let accent = read(ACCENT_KEY, ["red", "cyan", "amber", "violet"] as const, "red");
 let density = read(DENSITY_KEY, ["comfortable", "compact"] as const, "comfortable");
 let buttonStyle = read(BUTTON_STYLE_KEY, ["steam", "xbox", "ally"] as const, "steam");
+// useSyncExternalStore compares snapshots by reference. Keep this object stable until
+// a preference actually changes, otherwise React sees a new snapshot on every render.
+let appearance = { accent, density, buttonStyle };
+
+function syncAppearance(): void {
+  appearance = { accent, density, buttonStyle };
+}
 
 function save(key: string, value: string): void {
   try {
@@ -35,12 +42,13 @@ function notify(): void {
 }
 
 export function appearanceState(): { accent: Accent; density: Density; buttonStyle: ButtonStyle } {
-  return { accent, density, buttonStyle };
+  return appearance;
 }
 
 export function setAccent(next: Accent): void {
   if (next === accent) return;
   accent = next;
+  syncAppearance();
   save(ACCENT_KEY, next);
   notify();
 }
@@ -48,6 +56,7 @@ export function setAccent(next: Accent): void {
 export function setDensity(next: Density): void {
   if (next === density) return;
   density = next;
+  syncAppearance();
   save(DENSITY_KEY, next);
   notify();
 }
@@ -55,6 +64,7 @@ export function setDensity(next: Density): void {
 export function setButtonStyle(next: ButtonStyle): void {
   if (next === buttonStyle) return;
   buttonStyle = next;
+  syncAppearance();
   save(BUTTON_STYLE_KEY, next);
   notify();
 }
@@ -63,6 +73,7 @@ export function resetAppearance(): void {
   accent = "red";
   density = "comfortable";
   buttonStyle = "steam";
+  syncAppearance();
   save(ACCENT_KEY, accent);
   save(DENSITY_KEY, density);
   save(BUTTON_STYLE_KEY, buttonStyle);
