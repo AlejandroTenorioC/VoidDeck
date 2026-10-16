@@ -1,7 +1,7 @@
 {
   "name": "void-deck",
-  "version": "0.1.0",
-  "description": "Void Deck: una interfaz de puntos, luz y vacío para la Steam Deck.",
+  "version": "0.1.1",
+  "description": "Void Deck: an interface of dots, light, and void for the Steam Deck.",
   "type": "module",
   "private": true,
   "scripts": {
@@ -36,6 +36,6 @@
   "packageManager": "pnpm@12.11.2",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AlejandroTenorioC/VoidDeck"
+    "url": "https://github.com/endoflineservice/VoidDeck"
   }
 }

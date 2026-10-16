@@ -1,5 +1,5 @@
-// Barra inferior de pistas de controles (ButtonHint del concepto).
-// Steam dibuja A/B/X/Y con imágenes por dirección: s = A, e = B, w = X, n = Y.
+// Bottom control-hint bar (the design's ButtonHint).
+// Steam draws A/B/X/Y as directional images: s = A, e = B, w = X, n = Y.
 import { cls } from "../steam/classes";
 
 const FACE_BUTTONS: [direction: string, letter: string][] = [
@@ -15,7 +15,7 @@ export function footerCss(): string {
   const face = `${glyph}:has(img[src*="shared_buttons_"])`;
 
   return `
-/* A/B/X/Y: círculo con la letra; A relleno (acción principal) */
+/* A/B/X/Y: circle with the letter; filled A (primary action) */
 ${face} img { display: none !important; }
 ${face}::after {
   display: inline-grid; place-items: center; width: 19px; height: 19px; box-sizing: border-box; border-radius: 50%;
@@ -24,7 +24,7 @@ ${face}::after {
 ${glyph}:has(img[src*="shared_buttons_s"])::after { background: var(--vd-ink); border-color: var(--vd-ink); color: var(--vd-on-ink); }
 ${FACE_BUTTONS.map(([dir, letter]) => `${glyph}:has(img[src*="shared_buttons_${dir}"])::after { content: "${letter}"; }`).join("\n")}
 
-/* STEAM, Opciones...: las píldoras blancas de Steam pasan a píldoras con borde */
+/* STEAM, Options…: Steam's white pills become outlined pills */
 ${glyph} svg { filter: invert(1); border-radius: 999px; outline: 1px solid var(--vd-line-strong); outline-offset: -1px; }
 
 ${label} {

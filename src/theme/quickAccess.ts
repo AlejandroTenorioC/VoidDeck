@@ -1,9 +1,9 @@
-// Acceso rápido (···): panel en surface, pestañas en círculos, filas del concepto,
-// interruptores en píldora y deslizantes como medidores de puntos.
-// Medidas en px CSS de Steam: 1 px aquí = 1,5 px del concepto.
+// Quick Access (···): surface panel, circular tabs, design rows,
+// pill toggles, and sliders as dot meters.
+// Measurements are in Steam CSS px: 1 px here = 1.5 design px.
 import { cls, clsAll } from "../steam/classes";
 
-/** Fila de puntos para los deslizantes: puntos de 4 px cada 7 px. */
+/** Dot row for sliders: 4 px dots every 7 px. */
 const dotRow = (color: string) => `radial-gradient(circle, ${color} 1.6px, transparent 2px) 0 50% / 7px 8px repeat-x`;
 
 export function quickAccessCss(): string {
@@ -15,7 +15,7 @@ export function quickAccessCss(): string {
   const toggle = cls("Toggle", "ToggleRail");
   const on = cls("On", "ToggleRail");
   const rail = cls("ToggleRail", "ToggleSwitch");
-  // Repetida para ganar en especificidad a la posición que fija Steam.
+  // Repeated to override the position specificity set by Steam.
   const knob = cls("ToggleSwitch", "ToggleRail").repeat(2);
   const ring = "0 0 0 2px var(--vd-surface), 0 0 0 4px var(--vd-ink)";
 
@@ -28,7 +28,7 @@ ${clsAll("PanelSectionTitle")}, ${clsAll("PanelSectionTitle", " *")} {
   letter-spacing: .08em !important; color: var(--vd-ink-muted) !important;
 }
 
-/* Pestañas: círculos con el icono; la activa rellena */
+/* Tabs: icon circles; active tab filled */
 ${cls("Tabs", "TabList")} {
   width: 48px !important; min-width: 48px !important;
   background: var(--vd-surface) !important; border-right: 1px solid var(--vd-line) !important;
@@ -43,15 +43,15 @@ ${tab} svg { width: 16px !important; height: 16px !important; }
 ${tab}${selected} { background: var(--vd-ink) !important; border-color: var(--vd-ink) !important; color: var(--vd-on-ink) !important; }
 ${tab}.gpfocus { box-shadow: ${ring} !important; }
 
-/* Filas: el foco eleva la fila y marca el borde izquierdo */
+/* Rows: focus raises the row and marks the left edge */
 ${field}.gpfocus, ${field}.gpfocuswithin { background: var(--vd-surface-raised) !important; box-shadow: inset 2px 0 0 var(--vd-ink) !important; }
 
-/* Deslizantes (brillo, volumen...) como medidores de puntos */
+/* Sliders (brightness, volume…) as dot meters */
 ${track} { height: 8px !important; border-radius: 0 !important; background: ${dotRow("var(--vd-ink-faint)")} !important; }
 ${track}::before { height: 8px !important; border-radius: 0 !important; background: ${dotRow("var(--vd-ink)")} !important; }
 ${cls("SliderHandle", "SliderTrack")} { opacity: 0 !important; }
 
-/* Interruptores: píldora con borde; encendido = relleno blanco con botón negro */
+/* Toggles: outlined pill; on = white fill with black knob */
 ${rail} { background: transparent !important; border: 1px solid var(--vd-line-strong) !important; border-radius: 999px !important; box-sizing: border-box !important; }
 ${rail}::before { display: none !important; }
 ${toggle}${on} ${rail} { background: var(--vd-ink) !important; border-color: var(--vd-ink) !important; }

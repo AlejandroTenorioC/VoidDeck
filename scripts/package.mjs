@@ -1,5 +1,5 @@
-// Genera out/VoidDeck-v<versión>.zip para instalar desde Decky (Ajustes → Desarrollador → instalar desde ZIP).
-// El zip contiene la carpeta VoidDeck/ en la raíz. Sin dependencias: deflate de node:zlib.
+// Generate out/VoidDeck-v<version>.zip for installation from Decky (Settings → Developer → Install from ZIP).
+// The ZIP contains the VoidDeck/ directory at its root. No dependencies: node:zlib deflate.
 import { execSync } from "node:child_process";
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
@@ -16,12 +16,12 @@ function listFiles(dir) {
   });
 }
 
-/** Zip mínimo (deflate, sin cifrado ni zip64): suficiente para un plugin de unos cientos de KB. */
+/** Minimal ZIP (deflate, no encryption or zip64): enough for a plugin of a few hundred KB. */
 function zip(entries) {
   const locals = [];
   const centrals = [];
   let offset = 0;
-  // Fecha fija (1 ene 2020): el zip no cambia si el contenido no cambia.
+  // Fixed date (Jan 1, 2020): the ZIP does not change if its contents do not change.
   const time = 0;
   const date = ((2020 - 1980) << 9) | (1 << 5) | 1;
   for (const { name, data } of entries) {
@@ -34,8 +34,8 @@ function zip(entries) {
       return b;
     };
     const local = header(0x04034b50, 30);
-    local.writeUInt16LE(20, 4); // versión necesaria
-    local.writeUInt16LE(0x0800, 6); // nombres en UTF-8
+    local.writeUInt16LE(20, 4); // version needed
+    local.writeUInt16LE(0x0800, 6); // UTF-8 names
     local.writeUInt16LE(8, 8); // deflate
     local.writeUInt16LE(time, 10);
     local.writeUInt16LE(date, 12);
@@ -46,7 +46,7 @@ function zip(entries) {
     locals.push(local, nameBuf, packed);
 
     const central = header(0x02014b50, 46);
-    central.writeUInt16LE(0x031e, 4); // creado en Unix, versión 3.0
+    central.writeUInt16LE(0x031e, 4); // created on Unix, version 3.0
     central.writeUInt16LE(20, 6);
     central.writeUInt16LE(0x0800, 8);
     central.writeUInt16LE(8, 10);
@@ -56,7 +56,7 @@ function zip(entries) {
     central.writeUInt32LE(packed.length, 20);
     central.writeUInt32LE(data.length, 24);
     central.writeUInt16LE(nameBuf.length, 28);
-    central.writeUInt32LE((0o100644 << 16) >>> 0, 38); // permisos rw-r--r--
+    central.writeUInt32LE((0o100644 << 16) >>> 0, 38); // rw-r--r-- permissions
     central.writeUInt32LE(offset, 42);
     centrals.push(central, nameBuf);
     offset += local.length + nameBuf.length + packed.length;
@@ -79,4 +79,4 @@ const entries = listFiles(staged)
   .map((path) => ({ name: relative(base, path).split(sep).join("/"), data: readFileSync(path) }));
 const file = join(root, "out", `VoidDeck-v${version}.zip`);
 writeFileSync(file, zip(entries));
-console.log(`✓ ${relative(root, file)} (${entries.length} archivos)`);
+console.log(`✓ ${relative(root, file)} (${entries.length} files)`);

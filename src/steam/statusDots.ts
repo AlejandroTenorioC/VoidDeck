@@ -1,10 +1,10 @@
-// Barra superior: sustituye los iconos de wifi y batería de Steam por medidores de puntos.
+// Top bar: replace Steam Wi-Fi and battery icons with dot meters.
 import { cls } from "./classes";
 
 const METER = "vd-meter";
 const BATTERY_DOTS = 5;
 const LOW_BATTERY = 0.2;
-// Steam marca los arcos apagados del icono de wifi con fill-opacity 0.25.
+// Steam marks the unlit Wi-Fi icon arcs with fill-opacity 0.25.
 const LIT_ARC = '[fill-opacity="1"]';
 const AC_CONNECTED = 2;
 
@@ -35,7 +35,7 @@ const selectors = () =>
     percentage: cls("Percentage", "BatteryIcon"),
   });
 
-/** Crea o actualiza el medidor dentro de `host`: `on` puntos encendidos de `total`. */
+/** Create or update the meter inside `host`: `on` lit dots out of `total`. */
 function meter(host: Element, on: number, total: number, modifiers: string[], first: boolean): void {
   const doc = host.ownerDocument;
   let el = host.querySelector(`:scope > .${METER}`);
@@ -75,7 +75,7 @@ export function removeStatusDots(doc: Document): void {
   doc.querySelectorAll(".vd-battery-low").forEach((el) => el.classList.remove("vd-battery-low"));
 }
 
-/** CSS: oculta los iconos originales y dibuja los puntos (4 px = 6 px del concepto a escala 1,5). */
+/** CSS: hide original icons and draw dots (4 px = 6 design px at 1.5 scale). */
 export function statusDotsCss(): string {
   const s = selectors();
   return `

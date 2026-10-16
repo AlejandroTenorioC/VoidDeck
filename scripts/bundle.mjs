@@ -1,5 +1,5 @@
-// Prepara la carpeta del plugin tal como la espera Decky: out/<nombre>/ con dist, plugin.json, etc.
-// La usan el despliegue a la Deck y el empaquetado de releases.
+// Prepare the plugin directory as Decky expects: out/<name>/ with dist, plugin.json, etc.
+// Used by deployment to the Deck and release packaging.
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { root } from "./deck.mjs";
@@ -10,9 +10,9 @@ export function pluginName() {
   return JSON.parse(readFileSync(join(root, "plugin.json"), "utf8")).name;
 }
 
-/** Copia los archivos del plugin a out/<nombre> y devuelve esa ruta. Requiere `pnpm build` antes. */
+/** Copy plugin files to out/<name> and return that path. Requires `pnpm build` first. */
 export function stagePlugin() {
-  if (!existsSync(join(root, "dist", "index.js"))) throw new Error("Falta dist/index.js: ejecuta pnpm build");
+  if (!existsSync(join(root, "dist", "index.js"))) throw new Error("Missing dist/index.js: run pnpm build");
   const out = join(root, "out", pluginName());
   rmSync(join(root, "out"), { recursive: true, force: true });
   mkdirSync(out, { recursive: true });

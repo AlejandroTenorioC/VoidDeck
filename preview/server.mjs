@@ -1,4 +1,4 @@
-// Preview en el navegador: compila src/ con los stubs de Decky y recarga al guardar.
+// Browser preview: builds src/ with Decky stubs and reloads on save.
 import * as esbuild from "esbuild";
 import { fileURLToPath } from "node:url";
 

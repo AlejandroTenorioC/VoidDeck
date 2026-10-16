@@ -1,13 +1,13 @@
-// Traduce nombres legibles de clases de Steam a sus versiones minificadas.
-// Steam las regenera en cada actualización, así que nunca se escriben a mano.
+// Resolve readable Steam class names to their minified versions.
+// Steam regenerates them in every update, so they are never written by hand.
 import { classMap, findClassModule } from "@decky/ui";
 
 const missing = new Set<string>();
 
 /**
- * Selector CSS para la clase `name`. Si el nombre existe en varios módulos,
- * `siblings` elige el módulo que también define esas otras clases.
- * Si no se encuentra, devuelve un selector que no coincide con nada.
+ * CSS selector for the `name` class. If the name exists in several modules,
+ * `siblings` chooses the module that also defines those other classes.
+ * If it cannot be found, returns a selector that matches nothing.
  */
 export function cls(name: string, ...siblings: string[]): string {
   const mod = findClassModule((m) => typeof m?.[name] === "string" && siblings.every((s) => m[s]));
@@ -19,10 +19,10 @@ export function cls(name: string, ...siblings: string[]): string {
 }
 
 /**
- * Selectores de `name` en todos los módulos que lo definen. Steam compone el mismo CSS en
- * varios paneles (Acceso rápido, Decky, ajustes...) y cada copia tiene su propio nombre.
- * `suffix` se añade a cada selector (p. ej. " *" para alcanzar los hijos) y `siblings`
- * limita a los módulos que también definen esas clases.
+ * Selectors for `name` in every module that defines it. Steam composes the same CSS in
+ * several panels (Quick Access, Decky, settings…), and each copy has its own name.
+ * `suffix` is added to each selector (for example, " *" to reach children), and `siblings`
+ * limits it to modules that also define those classes.
  */
 export function clsAll(name: string, suffix = "", ...siblings: string[]): string {
   return clsList(name, ...siblings)
@@ -30,7 +30,7 @@ export function clsAll(name: string, suffix = "", ...siblings: string[]): string
     .join(", ");
 }
 
-/** Como `clsAll`, pero como lista de selectores sueltos para combinarlos entre sí. */
+/** Like `clsAll`, but returns a list of separate selectors for combining with each other. */
 export function clsList(name: string, ...siblings: string[]): string[] {
   const names = new Set(
     classMap
@@ -44,7 +44,7 @@ export function clsList(name: string, ...siblings: string[]): string[] {
   return [...names].map((n) => `.${n}`);
 }
 
-/** Clases que no se encontraron (útil para detectar roturas tras una actualización de Steam). */
+/** Classes that could not be found (useful for detecting breakage after a Steam update). */
 export function missingClasses(): string[] {
   return [...missing];
 }

@@ -1,4 +1,4 @@
-// Configuración compartida de los scripts que hablan con la Deck (.env.deck).
+// Shared configuration for scripts that communicate with the Deck (.env.deck).
 import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
@@ -9,7 +9,7 @@ export const root = fileURLToPath(new URL("..", import.meta.url));
 export function deckConfig() {
   const file = join(root, ".env.deck");
   if (!existsSync(file)) {
-    console.error("Falta .env.deck. Copia .env.deck.example y pon la IP de tu Deck.");
+    console.error("Missing .env.deck. Copy .env.deck.example and set your Deck's IP address.");
     process.exit(1);
   }
   const env = {};
@@ -18,7 +18,7 @@ export function deckConfig() {
     if (m) env[m[1]] = m[2];
   }
   if (!env.DECK_HOST) {
-    console.error("DECK_HOST no está definido en .env.deck");
+    console.error("DECK_HOST is not defined in .env.deck");
     process.exit(1);
   }
   const user = env.DECK_USER || "deck";
@@ -26,7 +26,7 @@ export function deckConfig() {
   return { host: env.DECK_HOST, user, port: env.DECK_PORT || "22", key, target: `${user}@${env.DECK_HOST}` };
 }
 
-/** Opciones de ssh/scp: usa la clave del proyecto si existe; nunca pregunta en modo `batch`. */
+/** ssh/scp options: use the project key if present; never prompt in `batch` mode. */
 export function sshOptions({ key }, { batch = false } = {}) {
   const opts = ["-o StrictHostKeyChecking=accept-new"];
   if (existsSync(key)) opts.push(`-i "${key}"`, "-o IdentitiesOnly=yes");

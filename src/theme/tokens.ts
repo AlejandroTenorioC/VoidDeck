@@ -1,4 +1,4 @@
-// Tokens de Void Deck como variables CSS. Fuente de verdad: el concepto (tokens.json).
+// Void Deck tokens as CSS variables. Source of truth: the design (tokens.json).
 
 export type Theme = "dark" | "light";
 
@@ -57,7 +57,7 @@ const declare = (vars: Record<string, string>) =>
     .map(([name, value]) => `--vd-${name}: ${value};`)
     .join(" ");
 
-/** Bloque `selector { ... }` con todas las variables `--vd-*` del tema dado. */
+/** A `selector { ... }` block with every `--vd-*` variable for the given theme. */
 export function tokensCss(theme: Theme, selector = ":root"): string {
   return `${selector} { ${declare(colors[theme])} ${declare(scale)} }`;
 }

@@ -1,4 +1,4 @@
-// Datos de ejemplo que imitan los stores de Steam (collectionStore, appStore, SteamClient).
+// Sample data that imitates Steam stores (collectionStore, appStore, SteamClient).
 const now = Math.floor(Date.now() / 1000);
 const hours = (h: number) => h * 60;
 
@@ -19,7 +19,7 @@ export function installMockSteam() {
       localGamesCollection: { allApps: [...apps, ...apps.map((a) => ({ ...a, appid: a.appid + 1 }))].sort((a, b) => a.display_name.localeCompare(b.display_name)) },
       myGamesCollection: { allApps: { length: 214 } },
     },
-    // Sin portadas: el preview muestra las iniciales sobre la retícula, como el concepto.
+    // No covers: the preview shows initials over the grid, like the design.
     appStore: { GetCustomVerticalCapsuleURLs: () => [] },
     SteamClient: { Apps: { RunGame: (id: string) => console.info(`[SteamClient] RunGame ${id}`) } },
   });

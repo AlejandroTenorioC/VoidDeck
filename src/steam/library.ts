@@ -1,29 +1,29 @@
-// Datos de la biblioteca de Steam: juegos recientes, portadas y acciones.
+// Steam library data: recent games, cover art, and actions.
 import { Navigation } from "@decky/ui";
 
 export interface Game {
   appid: number;
   gameid: string;
   name: string;
-  /** Minutos jugados en total. */
+  /** Total minutes played. */
   minutes: number;
-  /** Última partida, en segundos Unix (0 si nunca). */
+  /** Last play time, as Unix seconds (0 if never). */
   lastPlayed: number;
-  /** 0 desconocido, 1 no compatible, 2 jugable, 3 verificado. */
+  /** 0 unknown, 1 unsupported, 2 playable, 3 verified. */
   deckCompat: number;
-  /** Portadas 2:3 candidatas, de más a menos preferida. */
+  /** Candidate 2:3 covers, in descending preference. */
   covers: string[];
 }
 
 const ASSETS = "https://steamloopback.host";
-// Los accesos directos que no son de Steam usan appids por encima de 2^31.
+// Non-Steam shortcuts use app IDs above 2^31.
 const isSteamApp = (appid: number) => appid < 0x80000000;
 
 const stores = () => window as any;
 
 function toGame(app: any): Game {
   const appStore = stores().appStore;
-  // Mismo orden que el Inicio de Steam: portada personalizada, CDN de Steam y caché local.
+  // Same order as Steam Home: custom cover, Steam CDN, then local cache.
   const custom: string[] = appStore?.GetCustomVerticalCapsuleURLs?.(app) ?? [];
   const covers = custom.map((u) => (u.startsWith("http") ? u : ASSETS + u));
   if (isSteamApp(app.appid)) {
@@ -48,8 +48,8 @@ export function recentGames(limit: number): Game[] {
 }
 
 /**
- * Juegos instalados en esta Deck, en orden alfabético. Incluye los accesos directos que no son
- * de Steam (emuladores, otras tiendas): la colección "type-games" los contiene, "local-install" no.
+ * Games installed on this Deck, alphabetically. Includes non-Steam shortcuts
+ * (emulators, other stores): the "type-games" collection contains them, while "local-install" does not.
  */
 export function installedGames(): Game[] {
   const store = stores().collectionStore;

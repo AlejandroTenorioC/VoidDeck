@@ -1,4 +1,4 @@
-// Tipografías de Void Deck (SIL Open Font License), incrustadas para funcionar sin conexión.
+// Void Deck typefaces (SIL Open Font License), embedded to work offline.
 import doto800 from "@fontsource/doto/files/doto-latin-800-normal.woff2";
 import grotesk400 from "@fontsource/space-grotesk/files/space-grotesk-latin-400-normal.woff2";
 import grotesk500 from "@fontsource/space-grotesk/files/space-grotesk-latin-500-normal.woff2";

@@ -1,11 +1,11 @@
-// Capa 1: piel global. Inyecta el CSS de Void Deck en todas las ventanas de Steam.
+// Layer 1: global skin. Injects Void Deck CSS into every Steam window.
 import { removeStatusDots, unwatchBattery, updateStatusDots, watchBattery } from "./steam/statusDots";
 import { steamDocuments } from "./steam/windows";
 import { skinCss } from "./theme/skin";
 import type { Theme } from "./theme/tokens";
 
 const STYLE_ID = "voiddeck-skin";
-// Steam crea ventanas nuevas (overlays, popups) sobre la marcha y cambia el wifi: revisamos cada poco.
+// Steam creates new windows (overlays, popups) on demand and Wi-Fi changes, so check periodically.
 const RESYNC_MS = 2000;
 
 let css: string | null = null;
@@ -45,7 +45,7 @@ export function removeSkin(): void {
   }
 }
 
-/** Estado actual, para que el panel lo muestre al volver a abrirse. */
+/** Current state, so the panel can show it when reopened. */
 export function skinState(): { on: boolean; theme: Theme } {
   return { on: css !== null, theme };
 }

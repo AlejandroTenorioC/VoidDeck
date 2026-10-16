@@ -1,4 +1,4 @@
-# Al subir una etiqueta vX.Y.Z: compila, empaqueta VoidDeck-vX.Y.Z.zip y publica la Release con el zip.
+# Pushing a vX.Y.Z tag builds, packages VoidDeck-vX.Y.Z.zip, and publishes the Release with the ZIP.
 name: Release
 
 on:
@@ -21,8 +21,8 @@ jobs:
           node-version: 24
           cache: pnpm
 
-      # Si falla, el final del registro queda como anotación (visible sin abrir el registro completo).
-      - name: Instalar dependencias
+      # On failure, the end of the log is an annotation (visible without opening the full log).
+      - name: Install dependencies
         run: |
           pnpm install --frozen-lockfile > install.log 2>&1 || {
             cat install.log
@@ -30,11 +30,11 @@ jobs:
             exit 1
           }
 
-      - name: Comprobar que la etiqueta coincide con package.json
+      - name: Verify that the tag matches package.json
         run: |
           version="v$(node -p "require('./package.json').version")"
           if [ "$version" != "$GITHUB_REF_NAME" ]; then
-            echo "La etiqueta $GITHUB_REF_NAME no coincide con package.json ($version)"
+            echo "Tag $GITHUB_REF_NAME does not match package.json ($version)"
             exit 1
           fi
 

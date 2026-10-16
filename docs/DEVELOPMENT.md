@@ -1,53 +1,53 @@
-# Desarrollo de Void Deck
+# Void Deck development
 
 
-Requisitos: Node 22+ y pnpm.
+Requirements: Node 22+ and pnpm.
 
 ```sh
 pnpm install
-pnpm preview     # preview en el navegador: http://localhost:5173 (recarga al guardar)
+pnpm preview     # browser preview: http://localhost:5173 (reloads on save)
 pnpm typecheck
-pnpm build       # genera dist/
-pnpm package     # genera out/VoidDeck-v<versión>.zip, el mismo que se publica en Releases
+pnpm build       # generates dist/
+pnpm package     # generates out/VoidDeck-v<version>.zip, the same ZIP published in Releases
 ```
 
-En el preview, las flechas mueven el foco (D-pad), Enter activa (A), X abre detalles, Q/E son L1/R1 y P abre el
-Acceso rápido.
+In the preview, the arrow keys move focus (D-pad), Enter activates (A), X opens details, Q/E are L1/R1, and P
+opens Quick Access.
 
-## Arquitectura
+## Architecture
 
-| Capa | Qué hace | Dónde |
+| Layer | Purpose | Location |
 |---|---|---|
-| 1 · Piel global | Inyecta los tokens del diseño en todas las ventanas de Steam | `src/skin.ts`, `src/theme/` |
-| 2 · Pantallas propias | Sustituye rutas concretas (Inicio) por pantallas en React | `src/home/` |
-| 3 · Ajustes | Panel en el Acceso rápido | `src/qam/` |
+| 1 · Global skin | Injects the design tokens into every Steam window | `src/skin.ts`, `src/theme/` |
+| 2 · Custom screens | Replaces specific routes (Home) with React screens | `src/home/` |
+| 3 · Settings | Panel in Quick Access | `src/qam/` |
 
-Steam genera los nombres de sus clases CSS en cada actualización, así que nunca se escriben a mano:
-`src/steam/classes.ts` los traduce en tiempo de ejecución a partir de su nombre legible.
+Steam regenerates its CSS class names in every update, so they are never written by hand:
+`src/steam/classes.ts` resolves them at runtime from their readable name.
 
-## Probar en una Steam Deck
+## Testing on a Steam Deck
 
-1. En la Deck: Decky Loader con **Developer mode** activado y SSH habilitado
-   (`passwd` si no tienes contraseña, luego `sudo systemctl enable --now sshd`).
-2. En el PC: copia `.env.deck.example` como `.env.deck` y pon la IP de la Deck.
-3. `pnpm deck` compila, copia el plugin a la Deck y reinicia Decky.
+1. On the Deck: enable **Developer mode** in Decky Loader and enable SSH
+   (run `passwd` if you do not have a password, then `sudo systemctl enable --now sshd`).
+2. On your computer: copy `.env.deck.example` to `.env.deck` and set the Deck's IP address.
+3. `pnpm deck` builds the plugin, copies it to the Deck, and restarts Decky.
 
-Para desplegar sin contraseña (una sola vez): crea una clave con
-`ssh-keygen -t ed25519 -f ~/.ssh/voiddeck_deck -N ""` y ejecuta `pnpm deck:setup`. Autoriza la clave e instala
-en la Deck `/etc/voiddeck/deploy.sh` y una regla de `sudo` limitada a ese script y a arrancar/parar Decky
-(`scripts/deck-setup/`). Se revierte borrando `/etc/sudoers.d/zz-voiddeck`. El script detiene Decky, espera a
-que libere su puerto (1337) y limpia procesos huérfanos antes de arrancarlo: un reinicio brusco con otro plugin
-colgado puede dejar a Decky en bucle y agotar la memoria.
+For password-free deployment (one-time setup), create a key with
+`ssh-keygen -t ed25519 -f ~/.ssh/voiddeck_deck -N ""` and run `pnpm deck:setup`. This authorizes the key and
+installs `/etc/voiddeck/deploy.sh` plus a `sudo` rule limited to that script and to starting/stopping Decky
+(`scripts/deck-setup/`). Undo it by deleting `/etc/sudoers.d/zz-voiddeck`. The script stops Decky, waits for it
+to release port 1337, and clears orphan processes before starting it again: a hard restart while another plugin
+is stuck can leave Decky in a loop and exhaust memory.
 
-`pnpm deck:log` muestra los plugins instalados y el registro de Decky.
+`pnpm deck:log` shows installed plugins and the Decky log.
 
-Para inspeccionar la interfaz de Steam en vivo: en Decky, *⚙ → Developer → Allow Remote CEF Debugging*; después,
-en Chrome o Brave del PC, abre `chrome://inspect` y añade `IP_DE_LA_DECK:8081`.
+To inspect the live Steam interface: in Decky, choose *⚙ → Developer → Allow Remote CEF Debugging*; then open
+`chrome://inspect` in Chrome or Brave on your computer and add `DECK_IP:8081`.
 
-## Publicar una versión
+## Publishing a release
 
-1. Sube la versión en `package.json` (por ejemplo `0.2.0`) y haz commit.
-2. Crea y sube la etiqueta: `git tag v0.2.0 && git push origin v0.2.0`.
-3. GitHub Actions compila, genera `VoidDeck-v0.2.0.zip` y crea la Release con el zip adjunto
-   (`.github/workflows/release.yml`). La etiqueta debe coincidir con la versión de `package.json`.
+1. Bump the version in `package.json` (for example, `0.2.0`) and commit it.
+2. Create and push the tag: `git tag v0.2.0 && git push origin v0.2.0`.
+3. GitHub Actions builds the project, generates `VoidDeck-v0.2.0.zip`, and creates a Release with the ZIP attached
+   (`.github/workflows/release.yml`). The tag must match the version in `package.json`.
 

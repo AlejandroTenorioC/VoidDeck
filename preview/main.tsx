@@ -1,4 +1,4 @@
-// Monta el plugin real: la ruta de Inicio (con los parches del plugin) y el Acceso rápido simulado.
+// Mount the actual plugin: the Home route (with plugin patches) and simulated Quick Access.
 import type { RoutePatch } from "@decky/api/dist/types";
 import { useEffect, useReducer, useState } from "react";
 import { createRoot } from "react-dom/client";
@@ -11,7 +11,7 @@ installMockSteam();
 const p = plugin();
 
 function SteamHome() {
-  return <div className="steam-home">Inicio de Steam (sin parche)</div>;
+  return <div className="steam-home">Steam Home (unpatched)</div>;
 }
 
 function HomeRoute() {
@@ -35,7 +35,7 @@ function Screen() {
     <>
       <div className="steam-header" />
       <HomeRoute />
-      <div className="steam-footer">P · ACCESO RÁPIDO &nbsp; Q/E · L1/R1 &nbsp; ENTER · A &nbsp; X · X</div>
+      <div className="steam-footer">P · QUICK ACCESS &nbsp; Q/E · L1/R1 &nbsp; ENTER · A &nbsp; X · X</div>
       {qam && (
         <aside className="qam">
           <div className="qam-title">{p.titleView ?? p.name}</div>

@@ -4,7 +4,7 @@ A Steam Deck interface made of dots, light and void. A [Decky Loader](https://de
 the whole Steam interface (Game Mode): pure black backgrounds, dot-matrix typography and a custom Home screen,
 designed to be driven with the controller.
 
-![Void Deck Home screen](docs/screenshots/inicio.png)
+![Void Deck Home screen](docs/screenshots/home.png)
 
 ## What it changes
 
@@ -12,9 +12,9 @@ designed to be driven with the controller.
 Steam Deck compatibility. Below it, your recently played games and every installed game — including non-Steam
 ones such as emulators or other stores. A plays, X opens the details.
 
-![Installed games on the Home screen](docs/screenshots/instalados.png)
+![Installed games on the Home screen](docs/screenshots/installed.png)
 
-![Library with Void Deck](docs/screenshots/biblioteca.png)
+![Library with Void Deck](docs/screenshots/library.png)
 
 **The whole Steam interface.** The Library, main menu, top and bottom bars and Quick Access all share the same
 language: pure black, Space Grotesk for text, Space Mono for labels and Doto (dot matrix) for numbers. Battery and
@@ -22,18 +22,16 @@ Wi-Fi in the top bar become dot meters, and the battery turns red below 20 %.
 
 | Quick Access | Main menu |
 |---|---|
-| ![Quick Access](docs/screenshots/acceso-rapido.png) | ![Main menu](docs/screenshots/menu.png) |
+| ![Quick Access](docs/screenshots/quick-access.png) | ![Main menu](docs/screenshots/menu.png) |
 
 Brightness and volume are shown as rows of dots and toggles as pills, but they work exactly as before: Void Deck
 only changes how Steam looks, never how it works.
-
-> The plugin interface is currently in Spanish.
 
 ## Installation
 
 You need [Decky Loader](https://decky.xyz) installed on your Steam Deck.
 
-1. Find the latest `VoidDeck-vX.Y.Z.zip` on the [Releases](https://github.com/AlejandroTenorioC/VoidDeck/releases/latest) page.
+1. Find the latest `VoidDeck-vX.Y.Z.zip` on the [Releases](https://github.com/endoflineservice/VoidDeck/releases/latest) page.
 2. On the Deck, in Game Mode, open Quick Access (the `···` button) → the **Decky** tab (plug icon) → **⚙**.
 3. Under **General**, turn on **Developer mode**.
 4. In the new **Developer** section, choose one of:
@@ -52,9 +50,9 @@ right away.
 
 In Quick Access, Decky tab → **Void Deck**:
 
-- **Piel global** (global skin): the Void Deck style across the whole Steam interface.
-- **Pantalla de Inicio** (Home screen): replaces Steam's Home with the Void Deck one.
-- **Tema claro** (light theme): inverted colors for outdoor use.
+- **Global skin**: the Void Deck style across the whole Steam interface.
+- **Home screen**: replaces Steam's Home with the Void Deck one.
+- **Light theme**: inverted colors for outdoor use.
 
 Each part can be turned off on its own. If a Steam update breaks something, turn that part off and the rest keeps
 working.

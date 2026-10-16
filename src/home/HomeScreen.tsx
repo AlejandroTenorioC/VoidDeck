@@ -1,5 +1,5 @@
-// Capa 2: pantalla de Inicio de Void Deck. Medidas en píxeles del concepto (1280×800);
-// el contenedor se escala al tamaño CSS real de la ventana de Steam.
+// Layer 2: Void Deck's Home screen. Measurements are in design pixels (1280×800);
+// the container scales to the actual CSS size of the Steam window.
 import { Focusable, GamepadButton, Navigation, QuickAccessTab, type GamepadEvent } from "@decky/ui";
 import { useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { skinState } from "../skin";
@@ -12,18 +12,18 @@ import { homeCss } from "./homeCss";
 
 const DESIGN_WIDTH = 1280;
 const SHELF_SIZE = 7;
-// Espacio sobre la fila enfocada al desplazarse: barra de Steam (60) + título de sección y aire.
+// Space above the focused row when scrolling: Steam bar (60) + section title and padding.
 const ROW_TOP_SPACE = 136;
 
 const TABS: { label: string; go?: () => void }[] = [
-  { label: "Inicio" },
-  { label: "Biblioteca", go: () => Navigation.NavigateToLibraryTab() },
-  { label: "Tienda", go: () => Navigation.NavigateToSteamWeb("https://store.steampowered.com/") },
-  { label: "Amigos", go: () => Navigation.OpenQuickAccessMenu(QuickAccessTab.Friends) },
-  { label: "Descargas", go: () => Navigation.Navigate("/downloads") },
+  { label: "Home" },
+  { label: "Library", go: () => Navigation.NavigateToLibraryTab() },
+  { label: "Store", go: () => Navigation.NavigateToSteamWeb("https://store.steampowered.com/") },
+  { label: "Friends", go: () => Navigation.OpenQuickAccessMenu(QuickAccessTab.Friends) },
+  { label: "Downloads", go: () => Navigation.Navigate("/downloads") },
 ];
 
-/** Escala el contenido para que 1280 px de diseño ocupen el ancho real de la ventana. */
+/** Scale content so 1280 design pixels fill the actual window width. */
 function useDesignScale() {
   const ref = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ zoom: 1, height: 800 });
@@ -66,8 +66,8 @@ function Tile(props: { game: Game; first?: boolean; onFocus: (el: HTMLDivElement
       preferredFocus={first}
       onActivate={() => playGame(game)}
       onSecondaryButton={() => openDetails(game)}
-      onOKActionDescription="Jugar"
-      onSecondaryActionDescription="Detalles"
+      onOKActionDescription="Play"
+      onSecondaryActionDescription="Details"
       onGamepadFocus={focus}
       onFocus={focus}
     >
@@ -100,7 +100,7 @@ function Hero({ game, onFocus }: { game: Game; onFocus: () => void }) {
   return (
     <section className="vd-hero">
       <div className="vd-field" aria-hidden />
-      <span className="vd-kicker">{last ? `Continuar · jugado ${last}` : "Listo para jugar"}</span>
+      <span className="vd-kicker">{last ? `Continue · played ${last}` : "Ready to play"}</span>
       <h1 className={game.name.length > 14 ? "vd-gtitle is-long" : "vd-gtitle"}>{game.name}</h1>
       <div className="vd-meta">
         {time && (
@@ -111,24 +111,24 @@ function Hero({ game, onFocus }: { game: Game; onFocus: () => void }) {
         {compat && <span>{compat}</span>}
       </div>
       <Focusable className="vd-actions" flow-children="horizontal">
-        {button("primary", "A", "Jugar", () => playGame(game))}
-        {button("secondary", "X", "Detalles", () => openDetails(game))}
+        {button("primary", "A", "Play", () => playGame(game))}
+        {button("secondary", "X", "Details", () => openDetails(game))}
       </Focusable>
     </section>
   );
 }
 
 /**
- * Desplazamiento propio: el contenido se mueve con transform y una sola transición.
- * El contenedor usa `overflow: clip`, así el navegador no puede hacer su salto instantáneo
- * al recibir el foco (que encadenado con una animación producía un tirón).
+ * Custom scrolling: content moves with a transform and one transition.
+ * The container uses `overflow: clip`, so the browser cannot jump instantly when
+ * focus arrives (which caused a jerk when chained to an animation).
  */
 function useScroller(viewport: RefObject<HTMLDivElement>, content: RefObject<HTMLDivElement>) {
   const [offset, setOffset] = useState(0);
   const scroller = useMemo(
     () => ({
       toTop: () => setOffset(0),
-      /** Sube la fila del elemento hasta justo debajo de la barra superior y del título de sección. */
+      /** Move the item's row to just below the top bar and section title. */
       reveal: (el: HTMLElement) => {
         const view = viewport.current?.clientHeight ?? 0;
         const max = Math.max(0, (content.current?.offsetHeight ?? 0) - view);
@@ -153,11 +153,11 @@ export function HomeScreen() {
   const homeRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const scroll = useScroller(homeRef, contentRef);
-  // Tokens y fuentes propios: la pantalla funciona aunque la piel global esté apagada.
+  // Local tokens and fonts let the screen work even with the global skin turned off.
   const css = useMemo(
     () =>
       `${fontsCss}\n${tokensCss(skinState().theme, ".vd-home-viewport")}\n${homeCss}\n` +
-      // El Inicio de Steam encendía la barra superior (reloj, batería); sin él queda transparente.
+      // Steam Home enabled the top bar (clock, battery); without it, it stays transparent.
       `${cls("Header", "OverrideHeaderBackground")} { opacity: 1 !important; }`,
     [],
   );
@@ -195,7 +195,7 @@ export function HomeScreen() {
             ) : (
               <section className="vd-hero">
                 <div className="vd-field" aria-hidden />
-                <span className="vd-kicker">Biblioteca vacía</span>
+                <span className="vd-kicker">Library empty</span>
                 <h1 className="vd-gtitle">VOID</h1>
               </section>
             )}
@@ -203,8 +203,8 @@ export function HomeScreen() {
             {recent.length > 0 && (
               <section>
                 <div className="vd-shelf-h">
-                  <h2>Jugados recientemente</h2>
-                  {total > 0 && <span className="vd-kicker">{`${recent.length} de ${total}`}</span>}
+                  <h2>Recently played</h2>
+                  {total > 0 && <span className="vd-kicker">{`${recent.length} of ${total}`}</span>}
                 </div>
                 <Focusable className="vd-shelf" flow-children="horizontal">
                   {recent.map((g, i) => (
@@ -226,8 +226,8 @@ export function HomeScreen() {
           {installed.length > 0 && (
             <section className="vd-installed">
               <div className="vd-shelf-h">
-                <h2>Instalados</h2>
-                <span className="vd-kicker">{`${installed.length} juegos`}</span>
+                <h2>Installed</h2>
+                <span className="vd-kicker">{`${installed.length} games`}</span>
               </div>
               <Focusable className="vd-grid" flow-children="grid">
                 {installed.map((g) => (

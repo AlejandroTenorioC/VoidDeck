@@ -1,7 +1,7 @@
 import deckyPlugin from "@decky/rollup";
 import { readFileSync } from "node:fs";
 
-// Incrusta las fuentes .woff2 como data URL: funcionan sin conexión y sin servir archivos aparte.
+// Embed .woff2 fonts as data URLs: they work offline without serving separate files.
 function inlineFonts() {
   return {
     name: "inline-fonts",

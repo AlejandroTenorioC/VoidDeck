@@ -1,6 +1,6 @@
-// Documentos de las ventanas de Steam (principal, menú, Acceso rápido...).
-// El plugin vive en SharedJSContext; cada ventana es un documento aparte al que llegamos
-// a través de los árboles de navegación del mando.
+// Documents for Steam windows (main, menu, Quick Access…).
+// The plugin lives in SharedJSContext; each window is a separate document reached
+// through the controller's navigation trees.
 
 type NavTree = { m_ID?: string; Root?: { Element?: Element } };
 type NavContext = { m_rgGamepadNavigationTrees?: NavTree[] };
@@ -19,7 +19,7 @@ export function steamDocuments(): Document[] {
       if (doc) docs.add(doc);
     }
   }
-  // Fuera de Steam (preview) no hay árboles: usamos el documento actual.
+  // Outside Steam (preview), there are no trees, so use the current document.
   if (docs.size === 0) docs.add(document);
   return [...docs];
 }

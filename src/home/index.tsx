@@ -1,4 +1,4 @@
-// Capa 2: sustituye la ruta de Inicio de Steam por la pantalla de Void Deck.
+// Layer 2: replace Steam's Home route with the Void Deck screen.
 import { routerHook } from "@decky/api";
 import { HomeScreen } from "./HomeScreen";
 

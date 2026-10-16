@@ -1,4 +1,4 @@
-// Capa 3: ajustes de Void Deck en el menú de Acceso rápido.
+// Layer 3: Void Deck settings in the Quick Access menu.
 import { PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
 import { useState } from "react";
 import { disableHome, enableHome, homeEnabled } from "../home";
@@ -26,24 +26,24 @@ export function Panel() {
     <PanelSection title="VOID DECK">
       <PanelSectionRow>
         <ToggleField
-          label="Piel global"
-          description="Aplica los colores y tipografías de Void Deck a toda la interfaz."
+          label="Global skin"
+          description="Apply Void Deck colors and typefaces across the whole interface."
           checked={skinOn}
           onChange={(on) => updateSkin(on, light)}
         />
       </PanelSectionRow>
       <PanelSectionRow>
         <ToggleField
-          label="Pantalla de Inicio"
-          description="Sustituye el Inicio de Steam por el de Void Deck."
+          label="Home screen"
+          description="Replace Steam Home with Void Deck Home."
           checked={homeOn}
           onChange={updateHome}
         />
       </PanelSectionRow>
       <PanelSectionRow>
         <ToggleField
-          label="Tema claro"
-          description="Para uso en exterior."
+          label="Light theme"
+          description="For outdoor use."
           checked={light}
           disabled={!skinOn}
           onChange={(isLight) => updateSkin(skinOn, isLight)}

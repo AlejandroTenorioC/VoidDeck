@@ -1,7 +1,7 @@
 allowBuilds:
   esbuild: true
 
-# Decky aporta React en tiempo de ejecución: no es una dependencia que instalar.
+# Decky provides React at runtime, so it is not a dependency to install.
 peerDependencyRules:
   ignoreMissing:
     - react

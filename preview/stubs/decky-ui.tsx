@@ -1,9 +1,9 @@
-// Versiones mínimas de @decky/ui para el preview. Solo lo que usa Void Deck.
+// Minimal @decky/ui implementations for the preview: only what Void Deck uses.
 import { forwardRef, useState, type HTMLAttributes, type ReactNode } from "react";
 
 export const staticClasses = { Title: "stub-title" } as Record<string, string>;
 
-// En el preview no hay clases minificadas: cada nombre se traduce a sí mismo.
+// The preview has no minified classes: every name resolves to itself.
 const identity = new Proxy({}, { get: (_t, name) => (typeof name === "string" ? name : undefined) });
 export const classMap = [identity as Record<string, string>];
 export function findClassModule(filter: (m: any) => boolean): Record<string, string> | void {

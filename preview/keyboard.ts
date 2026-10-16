@@ -1,4 +1,4 @@
-// Mando simulado con teclado: flechas = D-pad, Enter = A.
+// Simulated controller via keyboard: arrows = D-pad, Enter = A.
 const FOCUSABLE = "button, [tabindex='0']";
 
 function move(step: 1 | -1) {

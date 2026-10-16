@@ -1,5 +1,5 @@
-// Biblioteca y demás páginas con pestañas de Steam (módulo GamepadTabbedPage).
-// Medidas en px CSS de Steam: 1 px aquí = 1,5 px del concepto.
+// Library and other tabbed Steam pages (GamepadTabbedPage module).
+// Measurements are in Steam CSS px: 1 px here = 1.5 design px.
 import { cls } from "../steam/classes";
 
 export function libraryCss(): string {
@@ -7,14 +7,14 @@ export function libraryCss(): string {
   const selected = cls("Selected", "TabCount");
   const glyphs = cls("Glyphs", "TabRow");
   const item = cls("LibraryItemBox");
-  // Anillo de foco del concepto (3 px de holgura + 3 px blanco) a escala de Steam.
+  // Design focus ring (3 px padding + 3 px white) at Steam scale.
   const ring = "0 0 0 2px var(--vd-bg), 0 0 0 4px var(--vd-ink)";
 
   return `
-/* Vacío primero: sin degradado de fondo */
+/* Void first: no background gradient */
 ${cls("GamepadLibrary")} { background: var(--vd-bg) !important; background-image: none !important; }
 
-/* Pestañas: etiquetas monoespaciadas, la activa en píldora blanca */
+/* Tabs: monospace labels, active tab in a white pill */
 ${tab} {
   background: transparent !important; color: var(--vd-ink-muted) !important;
   font-family: var(--vd-font-mono) !important; font-size: 10px !important; font-weight: 400 !important; letter-spacing: .08em !important;
@@ -24,7 +24,7 @@ ${tab}.gpfocus { box-shadow: ${ring} !important; color: var(--vd-ink) !important
 ${tab}${selected}.gpfocus { color: var(--vd-on-ink) !important; }
 ${cls("TabCount")} { font-family: var(--vd-font-mono) !important; opacity: .6; }
 
-/* L1 / R1: píldoras con borde en vez de las imágenes de Steam */
+/* L1 / R1: outlined pills instead of Steam images */
 ${glyphs}:has(img[src*="_l1"]) img, ${glyphs}:has(img[src*="_r1"]) img { display: none !important; }
 ${glyphs}:has(img[src*="_l1"])::after, ${glyphs}:has(img[src*="_r1"])::after {
   display: inline-grid; place-items: center; min-width: 27px; height: 19px; padding: 0 4px; box-sizing: border-box;
@@ -34,7 +34,7 @@ ${glyphs}:has(img[src*="_l1"])::after, ${glyphs}:has(img[src*="_r1"])::after {
 ${glyphs}:has(img[src*="_l1"])::after { content: "L1"; }
 ${glyphs}:has(img[src*="_r1"])::after { content: "R1"; }
 
-/* Portadas: esquinas radius-md, sin sombras ni resplandor; foco con anillo blanco */
+/* Cover art: radius-md corners, no shadows or glow; white focus ring */
 ${item} { box-shadow: none !important; border-radius: 11px !important; }
 ${item} ${cls("Capsule", "CapsuleVisible")} { border-radius: 11px !important; overflow: hidden !important; }
 ${item}.gpfocus { outline: none !important; box-shadow: ${ring} !important; }

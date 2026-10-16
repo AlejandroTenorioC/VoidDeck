@@ -1,4 +1,4 @@
-// CSS de la capa 1: aplica los tokens de Void Deck sobre las clases de Steam.
+// Layer 1 CSS: apply Void Deck tokens to Steam classes.
 import { cls } from "../steam/classes";
 import { statusDotsCss } from "../steam/statusDots";
 import { fontsCss } from "./fonts";
@@ -13,11 +13,11 @@ export function skinCss(theme: Theme): string {
 ${fontsCss}
 ${tokensCss(theme)}
 
-/* Tipografía: Space Grotesk para todo el texto (las pantallas propias gestionan la suya) */
-/* :where() deja la regla sin especificidad para que las reglas concretas (reloj, etiquetas) ganen */
+/* Typography: Space Grotesk for all text (custom screens manage their own) */
+/* :where() keeps this rule at zero specificity so specific rules (clock, labels) win */
 :where(body, body *:not(.vd-home-viewport *)) { font-family: var(--vd-font-sans) !important; }
 
-/* Vacío primero: fondo negro puro */
+/* Void first: pure black background */
 body, ${cls("BasicUiRoot")}, ${cls("BasicHome")} {
   background: var(--vd-bg) !important;
   background-image: none !important;
@@ -29,28 +29,28 @@ ${cls("BasicFooter")} {
   border-top: 1px solid var(--vd-line) !important;
 }
 
-/* Números del sistema en matriz de puntos */
+/* System numbers in dot matrix */
 ${cls("Clock", "HeaderItem")}, ${cls("Percentage")} {
   font-family: var(--vd-font-dot) !important;
   font-weight: 800 !important;
 }
 
-/* Pistas de controles de la barra inferior */
+/* Bottom-bar control hints */
 ${footerCss()}
 
-/* Menú principal (botón STEAM) */
+/* Main menu (STEAM button) */
 ${mainMenuCss()}
 
-/* Acceso rápido */
+/* Quick Access */
 ${quickAccessCss()}
 
-/* Biblioteca y páginas con pestañas */
+/* Library and tabbed pages */
 ${libraryCss()}
 
-/* Wifi y batería como medidores de puntos */
+/* Wi-Fi and battery as dot meters */
 ${statusDotsCss()}
 
-/* Etiquetas y pistas de controles en monoespaciada */
+/* Monospace labels and control hints */
 ${cls("Tab")}, ${cls("ActionButtonLabel")} {
   font-family: var(--vd-font-mono) !important;
   letter-spacing: 0.08em;

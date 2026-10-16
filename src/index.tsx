@@ -4,7 +4,7 @@ import { disableHome, enableHome } from "./home";
 import { Panel } from "./qam/Panel";
 import { applySkin, removeSkin } from "./skin";
 
-// Icono: retícula de puntos 5×5 con la diagonal encendida.
+// Icon: 5×5 dot grid with the diagonal lit.
 function VoidIcon() {
   const dots = [];
   for (let y = 0; y < 5; y++) {
