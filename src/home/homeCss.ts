@@ -25,7 +25,7 @@ export const homeCss = `
 .vd-home.is-compact { --vd-tile-width: 124px; --vd-grid-columns: 8; --vd-grid-gap: var(--vd-space-4); }
 
 /* Tabs L1 / R1 */
-.vd-tabs { display: flex; align-items: center; gap: var(--vd-space-1); }
+.vd-tabs { display: flex; align-items: center; gap: var(--vd-space-3); }
 .vd-trigger {
   display: inline-grid; place-items: center; min-width: 40px; height: 28px; padding: 0 6px; box-sizing: border-box;
   border: 1.5px solid var(--vd-line-strong); border-radius: var(--vd-radius-pill);
@@ -52,10 +52,12 @@ export const homeCss = `
 }
 .vd-kicker { font: 14px/16px var(--vd-font-mono); letter-spacing: .08em; color: var(--vd-ink-muted); text-transform: uppercase; }
 .vd-gtitle {
-  position: relative; margin: 0; max-width: 1100px; font: 800 96px/88px var(--vd-font-dot); letter-spacing: -.02em;
+  position: relative; margin: 0; max-width: 900px; font: 800 96px/88px var(--vd-font-dot); letter-spacing: -.02em;
   text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.vd-gtitle.is-long { font-size: 56px; line-height: 56px; letter-spacing: 0; }
+.vd-gtitle.is-medium { font-size: 72px; line-height: 68px; letter-spacing: 0; }
+.vd-gtitle.is-long { font-size: 52px; line-height: 52px; letter-spacing: 0; }
+.vd-gtitle.is-extra-long { font-size: 38px; line-height: 42px; letter-spacing: 0; }
 .vd-empty-description { position: relative; max-width: 440px; margin: calc(var(--vd-space-2) * -1) 0 0; color: var(--vd-ink-muted); font: 16px/24px var(--vd-font-sans); }
 .vd-empty-library {
   display: inline-flex; align-items: center; justify-content: center; width: max-content; height: 42px; padding: 0 var(--vd-space-5, 20px);

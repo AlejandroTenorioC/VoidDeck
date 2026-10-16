@@ -131,7 +131,19 @@ function Hero({ game, language, onFocus }: { game: Game; language: Language; onF
     <section className="vd-hero">
       <div className="vd-field" aria-hidden />
       <span className="vd-kicker">{last ? `${copy.continue} · ${copy.played} ${last}` : copy.ready}</span>
-      <h1 className={game.name.length > 14 ? "vd-gtitle is-long" : "vd-gtitle"}>{game.name}</h1>
+      <h1
+        className={
+          game.name.length > 32
+            ? "vd-gtitle is-extra-long"
+            : game.name.length > 20
+              ? "vd-gtitle is-long"
+              : game.name.length > 13
+                ? "vd-gtitle is-medium"
+                : "vd-gtitle"
+        }
+      >
+        {game.name}
+      </h1>
       <div className="vd-meta">
         {time && (
           <span>
