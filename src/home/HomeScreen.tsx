@@ -18,9 +18,7 @@ const ROW_TOP_SPACE = 136;
 const TABS: { label: string; go?: () => void }[] = [
   { label: "Inicio" },
   { label: "Biblioteca", go: () => Navigation.NavigateToLibraryTab() },
-  { label: "Tienda", go: () => Navigation.NavigateToSteamWeb("https://store.steampowered.com/") },
   { label: "Amigos", go: () => Navigation.OpenQuickAccessMenu(QuickAccessTab.Friends) },
-  { label: "Descargas", go: () => Navigation.Navigate("/downloads") },
 ];
 
 /** Escala el contenido para que 1280 px de diseño ocupen el ancho real de la ventana. */
