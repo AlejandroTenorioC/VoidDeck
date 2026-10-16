@@ -23,6 +23,10 @@ export function quickAccessCss(): string {
 /* Panel */
 ${cls("QuickAccessMenu", "TabList")}, ${title} { background: var(--vd-surface) !important; box-shadow: none !important; }
 ${title} { font-weight: 500 !important; }
+/* Con un juego abierto el Acceso rápido muestra su propia barra de estado (hora, batería): en surface */
+${cls("Header", "InQuickAccess")}${cls("InQuickAccess", "Header")} {
+  background: var(--vd-surface) !important; border-bottom: 1px solid var(--vd-line) !important;
+}
 ${clsAll("PanelSectionTitle")}, ${clsAll("PanelSectionTitle", " *")} {
   font-family: var(--vd-font-mono) !important; font-weight: 400 !important; font-size: 10px !important;
   letter-spacing: .08em !important; color: var(--vd-ink-muted) !important;

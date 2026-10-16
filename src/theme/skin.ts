@@ -10,6 +10,9 @@ import { quickAccessCss } from "./quickAccess";
 import { transitionsCss } from "./transitions";
 import { tokensCss, type Theme } from "./tokens";
 
+/** Atributo que `src/skin.ts` pone en cada documento mientras hay un juego en marcha. */
+export const IN_GAME_ATTR = "data-vd-ingame";
+
 export function skinCss(theme: Theme): string {
   return `
 ${fontsCss}
@@ -19,8 +22,9 @@ ${tokensCss(theme)}
 /* :where() deja la regla sin especificidad para que las reglas concretas (reloj, etiquetas) ganen */
 :where(body, body *:not(.vd-home-viewport *)) { font-family: var(--vd-font-sans) !important; }
 
-/* Vacío primero: fondo negro puro */
-body, ${cls("BasicUiRoot")}, ${cls("BasicHome")} {
+/* Vacío primero: fondo negro puro. Con un juego en marcha Steam deja estas capas transparentes para que el
+   juego se vea detrás de los menús: ahí no se fuerza el negro. */
+html:not([${IN_GAME_ATTR}]) :is(body, ${cls("BasicUiRoot")}, ${cls("BasicHome")}) {
   background: var(--vd-bg) !important;
   background-image: none !important;
 }
