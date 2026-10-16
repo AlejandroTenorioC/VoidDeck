@@ -24,7 +24,17 @@ export function detailsCss(): string {
 ${join(of("AppDetailsRoot"))} { background: var(--vd-bg) !important; }
 ${join(of("ImgBlurBackdrop"))} { display: none !important; }
 ${join(of("PlaySection"))} { background: transparent !important; }
-${join(capsule)} { position: relative; }
+/* La cabecera ocupa la pantalla: imagen + barra de Jugar (80 px) llegan justo a la barra inferior de Steam
+   (40 px). Al bajar, el desplazamiento exterior de Steam la sube y aparecen las pestañas. */
+${join(capsule)} { position: relative; height: calc(100vh - 120px) !important; }
+${join([...of("HeaderBackgroundImage"), ...of("HeaderBackgroundImage").map((s) => s + " img")])} { height: 100% !important; }
+${join(of("HeaderBackgroundImage"), " img")} { object-fit: cover !important; }
+${join(of("ScrollContainer", "Glassy").flatMap((s) => of("Glassy", "ScrollContainer").map((g) => s + g)))} {
+  background: var(--vd-bg) !important; background-image: none !important;
+}
+/* Con la página desplazada, la barra superior de Steam difumina lo que queda debajo (el botón Jugar fijo):
+   fondo negro sólido en su lugar */
+${join(of("Header", "OverrideHeaderBackground"), "::before")} { background: var(--vd-bg) !important; backdrop-filter: none !important; }
 ${join(capsule, "::after")} {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 55%; pointer-events: none;
   background: linear-gradient(transparent, var(--vd-bg));
