@@ -1,7 +1,7 @@
 // Layer 2: Void Deck's Home screen. Measurements are in design pixels (1280×800);
 // the container scales to the actual CSS size of the Steam window.
 import { Focusable, GamepadButton, Navigation, QuickAccessTab, type GamepadEvent } from "@decky/ui";
-import { useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { strings, useLanguage, type Language } from "../i18n";
 import { useAppearance } from "../preferences";
 import { skinState } from "../skin";
@@ -9,6 +9,7 @@ import { cls } from "../steam/classes";
 import { installedGames, libraryCount, openDetails, playGame, recentGames, type Game } from "../steam/library";
 import { fontsCss } from "../theme/fonts";
 import { tokensCss } from "../theme/tokens";
+import { FROM_HOME_ATTR, FROM_HOME_MS, FROM_HOME_VALUE } from "../theme/transitions";
 import { deckCompat, glyph, playtime, shortPlaytime, since } from "./format";
 import { homeCss } from "./homeCss";
 
@@ -22,9 +23,7 @@ const tabs = (language: Language): { label: string; go?: () => void }[] => {
   return [
     { label: copy.home },
     { label: copy.library, go: () => Navigation.NavigateToLibraryTab() },
-    { label: copy.store, go: () => Navigation.NavigateToSteamWeb("https://store.steampowered.com/") },
     { label: copy.friends, go: () => Navigation.OpenQuickAccessMenu(QuickAccessTab.Friends) },
-    { label: copy.downloads, go: () => Navigation.Navigate("/downloads") },
   ];
 };
 
@@ -45,6 +44,29 @@ function useDesignScale() {
     return () => win.removeEventListener("resize", measure);
   }, []);
   return { ref, ...box };
+}
+
+/**
+ * When Home begins to leave (Steam adds `Exit` to its transition container), mark the document
+ * so the incoming screen uses the matching dot-dissolve transition.
+ */
+function useFromHomeMark(ref: RefObject<HTMLDivElement>) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const root = el.ownerDocument.documentElement;
+    const transition = el.closest(cls("TopLevelTransition", "EnterActive"));
+    const exit = cls("Exit", "TopLevelTransition").slice(1);
+    if (!transition) return;
+    const observer = new MutationObserver(() => {
+      if (!transition.classList.contains(exit)) return;
+      observer.disconnect();
+      root.setAttribute(FROM_HOME_ATTR, FROM_HOME_VALUE);
+      setTimeout(() => root.removeAttribute(FROM_HOME_ATTR), FROM_HOME_MS);
+    });
+    observer.observe(transition, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, [ref]);
 }
 
 function Cover({ game }: { game: Game }) {
@@ -160,6 +182,7 @@ export function HomeScreen() {
   const total = useMemo(() => libraryCount(), []);
   const [hero, setHero] = useState<Game | undefined>(() => recent[0] ?? installed[0]);
   const { ref, zoom, height } = useDesignScale();
+  useFromHomeMark(ref);
   const homeRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const scroll = useScroller(homeRef, contentRef);

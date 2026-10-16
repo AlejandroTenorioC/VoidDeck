@@ -33,6 +33,8 @@ ${cls("Tabs", "TabList")} {
   width: 48px !important; min-width: 48px !important;
   background: var(--vd-surface) !important; border-right: 1px solid var(--vd-line) !important;
 }
+/* The list clips overflow (overflow: auto): use its full width so the focus ring fits. */
+${cls("TabList", "Tabs")} { width: 48px !important; box-sizing: border-box !important; }
 ${tab} {
   width: 32px !important; height: 32px !important; min-height: 0 !important; margin: 8px auto !important; padding: 0 !important;
   display: grid !important; place-items: center !important; box-sizing: border-box !important;

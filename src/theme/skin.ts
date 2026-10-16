@@ -1,11 +1,13 @@
 // Layer 1 CSS: apply Void Deck tokens to Steam classes.
 import { cls } from "../steam/classes";
 import { statusDotsCss } from "../steam/statusDots";
+import { detailsCss } from "./details";
 import { fontsCss } from "./fonts";
 import { footerCss } from "./footer";
 import { libraryCss } from "./library";
 import { mainMenuCss } from "./mainMenu";
 import { quickAccessCss } from "./quickAccess";
+import { transitionsCss } from "./transitions";
 import { tokensCss, type Theme } from "./tokens";
 import type { Accent, ButtonStyle } from "../preferences";
 
@@ -44,6 +46,12 @@ ${mainMenuCss()}
 
 /* Quick Access */
 ${quickAccessCss()}
+
+/* Transition when leaving Home */
+${transitionsCss()}
+
+/* Game details */
+${detailsCss()}
 
 /* Library and tabbed pages */
 ${libraryCss()}
