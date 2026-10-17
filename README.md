@@ -27,7 +27,7 @@ Wi-Fi in the top bar become dot meters, and the battery turns red below 20 %.
 Brightness and volume are shown as rows of dots and toggles as pills, but they work exactly as before: Void Deck
 only changes how Steam looks, never how it works.
 
-> The plugin interface is currently in Spanish.
+> The plugin interface is available in English and Spanish.
 
 ## Installation
 
@@ -52,9 +52,11 @@ right away.
 
 In Quick Access, Decky tab → **Void Deck**:
 
-- **Piel global** (global skin): the Void Deck style across the whole Steam interface.
-- **Pantalla de Inicio** (Home screen): replaces Steam's Home with the Void Deck one.
-- **Tema claro** (light theme): inverted colors for outdoor use.
+- **Global skin**: the Void Deck style across the whole Steam interface.
+- **Home screen**: replaces Steam's Home with the Void Deck one.
+- **Light theme**: inverted colors for outdoor use.
+- **Language**: English or Spanish.
+- **Reset to defaults**: restores the default settings.
 
 Each part can be turned off on its own. If a Steam update breaks something, turn that part off and the rest keeps
 working.
