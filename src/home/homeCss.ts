@@ -49,19 +49,26 @@ export const homeCss = `
   background-size: var(--vd-space-3) var(--vd-space-3);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 60%);
 }
-/* A band of light sweeps across the grid: a second layer of lit dots, aligned with the first, seen
-   through a moving mask. The dots never move; they only light up. */
-@keyframes vd-field-wave { from { -webkit-mask-position: 100% 0; } to { -webkit-mask-position: 0% 0; } }
-.vd-field::after {
-  content: ""; position: absolute; inset: 0;
+/* A band of light sweeps across the grid, then rests. The window (.vd-wave) moves right while the lit
+   dots inside it (.vd-wave-dots) move left by the same amount, so the dots stay put and only the lit area
+   travels. Only transform is animated: the compositor moves the layers without repainting the grid. */
+/* Literal lengths (field 560 px, window 200 px): keyframes with var() may not run on the compositor. */
+@keyframes vd-wave-window { 0% { transform: translateX(-200px); } 55%, 100% { transform: translateX(560px); } }
+@keyframes vd-wave-dots { 0% { transform: translateX(200px); } 55%, 100% { transform: translateX(-560px); } }
+.vd-wave, .vd-wave-dots { position: absolute; top: 0; bottom: 0; left: 0; will-change: transform;
+  animation: 9s cubic-bezier(.45, 0, .55, 1) infinite both; }
+.vd-wave {
+  width: 200px; overflow: hidden; animation-name: vd-wave-window;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 50%, transparent);
+}
+.vd-wave-dots {
+  width: 560px; opacity: .6; animation-name: vd-wave-dots;
   background-image: radial-gradient(circle, var(--vd-ink) 1.5px, transparent 1.75px);
   background-size: var(--vd-space-3) var(--vd-space-3);
-  -webkit-mask-image: linear-gradient(100deg, transparent 38%, #000 50%, transparent 62%);
-  -webkit-mask-size: 300% 100%;
-  opacity: .6;
-  animation: vd-field-wave 6s cubic-bezier(.45, 0, .55, 1) infinite;
 }
-@media (prefers-reduced-motion: reduce) { .vd-field::after { animation: none; opacity: 0; } }
+/* Nothing to animate while a game is running (Steam stays "visible" behind it) or with reduced motion */
+.vd-home-viewport.is-in-game .vd-wave { display: none; }
+@media (prefers-reduced-motion: reduce) { .vd-wave { display: none; } }
 .vd-kicker { font: 14px/16px var(--vd-font-mono); letter-spacing: .08em; color: var(--vd-ink-muted); text-transform: uppercase; }
 .vd-gtitle {
   position: relative; margin: 0; max-width: 900px; font: 800 96px/116px var(--vd-font-dot); letter-spacing: -.02em;

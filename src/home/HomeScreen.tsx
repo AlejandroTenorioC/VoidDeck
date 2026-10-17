@@ -48,6 +48,17 @@ function useDesignScale() {
   return { ref, ...box };
 }
 
+/** While a game is running (Steam stays "visible" behind it), Home stops its animation. */
+function useGameRunning(): boolean {
+  const check = () => ((window as any).SteamUIStore?.RunningApps?.length ?? 0) > 0;
+  const [running, setRunning] = useState(check);
+  useEffect(() => {
+    const timer = setInterval(() => setRunning(check()), 2000);
+    return () => clearInterval(timer);
+  }, []);
+  return running;
+}
+
 /**
  * When Home begins to leave (Steam adds `Exit` to its transition container), mark the document
  * so the incoming screen uses the matching dot-dissolve transition.
@@ -69,6 +80,21 @@ function useFromHomeMark(ref: RefObject<HTMLDivElement>) {
     observer.observe(transition, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
   }, [ref]);
+}
+
+/**
+ * Dot grid behind the featured game. A window with soft edges sweeps across it while the lit dots
+ * inside move the opposite way: they stay fixed on screen and only the lit area travels. Both move
+ * with transform, which the compositor animates without repainting.
+ */
+function DotField() {
+  return (
+    <div className="vd-field" aria-hidden>
+      <div className="vd-wave">
+        <div className="vd-wave-dots" />
+      </div>
+    </div>
+  );
 }
 
 function Cover({ game }: { game: Game }) {
@@ -129,7 +155,7 @@ function Hero({ game, language, onFocus }: { game: Game; language: Language; onF
   );
   return (
     <section className="vd-hero">
-      <div className="vd-field" aria-hidden />
+      <DotField />
       <span className="vd-kicker">{last ? `${copy.continue} · ${copy.played} ${last}` : copy.ready}</span>
       <h1
         className={
@@ -197,13 +223,15 @@ export function HomeScreen() {
   const [hero, setHero] = useState<Game | undefined>(() => recent[0] ?? installed[0]);
   const { ref, zoom, height } = useDesignScale();
   useFromHomeMark(ref);
+  const gameRunning = useGameRunning();
   const homeRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const scroll = useScroller(homeRef, contentRef);
   // Local tokens and fonts let the screen work even with the global skin turned off.
   const css = useMemo(
     () =>
-      `${fontsCss}\n${tokensCss(skinState().theme, ".vd-home-viewport")}\n${homeCss}\n` +
+      // Fonts only when the global skin is off: otherwise it has already loaded them in this window.
+      `${skinState().on ? "" : fontsCss}\n${tokensCss(skinState().theme, ".vd-home-viewport")}\n${homeCss}\n` +
       // Steam Home enabled the top bar (clock, battery); without it, it stays transparent.
       `${cls("Header", "OverrideHeaderBackground")} { opacity: 1 !important; }`,
     [],
@@ -214,7 +242,7 @@ export function HomeScreen() {
   };
 
   return (
-    <div className="vd-home-viewport" ref={ref}>
+    <div className={gameRunning ? "vd-home-viewport is-in-game" : "vd-home-viewport"} ref={ref}>
       <style>{css}</style>
       <Focusable className="vd-home" ref={homeRef} style={{ zoom, height }} onButtonDown={onBumper}>
         <div className="vd-scroll" ref={contentRef} style={{ transform: `translateY(${-scroll.offset}px)` }}>
@@ -241,7 +269,7 @@ export function HomeScreen() {
               <Hero game={hero} language={language} onFocus={scroll.toTop} />
             ) : (
               <section className="vd-hero">
-                <div className="vd-field" aria-hidden />
+                <DotField />
                 <span className="vd-kicker">{copy.noInstalledGames}</span>
                 <h1 className="vd-gtitle">VOID</h1>
                 <p className="vd-empty-description">{copy.noInstalledGamesDescription}</p>
