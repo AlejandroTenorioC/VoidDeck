@@ -22,7 +22,6 @@ export const homeCss = `
 /* Below: all installed games */
 .vd-installed { padding: 0 var(--vd-space-8) 120px; }
 .vd-grid { display: grid; grid-template-columns: repeat(var(--vd-grid-columns), var(--vd-tile-width)); column-gap: var(--vd-grid-gap); row-gap: var(--vd-space-2); }
-.vd-home.is-compact { --vd-tile-width: 124px; --vd-grid-columns: 8; --vd-grid-gap: var(--vd-space-4); }
 
 /* Tabs L1 / R1 */
 .vd-tabs { display: flex; align-items: center; gap: var(--vd-space-3); }

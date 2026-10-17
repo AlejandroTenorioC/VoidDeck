@@ -3,10 +3,10 @@ import { ButtonItem, DropdownItem, Navigation, PanelSection, PanelSectionRow, To
 import { useState } from "react";
 import { disableHome, enableHome, homeEnabled } from "../home";
 import { resetLanguage, setLanguage, strings, useLanguage, type Language } from "../i18n";
+import { version } from "../../package.json";
 import { applySkin, removeSkin, skinState } from "../skin";
 
-const VERSION = "0.2.8";
-const RELEASE_URL = "https://github.com/endoflineservice/VoidDeck/releases/latest";
+const RELEASE_URL = "https://github.com/AlejandroTenorioC/VoidDeck/releases/latest";
 
 export function Panel() {
   const [skinOn, setSkinOn] = useState(() => skinState().on);
@@ -82,7 +82,7 @@ export function Panel() {
       <PanelSection title={copy.version}>
         <PanelSectionRow>
           <ButtonItem
-            label={`Void Deck v${VERSION}`}
+            label={`Void Deck v${version}`}
             description={copy.versionDescription}
             onClick={() => Navigation.NavigateToSteamWeb(RELEASE_URL)}
           >

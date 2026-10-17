@@ -3,8 +3,12 @@
 // used alongside runtime-resolved component classes so this survives Steam hashes.
 import { clsList } from "../steam/classes";
 
+// Rows, buttons and inputs are scoped to .DialogContent: Field is also used by the Quick Access rows,
+// which have their own styling.
+const SCOPE = ".DialogContent";
+
 export function settingsCss(): string {
-  const join = (selectors: string[]) => selectors.join(", ");
+  const join = (selectors: string[]) => selectors.map((s) => `${SCOPE} ${s}`).join(", ");
   const field = clsList("Field", "FieldLabel");
   const fieldLabel = clsList("FieldLabel", "Field");
   const button = clsList("DialogButton");
@@ -57,14 +61,14 @@ ${join(fieldLabel)}, ${join(fieldLabel.map((selector) => `${selector} *`))} {
 }
 
 /* Inputs and action buttons are simple outlined instruments. */
-.DialogTextInputBase, input.DialogInput {
+${SCOPE} .DialogTextInputBase, ${SCOPE} input.DialogInput {
   background: var(--vd-bg) !important;
   border: 1px solid var(--vd-line-strong) !important;
   border-radius: 0 !important;
   color: var(--vd-ink) !important;
   box-shadow: none !important;
 }
-.DialogTextInputBase:focus, input.DialogInput:focus, .DialogTextInputBase.gpfocus, input.DialogInput.gpfocus {
+${SCOPE} :is(.DialogTextInputBase, input.DialogInput):is(:focus, .gpfocus) {
   border-color: var(--vd-ink) !important;
   box-shadow: 0 0 0 2px var(--vd-bg), 0 0 0 4px var(--vd-ink) !important;
 }

@@ -12,6 +12,7 @@
     "noImplicitReturns": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true
   },
   "include": ["src", "preview"],

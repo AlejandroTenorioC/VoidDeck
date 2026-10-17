@@ -46,7 +46,7 @@ export function useLanguage(): Language {
 
 const copy = {
   en: {
-    home: "Home", library: "Library", store: "Store", friends: "Friends", downloads: "Downloads",
+    home: "Home", library: "Library", friends: "Friends",
     play: "Play", details: "Details", continue: "Continue", played: "played", ready: "Ready to play",
     emptyLibrary: "Library empty", recentlyPlayed: "Recently played", installed: "Installed",
     games: "games", of: "of", notPlayed: "Not played", minPlayed: "min played",
@@ -61,7 +61,7 @@ const copy = {
     version: "Version", versionDescription: "View the latest release notes and download.", releaseNotes: "Open release notes",
   },
   es: {
-    home: "Inicio", library: "Biblioteca", store: "Tienda", friends: "Amigos", downloads: "Descargas",
+    home: "Inicio", library: "Biblioteca", friends: "Amigos",
     play: "Jugar", details: "Detalles", continue: "Continuar", played: "jugado", ready: "Listo para jugar",
     emptyLibrary: "Biblioteca vacía", recentlyPlayed: "Jugados recientemente", installed: "Instalados",
     games: "juegos", of: "de", notPlayed: "Sin jugar", minPlayed: "min jugados",
