@@ -49,6 +49,19 @@ export const homeCss = `
   background-size: var(--vd-space-3) var(--vd-space-3);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 60%);
 }
+/* A band of light sweeps across the grid: a second layer of lit dots, aligned with the first, seen
+   through a moving mask. The dots never move; they only light up. */
+@keyframes vd-field-wave { from { -webkit-mask-position: 100% 0; } to { -webkit-mask-position: 0% 0; } }
+.vd-field::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, var(--vd-ink) 1.5px, transparent 1.75px);
+  background-size: var(--vd-space-3) var(--vd-space-3);
+  -webkit-mask-image: linear-gradient(100deg, transparent 38%, #000 50%, transparent 62%);
+  -webkit-mask-size: 300% 100%;
+  opacity: .6;
+  animation: vd-field-wave 6s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) { .vd-field::after { animation: none; opacity: 0; } }
 .vd-kicker { font: 14px/16px var(--vd-font-mono); letter-spacing: .08em; color: var(--vd-ink-muted); text-transform: uppercase; }
 .vd-gtitle {
   position: relative; margin: 0; max-width: 900px; font: 800 96px/116px var(--vd-font-dot); letter-spacing: -.02em;
