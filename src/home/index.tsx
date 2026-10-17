@@ -1,5 +1,6 @@
-// Capa 2: sustituye la ruta de Inicio de Steam por la pantalla de Void Deck.
+// Layer 2: replace Steam's Home route with the Void Deck screen.
 import { routerHook } from "@decky/api";
+import { Navigation } from "@decky/ui";
 import { HomeScreen } from "./HomeScreen";
 
 const HOME_ROUTE = "/library/home";
@@ -15,10 +16,11 @@ export function enableHome(): void {
   active = true;
 }
 
-export function disableHome(): void {
+export function disableHome(navigateAway = false): void {
   if (!active) return;
   routerHook.removePatch(HOME_ROUTE, patch);
   active = false;
+  if (navigateAway) Navigation.NavigateToLibraryTab();
 }
 
 export const homeEnabled = () => active;

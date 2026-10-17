@@ -1,7 +1,8 @@
-// Capa 2: pantalla de Inicio de Void Deck. Medidas en píxeles del concepto (1280×800);
-// el contenedor se escala al tamaño CSS real de la ventana de Steam.
+// Layer 2: Void Deck's Home screen. Measurements are in design pixels (1280×800);
+// the container scales to the actual CSS size of the Steam window.
 import { Focusable, GamepadButton, Navigation, QuickAccessTab, type GamepadEvent } from "@decky/ui";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { strings, useLanguage, type Language } from "../i18n";
 import { skinState } from "../skin";
 import { cls } from "../steam/classes";
 import { installedGames, libraryCount, openDetails, playGame, recentGames, type Game } from "../steam/library";
@@ -13,16 +14,19 @@ import { homeCss } from "./homeCss";
 
 const DESIGN_WIDTH = 1280;
 const SHELF_SIZE = 7;
-// Espacio sobre la fila enfocada al desplazarse: barra de Steam (60) + título de sección y aire.
+// Space above the focused row when scrolling: Steam bar (60) + section title and padding.
 const ROW_TOP_SPACE = 136;
 
-const TABS: { label: string; go?: () => void }[] = [
-  { label: "Inicio" },
-  { label: "Biblioteca", go: () => Navigation.NavigateToLibraryTab() },
-  { label: "Amigos", go: () => Navigation.OpenQuickAccessMenu(QuickAccessTab.Friends) },
-];
+const tabs = (language: Language): { label: string; go?: () => void }[] => {
+  const copy = strings(language);
+  return [
+    { label: copy.home },
+    { label: copy.library, go: () => Navigation.NavigateToLibraryTab() },
+    { label: copy.friends, go: () => Navigation.OpenQuickAccessMenu(QuickAccessTab.Friends) },
+  ];
+};
 
-/** Escala el contenido para que 1280 px de diseño ocupen el ancho real de la ventana. */
+/** Scale content so 1280 design pixels fill the actual window width. */
 function useDesignScale() {
   const ref = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ zoom: 1, height: 800 });
@@ -31,7 +35,10 @@ function useDesignScale() {
     if (!el) return;
     const measure = () => {
       const zoom = el.clientWidth / DESIGN_WIDTH;
-      setBox({ zoom, height: el.clientHeight / zoom });
+      const height = el.clientHeight / zoom;
+      // Steam can emit a layout-driven resize while React is committing. Avoid scheduling
+      // another render when its dimensions did not actually change.
+      setBox((previous) => (previous.zoom === zoom && previous.height === height ? previous : { zoom, height }));
     };
     measure();
     const win = el.ownerDocument.defaultView ?? window;
@@ -42,8 +49,8 @@ function useDesignScale() {
 }
 
 /**
- * En cuanto el Inicio empieza a salir (Steam añade `Exit` a su contenedor de transición), marca el documento
- * para que la pantalla que entra, a la vez, use la disolución de puntos.
+ * When Home begins to leave (Steam adds `Exit` to its transition container), mark the document
+ * so the incoming screen uses the matching dot-dissolve transition.
  */
 function useFromHomeMark(ref: RefObject<HTMLDivElement>) {
   useEffect(() => {
@@ -75,8 +82,8 @@ function Cover({ game }: { game: Game }) {
   );
 }
 
-function Tile(props: { game: Game; first?: boolean; onFocus: (el: HTMLDivElement) => void }) {
-  const { game, first, onFocus } = props;
+function Tile(props: { game: Game; first?: boolean; language: Language; onFocus: (el: HTMLDivElement) => void }) {
+  const { game, first, language, onFocus } = props;
   const ref = useRef<HTMLDivElement>(null);
   const focus = () => ref.current && onFocus(ref.current);
   return (
@@ -88,24 +95,25 @@ function Tile(props: { game: Game; first?: boolean; onFocus: (el: HTMLDivElement
       preferredFocus={first}
       onActivate={() => playGame(game)}
       onSecondaryButton={() => openDetails(game)}
-      onOKActionDescription="Jugar"
-      onSecondaryActionDescription="Detalles"
+      onOKActionDescription={strings(language).play}
+      onSecondaryActionDescription={strings(language).details}
       onGamepadFocus={focus}
       onFocus={focus}
     >
       <Cover game={game} />
       <div className="vd-tile-meta">
         <span className="vd-tile-title">{game.name}</span>
-        <span className="vd-tile-detail">{shortPlaytime(game.minutes)}</span>
+        <span className="vd-tile-detail">{shortPlaytime(game.minutes, language)}</span>
       </div>
     </Focusable>
   );
 }
 
-function Hero({ game, onFocus }: { game: Game; onFocus: () => void }) {
-  const time = playtime(game.minutes);
-  const last = since(game.lastPlayed);
-  const compat = deckCompat(game.deckCompat);
+function Hero({ game, language, onFocus }: { game: Game; language: Language; onFocus: () => void }) {
+  const copy = strings(language);
+  const time = playtime(game.minutes, language);
+  const last = since(game.lastPlayed, language);
+  const compat = deckCompat(game.deckCompat, language);
   const button = (variant: string, glyphLabel: string, label: string, action: () => void) => (
     <Focusable
       className={`vd-btn vd-btn-${variant}`}
@@ -122,8 +130,20 @@ function Hero({ game, onFocus }: { game: Game; onFocus: () => void }) {
   return (
     <section className="vd-hero">
       <div className="vd-field" aria-hidden />
-      <span className="vd-kicker">{last ? `Continuar · jugado ${last}` : "Listo para jugar"}</span>
-      <h1 className={game.name.length > 14 ? "vd-gtitle is-long" : "vd-gtitle"}>{game.name}</h1>
+      <span className="vd-kicker">{last ? `${copy.continue} · ${copy.played} ${last}` : copy.ready}</span>
+      <h1
+        className={
+          game.name.length > 32
+            ? "vd-gtitle is-extra-long"
+            : game.name.length > 20
+              ? "vd-gtitle is-long"
+              : game.name.length > 13
+                ? "vd-gtitle is-medium"
+                : "vd-gtitle"
+        }
+      >
+        {game.name}
+      </h1>
       <div className="vd-meta">
         {time && (
           <span>
@@ -133,24 +153,24 @@ function Hero({ game, onFocus }: { game: Game; onFocus: () => void }) {
         {compat && <span>{compat}</span>}
       </div>
       <Focusable className="vd-actions" flow-children="horizontal">
-        {button("primary", "A", "Jugar", () => playGame(game))}
-        {button("secondary", "X", "Detalles", () => openDetails(game))}
+        {button("primary", "A", copy.play, () => playGame(game))}
+        {button("secondary", "X", copy.details, () => openDetails(game))}
       </Focusable>
     </section>
   );
 }
 
 /**
- * Desplazamiento propio: el contenido se mueve con transform y una sola transición.
- * El contenedor usa `overflow: clip`, así el navegador no puede hacer su salto instantáneo
- * al recibir el foco (que encadenado con una animación producía un tirón).
+ * Custom scrolling: content moves with a transform and one transition.
+ * The container uses `overflow: clip`, so the browser cannot jump instantly when
+ * focus arrives (which caused a jerk when chained to an animation).
  */
 function useScroller(viewport: RefObject<HTMLDivElement>, content: RefObject<HTMLDivElement>) {
   const [offset, setOffset] = useState(0);
   const scroller = useMemo(
     () => ({
-      toTop: () => setOffset(0),
-      /** Sube la fila del elemento hasta justo debajo de la barra superior y del título de sección. */
+      toTop: () => setOffset((previous) => (previous === 0 ? previous : 0)),
+      /** Move the item's row to just below the top bar and section title. */
       reveal: (el: HTMLElement) => {
         const view = viewport.current?.clientHeight ?? 0;
         const max = Math.max(0, (content.current?.offsetHeight ?? 0) - view);
@@ -158,7 +178,8 @@ function useScroller(viewport: RefObject<HTMLDivElement>, content: RefObject<HTM
         for (let n: HTMLElement | null = el; n && n !== content.current; n = n.offsetParent as HTMLElement | null) {
           top += n.offsetTop;
         }
-        setOffset(Math.min(max, Math.max(0, top - ROW_TOP_SPACE)));
+        const next = Math.min(max, Math.max(0, top - ROW_TOP_SPACE));
+        setOffset((previous) => (previous === next ? previous : next));
       },
     }),
     [viewport, content],
@@ -167,6 +188,9 @@ function useScroller(viewport: RefObject<HTMLDivElement>, content: RefObject<HTM
 }
 
 export function HomeScreen() {
+  const language = useLanguage();
+  const copy = strings(language);
+  const navigationTabs = tabs(language);
   const recent = useMemo(() => recentGames(SHELF_SIZE), []);
   const installed = useMemo(() => installedGames(), []);
   const total = useMemo(() => libraryCount(), []);
@@ -176,17 +200,17 @@ export function HomeScreen() {
   const homeRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const scroll = useScroller(homeRef, contentRef);
-  // Tokens y fuentes propios: la pantalla funciona aunque la piel global esté apagada.
+  // Local tokens and fonts let the screen work even with the global skin turned off.
   const css = useMemo(
     () =>
       `${fontsCss}\n${tokensCss(skinState().theme, ".vd-home-viewport")}\n${homeCss}\n` +
-      // El Inicio de Steam encendía la barra superior (reloj, batería); sin él queda transparente.
+      // Steam Home enabled the top bar (clock, battery); without it, it stays transparent.
       `${cls("Header", "OverrideHeaderBackground")} { opacity: 1 !important; }`,
     [],
   );
 
   const onBumper = (e: GamepadEvent) => {
-    if (e.detail.button === GamepadButton.BUMPER_RIGHT) TABS[1].go?.();
+    if (e.detail.button === GamepadButton.BUMPER_RIGHT) navigationTabs[1].go?.();
   };
 
   return (
@@ -197,7 +221,7 @@ export function HomeScreen() {
           <div className="vd-page" style={{ height }}>
             <Focusable className="vd-tabs" flow-children="horizontal">
               <span className="vd-trigger">L1</span>
-              {TABS.map((t, i) => (
+              {navigationTabs.map((t, i) => (
                 <Focusable
                   key={t.label}
                   className={i === 0 ? "vd-tab is-active" : "vd-tab"}
@@ -214,20 +238,29 @@ export function HomeScreen() {
             </Focusable>
 
             {hero ? (
-              <Hero game={hero} onFocus={scroll.toTop} />
+              <Hero game={hero} language={language} onFocus={scroll.toTop} />
             ) : (
               <section className="vd-hero">
                 <div className="vd-field" aria-hidden />
-                <span className="vd-kicker">Biblioteca vacía</span>
+                <span className="vd-kicker">{copy.noInstalledGames}</span>
                 <h1 className="vd-gtitle">VOID</h1>
+                <p className="vd-empty-description">{copy.noInstalledGamesDescription}</p>
+                <Focusable
+                  className="vd-empty-library"
+                  focusClassName="is-focused"
+                  noFocusRing
+                  onActivate={() => Navigation.NavigateToLibraryTab()}
+                >
+                  {copy.openLibrary}
+                </Focusable>
               </section>
             )}
 
             {recent.length > 0 && (
               <section>
                 <div className="vd-shelf-h">
-                  <h2>Jugados recientemente</h2>
-                  {total > 0 && <span className="vd-kicker">{`${recent.length} de ${total}`}</span>}
+                  <h2>{copy.recentlyPlayed}</h2>
+                  {total > 0 && <span className="vd-kicker">{`${recent.length} ${copy.of} ${total}`}</span>}
                 </div>
                 <Focusable className="vd-shelf" flow-children="horizontal">
                   {recent.map((g, i) => (
@@ -235,8 +268,9 @@ export function HomeScreen() {
                       key={g.appid}
                       game={g}
                       first={i === 0}
+                      language={language}
                       onFocus={() => {
-                        setHero(g);
+                        setHero((current) => (current?.appid === g.appid ? current : g));
                         scroll.toTop();
                       }}
                     />
@@ -249,16 +283,17 @@ export function HomeScreen() {
           {installed.length > 0 && (
             <section className="vd-installed">
               <div className="vd-shelf-h">
-                <h2>Instalados</h2>
-                <span className="vd-kicker">{`${installed.length} juegos`}</span>
+                <h2>{copy.installed}</h2>
+                <span className="vd-kicker">{`${installed.length} ${copy.games}`}</span>
               </div>
               <Focusable className="vd-grid" flow-children="grid">
                 {installed.map((g) => (
                   <Tile
                     key={g.appid}
                     game={g}
+                    language={language}
                     onFocus={(el) => {
-                      setHero(g);
+                      setHero((current) => (current?.appid === g.appid ? current : g));
                       scroll.reveal(el);
                     }}
                   />

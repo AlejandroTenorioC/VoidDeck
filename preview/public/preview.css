@@ -1,4 +1,4 @@
-/* Marco del preview: imita la pantalla de la Deck (1280×800). No se empaqueta en el plugin. */
+/* Preview frame: imitates the Deck display (1280×800). Not bundled in the plugin. */
 html, body { margin: 0; height: 100%; background: #202020; }
 body { display: grid; place-items: center; font-family: system-ui, sans-serif; }
 
@@ -9,7 +9,7 @@ body { display: grid; place-items: center; font-family: system-ui, sans-serif; }
   outline: 1px solid #444;
 }
 
-/* Cabecera y pie de Steam simulados (en la Deck los pone Steam por encima de la ruta) */
+/* Simulated Steam header and footer (Steam renders them above the route on the Deck) */
 .steam-header, .steam-footer { position: absolute; left: 0; right: 0; z-index: 1; }
 .steam-header { top: 0; height: 60px; }
 .steam-footer {
@@ -19,7 +19,7 @@ body { display: grid; place-items: center; font-family: system-ui, sans-serif; }
 }
 .steam-home { display: grid; place-items: center; height: 100%; color: #888; }
 
-/* Menú de Acceso rápido simulado */
+/* Simulated Quick Access menu */
 .qam {
   position: absolute; top: 0; right: 0; bottom: 0; width: 440px; box-sizing: border-box; z-index: 2;
   display: flex; flex-direction: column;
@@ -28,7 +28,7 @@ body { display: grid; place-items: center; font-family: system-ui, sans-serif; }
 .qam-title { padding: 24px 24px 8px; font-size: 24px; font-weight: 500; }
 .qam-body { flex: 1; overflow-y: auto; }
 
-/* Stubs de @decky/ui */
+/* @decky/ui stubs */
 .stub-section { padding: 8px 24px 16px; }
 .stub-section-title {
   font: 14px/16px var(--vd-font-mono, monospace); letter-spacing: .08em; text-transform: uppercase;
@@ -44,6 +44,8 @@ body { display: grid; place-items: center; font-family: system-ui, sans-serif; }
 .stub-toggle-text { flex: 1; }
 .stub-toggle-label { font-size: 16px; }
 .stub-toggle-desc { font-size: 14px; color: var(--vd-ink-muted, #aaa); margin-top: 4px; }
+.stub-dropdown { box-sizing: border-box; width: 100%; display: flex; align-items: center; gap: 16px; padding: 12px 16px; }
+.stub-dropdown select { min-width: 112px; border: 1px solid var(--vd-line-strong, #888); border-radius: 6px; background: var(--vd-surface-raised, #3d4450); color: inherit; padding: 6px; }
 .stub-switch {
   width: 44px; height: 24px; border-radius: 999px; flex: none; position: relative;
   border: 1.5px solid var(--vd-line-strong, #888); box-sizing: border-box;

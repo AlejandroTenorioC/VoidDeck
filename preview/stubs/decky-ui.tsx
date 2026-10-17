@@ -1,9 +1,9 @@
-// Versiones mínimas de @decky/ui para el preview. Solo lo que usa Void Deck.
+// Minimal @decky/ui implementations for the preview: only what Void Deck uses.
 import { forwardRef, useState, type HTMLAttributes, type ReactNode } from "react";
 
 export const staticClasses = { Title: "stub-title" } as Record<string, string>;
 
-// En el preview no hay clases minificadas: cada nombre se traduce a sí mismo.
+// The preview has no minified classes: every name resolves to itself.
 const identity = new Proxy({}, { get: (_t, name) => (typeof name === "string" ? name : undefined) });
 export const classMap = [identity as Record<string, string>];
 export function findClassModule(filter: (m: any) => boolean): Record<string, string> | void {
@@ -121,6 +121,40 @@ export function ToggleField(props: {
         {props.description && <div className="stub-toggle-desc">{props.description}</div>}
       </span>
       <span className={props.checked ? "stub-switch is-on" : "stub-switch"} />
+    </button>
+  );
+}
+
+type DropdownOption = { data: any; label: ReactNode };
+
+export function DropdownItem(props: {
+  label?: ReactNode;
+  description?: ReactNode;
+  rgOptions: DropdownOption[];
+  selectedOption: any;
+  onChange?: (option: DropdownOption) => void;
+}) {
+  return (
+    <label className="stub-dropdown">
+      <span className="stub-toggle-text">
+        <div className="stub-toggle-label">{props.label}</div>
+        {props.description && <div className="stub-toggle-desc">{props.description}</div>}
+      </span>
+      <select value={props.selectedOption} onChange={(e) => props.onChange?.(props.rgOptions.find((o) => o.data === e.target.value) ?? props.rgOptions[0])}>
+        {props.rgOptions.map((option) => <option key={String(option.data)} value={option.data}>{option.label}</option>)}
+      </select>
+    </label>
+  );
+}
+
+export function ButtonItem(props: { label?: ReactNode; description?: ReactNode; children?: ReactNode; onClick?: () => void }) {
+  return (
+    <button type="button" className="stub-toggle" onClick={props.onClick}>
+      <span className="stub-toggle-text">
+        <div className="stub-toggle-label">{props.label}</div>
+        {props.description && <div className="stub-toggle-desc">{props.description}</div>}
+      </span>
+      {props.children && <span>{props.children}</span>}
     </button>
   );
 }
