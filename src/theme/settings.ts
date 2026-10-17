@@ -14,6 +14,10 @@ export function settingsCss(): string {
   const button = clsList("DialogButton");
   const focusedField = field.flatMap((selector) => [`${selector}.gpfocus`, `${selector}.gpfocuswithin`]);
   const focusedButton = button.map((selector) => `${selector}.gpfocus`);
+  const list = clsList("PagedSettingsDialog_PageList");
+  const item = clsList("PagedSettingsDialog_PageListItem");
+  const activeItem = item.flatMap((i) => clsList("Active", "PagedSettingsDialog_PageListItem").map((a) => i + a));
+  const sidebar = (selectors: string[], suffix: string) => selectors.map((s) => `.PageListColumn ${s}${suffix}`).join(", ");
 
   return `
 /* Settings frame and content field */
@@ -28,22 +32,23 @@ export function settingsCss(): string {
   background-size: 12px 12px !important;
 }
 
-/* Sidebar: quiet labels, a lit row, and a clean white focus rail. */
-.PageListColumn .Panel {
-  background: transparent !important;
-  border-radius: 0 !important;
-  color: var(--vd-ink-muted) !important;
-  font-family: var(--vd-font-mono) !important;
-  font-size: 11px !important;
-  letter-spacing: .08em !important;
-  text-transform: uppercase !important;
+/* Sidebar: quiet labels; the current page is marked with a dot (as in the main menu) and the focused
+   row is raised. No rails: the list itself is a Panel holding focus, so a focus rail ran down the
+   whole column. Steam's blue marker on the active page is a left border. */
+${sidebar(list, "")} { background: transparent !important; box-shadow: none !important; }
+${sidebar(item, "")}, ${sidebar(item, ".gpfocus")} {
+  position: relative !important; background: transparent !important; box-shadow: none !important;
+  border-left: 0 !important; border-radius: 0 !important; color: var(--vd-ink-muted) !important;
+  font-family: var(--vd-font-mono) !important; font-size: 11px !important;
+  letter-spacing: .08em !important; text-transform: uppercase !important;
 }
-.PageListColumn .Panel * { color: inherit !important; }
-.PageListColumn .Panel.gpfocus, .PageListColumn .Panel:focus-within {
-  background: var(--vd-surface-raised) !important;
-  box-shadow: inset 2px 0 0 var(--vd-ink) !important;
-  color: var(--vd-ink) !important;
+${sidebar(item, " *")} { color: inherit !important; }
+${sidebar(activeItem, "")} { color: var(--vd-ink) !important; }
+${sidebar(activeItem, "::before")} {
+  content: ""; position: absolute; left: 11px; top: 50%; width: 4px; height: 4px; margin-top: -2px;
+  border-radius: 50%; background: var(--vd-ink);
 }
+${sidebar(item, ".gpfocus")} { background: var(--vd-surface-raised) !important; color: var(--vd-ink) !important; }
 
 /* Setting rows become a precise ruled form rather than floating cards. */
 ${join(field)} {
