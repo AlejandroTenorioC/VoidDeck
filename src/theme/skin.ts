@@ -7,6 +7,7 @@ import { footerCss } from "./footer";
 import { libraryCss } from "./library";
 import { mainMenuCss } from "./mainMenu";
 import { quickAccessCss } from "./quickAccess";
+import { settingsCss } from "./settings";
 import { transitionsCss } from "./transitions";
 import { tokensCss, type Theme } from "./tokens";
 
@@ -49,6 +50,9 @@ ${mainMenuCss()}
 
 /* Acceso rápido */
 ${quickAccessCss()}
+
+/* Ajustes de Steam */
+${settingsCss()}
 
 /* Transición al salir del Inicio */
 ${transitionsCss()}
