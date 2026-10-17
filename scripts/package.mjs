@@ -72,7 +72,7 @@ function zip(entries) {
 }
 
 execSync("pnpm build", { stdio: "inherit", cwd: root });
-const staged = stagePlugin();
+const staged = stagePlugin({ sourceMaps: false });
 const base = join(staged, "..");
 const entries = listFiles(staged)
   .sort()
