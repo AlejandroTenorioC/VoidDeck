@@ -13,14 +13,21 @@ let unregister: (() => void) | null = null;
 
 export function watchBattery(onChange: () => void): void {
   if (unregister) return;
-  const register = (window as any).SteamClient?.System?.RegisterForBatteryStateChanges;
+  const system = (window as any).SteamClient?.System;
+  const register = system?.RegisterForBatteryStateChanges;
   // Steam is not always ready when the skin applies; the next sync retries.
   if (typeof register !== "function") return;
-  const reg = register((s: any) => {
+  // Steam pushes the current state during `register`, before `unregister` exists. Forwarding it now
+  // re-enters sync() → watchBattery → register, recursing forever; hold it and deliver below.
+  // `call` keeps the receiver: the method must not run detached from SteamClient.System.
+  let pushed = false;
+  const reg = register.call(system, (s: any) => {
     battery = s.bHasBattery ? { level: s.flLevel, charging: s.eACState === AC_CONNECTED } : null;
-    onChange();
+    if (unregister) onChange();
+    else pushed = true;
   });
   unregister = () => reg?.unregister?.();
+  if (pushed) onChange();
 }
 
 export function unwatchBattery(): void {

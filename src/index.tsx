@@ -25,8 +25,21 @@ function VoidIcon() {
 export default definePlugin(() => {
   // The plugin mounts again after every Steam restart, so the stored choices are restored here.
   const settings = settingsState();
-  if (settings.skin) applySkin(settings.theme);
-  if (settings.home) enableHome();
+  // Each part stands alone: a failure in one must never stop the other from applying.
+  if (settings.skin) {
+    try {
+      applySkin(settings.theme);
+    } catch (error) {
+      console.error("[Void Deck] skin failed to apply", error);
+    }
+  }
+  if (settings.home) {
+    try {
+      enableHome();
+    } catch (error) {
+      console.error("[Void Deck] home screen failed to mount", error);
+    }
+  }
 
   return {
     name: "Void Deck",

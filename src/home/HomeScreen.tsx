@@ -56,12 +56,13 @@ function useDesignScale() {
     measure();
     const win = el.ownerDocument.defaultView ?? window;
     win.addEventListener("resize", measure);
-    // Steam resizes the Home container without a window resize (bars, overlays).
-    const observer = new ResizeObserver(measure);
-    observer.observe(el);
+    // Steam resizes the Home container without a window resize (bars, overlays). An older engine
+    // may lack ResizeObserver; the window listener above still covers that case.
+    const observer = typeof ResizeObserver === "function" ? new ResizeObserver(measure) : null;
+    observer?.observe(el);
     return () => {
       win.removeEventListener("resize", measure);
-      observer.disconnect();
+      observer?.disconnect();
     };
   }, []);
   return { ref, ...box };
