@@ -39,8 +39,8 @@ always know where you are typing.
 
 You need [Decky Loader](https://decky.xyz) installed on your Steam Deck.
 
-1. Download `VoidDeck-v0.2.16.zip` from the [v0.2.16 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v0.2.16), or copy its direct URL:
-   `https://github.com/endoflineservice/VoidDeck/releases/download/v0.2.16/VoidDeck-v0.2.16.zip`
+1. Download `VoidDeck-v0.2.17.zip` from the [v0.2.17 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v0.2.17), or copy its direct URL:
+   `https://github.com/endoflineservice/VoidDeck/releases/download/v0.2.17/VoidDeck-v0.2.17.zip`
 2. On the Deck, in Game Mode, open Quick Access (the `···` button) → the **Decky** tab (plug icon) → **⚙**.
 3. Under **General**, turn on **Developer mode**.
 4. In the new **Developer** section, choose one of:
@@ -63,10 +63,7 @@ In Quick Access, Decky tab → **Void Deck**:
 - **Home screen**: replaces Steam's Home with the Void Deck one.
 - **Light theme**: inverted colors for outdoor use.
 - **Language**: select English (the default) or Spanish. The selector is ready for more languages in future releases.
-- **Accent color**: choose red, cyan, amber, or violet for focus rings and alerts.
-- **Controller glyphs**: choose bundled Steam Deck (the default), Xbox, or ASUS ROG Ally button prompts.
-- **Home layout density**: choose Comfortable or Compact game-cover spacing.
-- **Reset to defaults**: restore English, Steam Deck prompts, red accents, comfortable density, and enabled screens.
+- **Reset to defaults**: restore English, the dark theme and both screens enabled.
 - **Version**: shows the installed plugin version and opens the latest release notes.
 
 Each part can be turned off on its own. If a Steam update breaks something, turn that part off and the rest keeps

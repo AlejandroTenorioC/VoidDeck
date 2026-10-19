@@ -1,38 +1,33 @@
 // Layer 3: Void Deck settings in the Quick Access menu.
 import { ButtonItem, DropdownItem, Navigation, PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
-import { useState } from "react";
-import { disableHome, enableHome, homeEnabled } from "../home";
+import { disableHome, enableHome } from "../home";
 import { resetLanguage, setLanguage, strings, useLanguage, type Language } from "../i18n";
-import { applySkin, removeSkin, skinState } from "../skin";
+import { resetSettings, setHome, setSkin, useSettings } from "../settings";
+import { applySkin, removeSkin } from "../skin";
 
-const VERSION = "0.2.16";
+const VERSION = "0.2.17";
 const RELEASE_URL = "https://github.com/endoflineservice/VoidDeck/releases/latest";
 
 export function Panel() {
-  const [skinOn, setSkinOn] = useState(() => skinState().on);
-  const [light, setLight] = useState(() => skinState().theme === "light");
-  const [homeOn, setHomeOn] = useState(homeEnabled);
+  const settings = useSettings();
   const language = useLanguage();
   const copy = strings(language);
 
   const updateSkin = (on: boolean, isLight: boolean) => {
-    setSkinOn(on);
-    setLight(isLight);
+    setSkin(on, isLight ? "light" : "dark");
     if (on) applySkin(isLight ? "light" : "dark");
     else removeSkin();
   };
 
   const updateHome = (on: boolean) => {
-    setHomeOn(on);
+    setHome(on);
     if (on) enableHome();
     else disableHome(true);
   };
 
   const resetDefaults = () => {
     resetLanguage();
-    setSkinOn(true);
-    setLight(false);
-    setHomeOn(true);
+    resetSettings();
     applySkin("dark");
     enableHome();
   };
@@ -43,15 +38,15 @@ export function Panel() {
         <ToggleField
           label={copy.globalSkin}
           description={copy.globalSkinDescription}
-          checked={skinOn}
-          onChange={(on) => updateSkin(on, light)}
+          checked={settings.skin}
+          onChange={(on) => updateSkin(on, settings.theme === "light")}
         />
       </PanelSectionRow>
       <PanelSectionRow>
         <ToggleField
           label={copy.homeScreen}
           description={copy.homeScreenDescription}
-          checked={homeOn}
+          checked={settings.home}
           onChange={updateHome}
         />
       </PanelSectionRow>
@@ -59,9 +54,9 @@ export function Panel() {
         <ToggleField
           label={copy.lightTheme}
           description={copy.lightThemeDescription}
-          checked={light}
-          disabled={!skinOn}
-          onChange={(isLight) => updateSkin(skinOn, isLight)}
+          checked={settings.theme === "light"}
+          disabled={!settings.skin}
+          onChange={(isLight) => updateSkin(settings.skin, isLight)}
         />
       </PanelSectionRow>
       <PanelSectionRow>
