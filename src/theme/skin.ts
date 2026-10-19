@@ -10,6 +10,7 @@ import { mainMenuCss } from "./mainMenu";
 import { menusCss } from "./menus";
 import { quickAccessCss } from "./quickAccess";
 import { settingsCss } from "./settings";
+import { sliderCss } from "./slider";
 import { transitionsCss } from "./transitions";
 import { tokensCss, type Theme } from "./tokens";
 import { volumeCss } from "./volume";
@@ -55,6 +56,9 @@ ${quickAccessCss()}
 
 /* Volume overlays */
 ${volumeCss()}
+
+/* Icon sliders (Quick Access brightness and volume) */
+${sliderCss()}
 
 /* On-screen keyboard */
 ${keyboardCss()}
