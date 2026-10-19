@@ -13,7 +13,7 @@ import { deckCompat, glyph, playtime, shortPlaytime, since } from "./format";
 import { homeCss } from "./homeCss";
 
 const DESIGN_WIDTH = 1280;
-const SHORT_HEIGHT = 790;
+const DESIGN_HEIGHT = 800;
 const SHELF_SIZE = 7;
 // Space above the focused row when scrolling: Steam bar (60) + section title and padding.
 const ROW_TOP_SPACE = 136;
@@ -27,19 +27,29 @@ const tabs = (language: Language): { label: string; go?: () => void }[] => {
   ];
 };
 
-/** Scale content so 1280 design pixels fill the actual window width. */
+/** Scale content so the 1280x800 design box always fits the window, whatever its ratio. */
 function useDesignScale() {
   const ref = useRef<HTMLDivElement>(null);
-  const [box, setBox] = useState({ zoom: 1, height: 800 });
+  const [box, setBox] = useState({ zoom: 1, width: DESIGN_WIDTH, height: DESIGN_HEIGHT });
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
     const measure = () => {
-      const zoom = el.clientWidth / DESIGN_WIDTH;
-      const height = el.clientHeight / zoom;
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      if (!w || !h) return;
+      // Scale by the tighter axis: the design box keeps its proportions and the extra
+      // room on the other axis becomes margin, so nothing is ever squeezed or cut off.
+      const zoom = Math.min(w / DESIGN_WIDTH, h / DESIGN_HEIGHT);
+      const width = w / zoom;
+      const height = h / zoom;
       // Steam can emit a layout-driven resize while React is committing. Avoid scheduling
       // another render when its dimensions did not actually change.
-      setBox((previous) => (previous.zoom === zoom && previous.height === height ? previous : { zoom, height }));
+      setBox((previous) =>
+        previous.zoom === zoom && previous.width === width && previous.height === height
+          ? previous
+          : { zoom, width, height },
+      );
     };
     measure();
     const win = el.ownerDocument.defaultView ?? window;
@@ -149,13 +159,15 @@ function Hero({ game, language, onFocus }: { game: Game; language: Language; onF
       <span className="vd-kicker">{last ? `${copy.continue} · ${copy.played} ${last}` : copy.ready}</span>
       <h1
         className={
-          game.name.length > 32
-            ? "vd-gtitle is-extra-long"
-            : game.name.length > 20
-              ? "vd-gtitle is-long"
-              : game.name.length > 13
-                ? "vd-gtitle is-medium"
-                : "vd-gtitle"
+          game.name.length > 48
+            ? "vd-gtitle is-ultra-long"
+            : game.name.length > 32
+              ? "vd-gtitle is-extra-long"
+              : game.name.length > 20
+                ? "vd-gtitle is-long"
+                : game.name.length > 13
+                  ? "vd-gtitle is-medium"
+                  : "vd-gtitle"
         }
       >
         {game.name}
@@ -211,7 +223,7 @@ export function HomeScreen() {
   const installed = useMemo(() => installedGames(), []);
   const total = useMemo(() => libraryCount(), []);
   const [hero, setHero] = useState<Game | undefined>(() => recent[0] ?? installed[0]);
-  const { ref, zoom, height } = useDesignScale();
+  const { ref, zoom, width, height } = useDesignScale();
   useFromHomeMark(ref);
   const homeRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -233,9 +245,9 @@ export function HomeScreen() {
     <div className="vd-home-viewport" ref={ref}>
       <style>{css}</style>
       <Focusable
-        className={height < SHORT_HEIGHT ? "vd-home is-short" : "vd-home"}
+        className="vd-home"
         ref={homeRef}
-        style={{ zoom, height }}
+        style={{ zoom, width, height }}
         onButtonDown={onBumper}
       >
         <div className="vd-scroll" ref={contentRef} style={{ transform: `translateY(${-scroll.offset}px)` }}>

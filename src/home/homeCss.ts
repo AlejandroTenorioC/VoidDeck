@@ -8,7 +8,7 @@ export const homeCss = `
   background: linear-gradient(var(--vd-bg) 75%, transparent);
 }
 .vd-home {
-  width: 1280px; overflow: clip; color: var(--vd-ink); font-family: var(--vd-font-sans);
+  overflow: clip; color: var(--vd-ink); font-family: var(--vd-font-sans);
   --vd-tile-width: 150px; --vd-grid-columns: 7; --vd-grid-gap: var(--vd-space-6);
 }
 .vd-scroll { transition: transform 320ms cubic-bezier(.2, .7, .2, 1); will-change: transform; }
@@ -17,10 +17,11 @@ export const homeCss = `
 .vd-page {
   box-sizing: border-box; display: flex; flex-direction: column;
   padding: 88px var(--vd-space-8) 80px;
+  max-width: 1280px; margin-inline: auto;
 }
 
 /* Below: all installed games */
-.vd-installed { padding: 0 var(--vd-space-8) 120px; }
+.vd-installed { padding: 0 var(--vd-space-8) 120px; max-width: 1280px; margin-inline: auto; }
 .vd-grid { display: grid; grid-template-columns: repeat(var(--vd-grid-columns), var(--vd-tile-width)); column-gap: var(--vd-grid-gap); row-gap: var(--vd-space-2); }
 .vd-home.is-compact { --vd-tile-width: 124px; --vd-grid-columns: 8; --vd-grid-gap: var(--vd-space-4); }
 
@@ -44,6 +45,8 @@ export const homeCss = `
 
 /* Juego destacado */
 .vd-hero { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px; min-height: 0; }
+/* The hero never squashes its content: it overflows the page instead of overlapping itself. */
+.vd-hero > * { flex: none; }
 .vd-field {
   position: absolute; right: -32px; top: 0; width: 560px; height: 100%; pointer-events: none;
   background-image: radial-gradient(circle, var(--vd-ink-faint) 1.5px, transparent 1.75px);
@@ -54,15 +57,18 @@ export const homeCss = `
 /* One fixed title box: the type shrinks to fit long names, but the block height never
    changes, so the kicker, playtime and buttons around it stay put. */
 .vd-gtitle {
-  position: relative; margin: 0; max-width: 900px; height: 116px; box-sizing: border-box;
-  display: flex; align-items: center; font: 800 96px/116px var(--vd-font-dot); letter-spacing: -.02em;
-  /* Doto's dot cells extend below the font's nominal box. Do not clip their last row. */
-  text-transform: uppercase; white-space: nowrap; overflow: visible;
+  position: relative; margin: 0; max-width: 100%; box-sizing: border-box;
+  font: 800 96px/116px var(--vd-font-dot); letter-spacing: -.02em;
+  text-transform: uppercase; white-space: nowrap;
+  /* Doto's dot cells drop below the baseline: the padding keeps them clear of the row
+     below, and the clip stops a long name from leaving the column. */
+  padding-bottom: 18px; overflow: hidden;
 }
 .vd-gtitle.is-medium { font-size: 72px; line-height: 116px; letter-spacing: 0; }
 .vd-gtitle.is-long { font-size: 52px; line-height: 116px; letter-spacing: 0; }
 .vd-gtitle.is-extra-long { font-size: 38px; line-height: 116px; letter-spacing: 0; }
-.vd-empty-description { position: relative; max-width: 440px; margin: calc(var(--vd-space-2) * -1) 0 0; color: var(--vd-ink-muted); font: 16px/24px var(--vd-font-sans); }
+.vd-gtitle.is-ultra-long { font-size: 30px; line-height: 116px; letter-spacing: 0; }
+.vd-empty-description { position: relative; max-width: 440px; margin: 0; color: var(--vd-ink-muted); font: 16px/24px var(--vd-font-sans); }
 .vd-empty-library {
   display: inline-flex; align-items: center; justify-content: center; width: max-content; height: 42px; padding: 0 var(--vd-space-5, 20px);
   border: 1.5px solid var(--vd-line-strong); border-radius: var(--vd-radius-pill); color: var(--vd-ink);
@@ -109,12 +115,4 @@ export const homeCss = `
 .vd-tile-detail { font: 400 14px/20px var(--vd-font-sans); color: var(--vd-ink-muted); }
 .vd-tile.is-focused .vd-tile-art { transform: scale(1.06); box-shadow: var(--vd-focus-ring); }
 .vd-tile.is-focused .vd-tile-meta { opacity: 1; }
-
-.vd-home.is-short .vd-page { padding-top: 80px; padding-bottom: 72px; }
-.vd-home.is-short .vd-hero { gap: var(--vd-space-3); }
-.vd-home.is-short .vd-gtitle { height: 96px; font-size: 80px; line-height: 96px; }
-.vd-home.is-short .vd-gtitle.is-medium { font-size: 64px; line-height: 96px; }
-.vd-home.is-short .vd-gtitle.is-long { font-size: 48px; line-height: 96px; }
-.vd-home.is-short .vd-gtitle.is-extra-long { font-size: 36px; line-height: 96px; }
-.vd-home.is-short .vd-empty-description { font: 15px/22px var(--vd-font-sans); }
 `;
