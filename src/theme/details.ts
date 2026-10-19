@@ -4,6 +4,9 @@ import { clsList } from "../steam/classes";
 
 const join = (list: string[], suffix = "") => list.map((s) => s + suffix).join(", ");
 
+/** Repeats the class (".a.a") so a rule outranks Steam's own, more specific, ones. */
+const paint = (list: string[], suffix: string) => list.map((s) => `${s}${s}${suffix}`);
+
 export function detailsCss(): string {
   const of = (name: string, ...siblings: string[]) => clsList(name, ...siblings);
   const play = of("PlayButton", "PlayButtonContainer");
@@ -61,10 +64,17 @@ ${join(selector)} {
 ${join(selector, " svg")} { fill: var(--vd-on-ink) !important; color: var(--vd-on-ink) !important; }
 ${join([...play, ...selector], ".gpfocus")} { box-shadow: none !important; outline: none !important; }
 
-/* Controller and settings: outlined circles */
+/* Controller and settings: outlined circles that invert on hover, like the Play button.
+   The class is repeated so these rules outrank Steam's own (more specific) fill on the glyph. */
 ${join(menuButton)} { background: transparent !important; border: 1px solid var(--vd-line-strong) !important; border-radius: 50% !important; box-sizing: border-box !important; color: var(--vd-ink) !important; }
-${join([...menuButton.map((s) => `${s} svg`), ...menuButton.map((s) => `${s} svg *`)])} { color: inherit !important; fill: currentColor !important; }
-${join([...menuButton.map((s) => `${s}:hover`), ...menuButton.map((s) => `${s}.gpfocus`)])} { background: var(--vd-surface-raised) !important; border-color: var(--vd-ink) !important; color: var(--vd-ink) !important; }
+${join(paint(menuButton, " svg"))} { color: var(--vd-ink) !important; fill: var(--vd-ink) !important; }
+${join(paint(menuButton, " svg *"))} { color: var(--vd-ink) !important; fill: var(--vd-ink) !important; }
+${join(paint(menuButton, ":hover"))} { background: var(--vd-ink) !important; border-color: var(--vd-ink) !important; color: var(--vd-on-ink) !important; }
+${join(paint(menuButton, ".gpfocus"))} { background: var(--vd-ink) !important; border-color: var(--vd-ink) !important; color: var(--vd-on-ink) !important; }
+${join(paint(menuButton, ":hover svg"))} { color: var(--vd-on-ink) !important; fill: var(--vd-on-ink) !important; }
+${join(paint(menuButton, ":hover svg *"))} { color: var(--vd-on-ink) !important; fill: var(--vd-on-ink) !important; }
+${join(paint(menuButton, ".gpfocus svg"))} { color: var(--vd-on-ink) !important; fill: var(--vd-on-ink) !important; }
+${join(paint(menuButton, ".gpfocus svg *"))} { color: var(--vd-on-ink) !important; fill: var(--vd-on-ink) !important; }
 ${join(menuButton, ".gpfocus")} { box-shadow: ${ring} !important; }
 
 /* Last session / playtime: monospaced label and dot-matrix value */
