@@ -13,6 +13,7 @@ import { deckCompat, glyph, playtime, shortPlaytime, since } from "./format";
 import { homeCss } from "./homeCss";
 
 const DESIGN_WIDTH = 1280;
+const SHORT_HEIGHT = 790;
 const SHELF_SIZE = 7;
 // Space above the focused row when scrolling: Steam bar (60) + section title and padding.
 const ROW_TOP_SPACE = 136;
@@ -216,7 +217,12 @@ export function HomeScreen() {
   return (
     <div className="vd-home-viewport" ref={ref}>
       <style>{css}</style>
-      <Focusable className="vd-home" ref={homeRef} style={{ zoom, height }} onButtonDown={onBumper}>
+      <Focusable
+        className={height < SHORT_HEIGHT ? "vd-home is-short" : "vd-home"}
+        ref={homeRef}
+        style={{ zoom, height }}
+        onButtonDown={onBumper}
+      >
         <div className="vd-scroll" ref={contentRef} style={{ transform: `translateY(${-scroll.offset}px)` }}>
           <div className="vd-page" style={{ height }}>
             <Focusable className="vd-tabs" flow-children="horizontal">

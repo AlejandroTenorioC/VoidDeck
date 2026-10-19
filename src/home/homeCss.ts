@@ -25,7 +25,7 @@ export const homeCss = `
 .vd-home.is-compact { --vd-tile-width: 124px; --vd-grid-columns: 8; --vd-grid-gap: var(--vd-space-4); }
 
 /* Tabs L1 / R1 */
-.vd-tabs { display: flex; align-items: center; gap: var(--vd-space-3); }
+.vd-tabs { display: flex; flex: none; align-items: center; gap: var(--vd-space-3); }
 .vd-trigger {
   display: inline-grid; place-items: center; min-width: 40px; height: 28px; padding: 0 6px; box-sizing: border-box;
   border: 1.5px solid var(--vd-line-strong); border-radius: var(--vd-radius-pill);
@@ -43,7 +43,7 @@ export const homeCss = `
 .vd-tab.is-active.is-focused { color: var(--vd-on-ink); box-shadow: var(--vd-focus-ring); }
 
 /* Juego destacado */
-.vd-hero { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: var(--vd-space-4); min-height: 0; }
+.vd-hero { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px; min-height: 0; }
 .vd-field {
   position: absolute; right: -32px; top: 0; width: 560px; height: 100%; pointer-events: none;
   background-image: radial-gradient(circle, var(--vd-ink-faint) 1.5px, transparent 1.75px);
@@ -68,7 +68,7 @@ export const homeCss = `
 .vd-empty-library.is-focused { background: var(--vd-ink); color: var(--vd-on-ink); box-shadow: var(--vd-focus-ring); }
 .vd-meta { display: flex; gap: var(--vd-space-6); align-items: center; font: 16px/24px var(--vd-font-sans); color: var(--vd-ink-muted); }
 .vd-meta b { color: var(--vd-ink); font-weight: 500; }
-.vd-actions { display: flex; gap: var(--vd-space-4); margin-top: var(--vd-space-2); }
+.vd-actions { display: flex; gap: var(--vd-space-4); }
 
 /* Botones */
 .vd-btn {
@@ -86,9 +86,10 @@ export const homeCss = `
 }
 
 /* Estante de recientes */
-.vd-shelf-h { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--vd-space-3); }
+/* 16px clears the focused cover's scale + ring above the shelf. */
+.vd-shelf-h { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--vd-space-4); }
 .vd-shelf-h h2 { margin: 0; font: 500 18px/24px var(--vd-font-sans); }
-.vd-shelf { display: flex; gap: var(--vd-grid-gap); align-items: flex-start; height: 290px; }
+.vd-shelf { display: flex; gap: var(--vd-grid-gap); align-items: flex-start; height: 285px; }
 
 .vd-tile { display: flex; flex-direction: column; gap: var(--vd-space-2); width: var(--vd-tile-width); flex: none; }
 .vd-tile-art {
@@ -105,4 +106,12 @@ export const homeCss = `
 .vd-tile-detail { font: 400 14px/20px var(--vd-font-sans); color: var(--vd-ink-muted); }
 .vd-tile.is-focused .vd-tile-art { transform: scale(1.06); box-shadow: var(--vd-focus-ring); }
 .vd-tile.is-focused .vd-tile-meta { opacity: 1; }
+
+.vd-home.is-short .vd-page { padding-top: 80px; padding-bottom: 72px; }
+.vd-home.is-short .vd-hero { gap: var(--vd-space-3); }
+.vd-home.is-short .vd-gtitle { font-size: 80px; line-height: 96px; }
+.vd-home.is-short .vd-gtitle.is-medium { font-size: 64px; line-height: 78px; }
+.vd-home.is-short .vd-gtitle.is-long { font-size: 48px; line-height: 60px; }
+.vd-home.is-short .vd-gtitle.is-extra-long { font-size: 36px; line-height: 46px; }
+.vd-home.is-short .vd-empty-description { font: 15px/22px var(--vd-font-sans); }
 `;
