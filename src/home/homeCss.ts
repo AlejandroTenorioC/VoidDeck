@@ -108,7 +108,9 @@ export const homeCss = `
   background-size: var(--vd-space-3) var(--vd-space-3);
   transition: transform 150ms ease, box-shadow 150ms ease;
 }
-.vd-tile-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Covers are monochrome until the tile is hovered or focused. */
+.vd-tile-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: filter 150ms ease; }
+.vd-tile:hover .vd-tile-art img, .vd-tile.is-focused .vd-tile-art img { filter: none; }
 .vd-tile-glyph { font: 800 72px/1 var(--vd-font-dot); color: var(--vd-ink); }
 .vd-tile-meta { display: flex; flex-direction: column; gap: 2px; padding: var(--vd-space-2) var(--vd-space-1) 0; opacity: 0; transition: opacity 150ms; }
 .vd-tile-title { font: 500 16px/22px var(--vd-font-sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
