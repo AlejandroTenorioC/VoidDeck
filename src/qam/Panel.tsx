@@ -5,7 +5,7 @@ import { resetLanguage, setLanguage, strings, useLanguage, type Language } from 
 import { resetSettings, setHome, setSkin, useSettings } from "../settings";
 import { applySkin, removeSkin } from "../skin";
 
-const VERSION = "0.2.18";
+const VERSION = "0.2.19";
 const RELEASE_URL = "https://github.com/endoflineservice/VoidDeck/releases/latest";
 
 export function Panel() {
