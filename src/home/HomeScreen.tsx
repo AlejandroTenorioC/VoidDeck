@@ -23,7 +23,7 @@ const ART_REFRESH_MS = 15000;
 const tabs = (language: Language): { label: string; go?: () => void }[] => {
   const copy = strings(language);
   return [
-    { label: copy.home },
+    { label: copy.home, go: () => Navigation.Navigate("/library/home") },
     { label: copy.library, go: () => Navigation.NavigateToLibraryTab() },
     { label: copy.friends, go: () => Navigation.OpenQuickAccessMenu(QuickAccessTab.Friends) },
   ];
@@ -56,7 +56,13 @@ function useDesignScale() {
     measure();
     const win = el.ownerDocument.defaultView ?? window;
     win.addEventListener("resize", measure);
-    return () => win.removeEventListener("resize", measure);
+    // Steam resizes the Home container without a window resize (bars, overlays).
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => {
+      win.removeEventListener("resize", measure);
+      observer.disconnect();
+    };
   }, []);
   return { ref, ...box };
 }
@@ -256,7 +262,9 @@ export function HomeScreen() {
   );
 
   const onBumper = (e: GamepadEvent) => {
-    if (e.detail.button === GamepadButton.BUMPER_RIGHT) navigationTabs[1].go?.();
+    const button = e.detail.button;
+    if (button === GamepadButton.BUMPER_LEFT) navigationTabs[0].go?.();
+    else if (button === GamepadButton.BUMPER_RIGHT) navigationTabs[1].go?.();
   };
 
   return (

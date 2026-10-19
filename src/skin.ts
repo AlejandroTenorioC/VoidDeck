@@ -1,4 +1,5 @@
 // Layer 1: global skin. Injects Void Deck CSS into every Steam window.
+import { warnMissingClasses } from "./steam/classes";
 import { removeStatusDots, unwatchBattery, updateStatusDots, watchBattery } from "./steam/statusDots";
 import { harvestClasses } from "./steam/windowClasses";
 import { steamDocuments, steamWindows } from "./steam/windows";
@@ -17,7 +18,10 @@ function sync(): void {
   if (css === null) return;
   // The on-screen keyboard publishes its class names only once it opens, so the theme
   // is rebuilt as soon as new ones are found.
-  if (harvestClasses(steamWindows())) css = skinCss(theme);
+  if (harvestClasses(steamWindows())) {
+    css = skinCss(theme);
+    warnMissingClasses();
+  }
   for (const doc of steamDocuments()) {
     let el = doc.getElementById(STYLE_ID);
     if (!el) {
@@ -30,14 +34,16 @@ function sync(): void {
     if (doc.head.lastElementChild !== el) doc.head.appendChild(el);
     updateStatusDots(doc);
   }
+  // Steam does not always have the battery hook ready when the skin applies.
+  watchBattery(sync);
 }
 
 export function applySkin(next: Theme): void {
   theme = next;
   css = skinCss(next);
+  warnMissingClasses();
   sync();
   timer ??= setInterval(sync, RESYNC_MS);
-  watchBattery(sync);
 }
 
 export function removeSkin(): void {

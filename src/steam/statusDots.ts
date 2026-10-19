@@ -1,5 +1,5 @@
 // Top bar: replace Steam Wi-Fi and battery icons with dot meters.
-import { cls } from "./classes";
+import { classEpoch, cls } from "./classes";
 
 const METER = "vd-meter";
 const BATTERY_DOTS = 5;
@@ -13,7 +13,10 @@ let unregister: (() => void) | null = null;
 
 export function watchBattery(onChange: () => void): void {
   if (unregister) return;
-  const reg = (window as any).SteamClient?.System?.RegisterForBatteryStateChanges?.((s: any) => {
+  const register = (window as any).SteamClient?.System?.RegisterForBatteryStateChanges;
+  // Steam is not always ready when the skin applies; the next sync retries.
+  if (typeof register !== "function") return;
+  const reg = register((s: any) => {
     battery = s.bHasBattery ? { level: s.flLevel, charging: s.eACState === AC_CONNECTED } : null;
     onChange();
   });
@@ -27,13 +30,24 @@ export function unwatchBattery(): void {
 }
 
 let cached: Record<"wifi" | "battery" | "stack" | "percentage", string> | null = null;
-const selectors = () =>
-  (cached ??= {
+let cachedEpoch = -1;
+
+/**
+ * Resolved selectors, rebuilt when the harvest finds new Steam modules: a class that is
+ * missing at first would otherwise stay unresolved for the whole session.
+ */
+function selectors(): Record<"wifi" | "battery" | "stack" | "percentage", string> {
+  const epoch = classEpoch();
+  if (cached && cachedEpoch === epoch) return cached;
+  cachedEpoch = epoch;
+  cached = {
     wifi: cls("WirelessIcon", "HeaderItem"),
     battery: cls("BatteryIcon", "HeaderItem"),
     stack: cls("BatteryIconVerticalStack"),
     percentage: cls("Percentage", "BatteryIcon"),
-  });
+  };
+  return cached;
+}
 
 /** Create or update the meter inside `host`: `on` lit dots out of `total`. */
 function meter(host: Element, on: number, total: number, modifiers: string[], first: boolean): void {

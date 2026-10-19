@@ -2,6 +2,7 @@ import { definePlugin } from "@decky/api";
 import { staticClasses } from "@decky/ui";
 import { disableHome, enableHome } from "./home";
 import { Panel } from "./qam/Panel";
+import { settingsState } from "./settings";
 import { applySkin, removeSkin } from "./skin";
 
 // Icon: 5×5 dot grid with the diagonal lit.
@@ -22,8 +23,10 @@ function VoidIcon() {
 }
 
 export default definePlugin(() => {
-  applySkin("dark");
-  enableHome();
+  // The plugin mounts again after every Steam restart, so the stored choices are restored here.
+  const settings = settingsState();
+  if (settings.skin) applySkin(settings.theme);
+  if (settings.home) enableHome();
 
   return {
     name: "Void Deck",

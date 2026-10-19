@@ -62,3 +62,22 @@ export function clsList(name: string, ...siblings: string[]): string[] {
 export function missingClasses(): string[] {
   return [...missing];
 }
+
+/** Number of class modules the theme can read: it changes when Steam publishes new ones. */
+export function classEpoch(): number {
+  return classMap.length + harvestedModules().length;
+}
+
+let warned = "";
+
+/**
+ * Log the classes that could not be found, once per distinct set, so a Steam update that
+ * breaks part of the theme leaves a trace in the plugin log instead of failing silently.
+ */
+export function warnMissingClasses(): void {
+  if (missing.size === 0) return;
+  const signature = [...missing].sort().join(", ");
+  if (signature === warned) return;
+  warned = signature;
+  console.warn(`[Void Deck] Steam classes not found: ${signature}`);
+}

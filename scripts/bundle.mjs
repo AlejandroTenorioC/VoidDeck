@@ -19,5 +19,7 @@ export function stagePlugin() {
   for (const f of FILES) {
     if (existsSync(join(root, f))) cpSync(join(root, f), join(out, f), { recursive: true });
   }
+  // The source map is development-only data; the release ships the bundle alone.
+  rmSync(join(out, "dist", "index.js.map"), { force: true });
   return out;
 }

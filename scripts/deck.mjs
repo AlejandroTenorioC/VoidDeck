@@ -22,8 +22,14 @@ export function deckConfig() {
     process.exit(1);
   }
   const user = env.DECK_USER || "deck";
+  const port = env.DECK_PORT || "22";
+  // These values end up inside remote shell commands, so reject anything unexpected.
+  if (!/^[A-Za-z0-9._:-]+$/.test(env.DECK_HOST) || !/^[A-Za-z0-9._-]+$/.test(user) || !/^\d+$/.test(port)) {
+    console.error("DECK_HOST, DECK_USER or DECK_PORT contains unexpected characters.");
+    process.exit(1);
+  }
   const key = (env.DECK_KEY || join(homedir(), ".ssh", "voiddeck_deck")).replace(/^~/, homedir());
-  return { host: env.DECK_HOST, user, port: env.DECK_PORT || "22", key, target: `${user}@${env.DECK_HOST}` };
+  return { host: env.DECK_HOST, user, port, key, target: `${user}@${env.DECK_HOST}` };
 }
 
 /** ssh/scp options: use the project key if present; never prompt in `batch` mode. */
@@ -32,4 +38,12 @@ export function sshOptions({ key }, { batch = false } = {}) {
   if (existsSync(key)) opts.push(`-i "${key}"`, "-o IdentitiesOnly=yes");
   if (batch) opts.push("-o BatchMode=yes");
   return opts.join(" ");
+}
+
+/** The same options as an argument list, so no shell ever parses the configured values. */
+export function sshArgs({ key }, { batch = false } = {}) {
+  const args = ["-o", "StrictHostKeyChecking=accept-new"];
+  if (existsSync(key)) args.push("-i", key, "-o", "IdentitiesOnly=yes");
+  if (batch) args.push("-o", "BatchMode=yes");
+  return args;
 }
