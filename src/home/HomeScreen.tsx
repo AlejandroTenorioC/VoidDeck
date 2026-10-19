@@ -17,6 +17,8 @@ const DESIGN_HEIGHT = 800;
 const SHELF_SIZE = 7;
 // Space above the focused row when scrolling: Steam bar (60) + section title and padding.
 const ROW_TOP_SPACE = 136;
+// Decky art plugins rewrite Steam's capsule URLs, so the shelf re-reads them.
+const ART_REFRESH_MS = 15000;
 
 const tabs = (language: Language): { label: string; go?: () => void }[] => {
   const copy = strings(language);
@@ -219,22 +221,38 @@ export function HomeScreen() {
   const language = useLanguage();
   const copy = strings(language);
   const navigationTabs = tabs(language);
-  const recent = useMemo(() => recentGames(SHELF_SIZE), []);
-  const installed = useMemo(() => installedGames(), []);
-  const total = useMemo(() => libraryCount(), []);
-  const [hero, setHero] = useState<Game | undefined>(() => recent[0] ?? installed[0]);
+  const [artTick, setArtTick] = useState(0);
+  const recent = useMemo(() => recentGames(SHELF_SIZE), [artTick]);
+  const installed = useMemo(() => installedGames(), [artTick]);
+  const total = useMemo(() => libraryCount(), [artTick]);
+  // The hero is held by appid so it survives a refresh and picks up new art.
+  const [heroId, setHeroId] = useState<number | undefined>(() => (recent[0] ?? installed[0])?.appid);
+  const hero = useMemo(() => {
+    if (heroId === undefined) return undefined;
+    return [...recent, ...installed].find((game) => game.appid === heroId) ?? recent[0] ?? installed[0];
+  }, [heroId, recent, installed]);
   const { ref, zoom, width, height } = useDesignScale();
   useFromHomeMark(ref);
   const homeRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const scroll = useScroller(homeRef, contentRef);
+  useEffect(() => {
+    const refresh = () => setArtTick((tick) => tick + 1);
+    window.addEventListener("focus", refresh);
+    const timer = window.setInterval(refresh, ART_REFRESH_MS);
+    return () => {
+      window.removeEventListener("focus", refresh);
+      window.clearInterval(timer);
+    };
+  }, []);
   // Local tokens and fonts let the screen work even with the global skin turned off.
+  const theme = skinState().theme;
   const css = useMemo(
     () =>
-      `${fontsCss}\n${tokensCss(skinState().theme, ".vd-home-viewport")}\n${homeCss}\n` +
+      `${fontsCss}\n${tokensCss(theme, ".vd-home-viewport")}\n${homeCss}\n` +
       // Steam Home enabled the top bar (clock, battery); without it, it stays transparent.
       `${cls("Header", "OverrideHeaderBackground")} { opacity: 1 !important; }`,
-    [],
+    [theme],
   );
 
   const onBumper = (e: GamepadEvent) => {
@@ -303,7 +321,7 @@ export function HomeScreen() {
                       first={i === 0}
                       language={language}
                       onFocus={() => {
-                        setHero((current) => (current?.appid === g.appid ? current : g));
+                        setHeroId((current) => (current === g.appid ? current : g.appid));
                         scroll.toTop();
                       }}
                     />
@@ -326,7 +344,7 @@ export function HomeScreen() {
                     game={g}
                     language={language}
                     onFocus={(el) => {
-                      setHero((current) => (current?.appid === g.appid ? current : g));
+                      setHeroId((current) => (current === g.appid ? current : g.appid));
                       scroll.reveal(el);
                     }}
                   />

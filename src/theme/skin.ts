@@ -7,7 +7,7 @@ import { footerCss } from "./footer";
 import { keyboardCss } from "./keyboard";
 import { libraryCss } from "./library";
 import { mainMenuCss } from "./mainMenu";
-import { menusCss } from "./menus";
+import { contextMenuCss, menusCss } from "./menus";
 import { quickAccessCss } from "./quickAccess";
 import { settingsCss } from "./settings";
 import { sliderCss } from "./slider";
@@ -45,11 +45,17 @@ ${cls("Clock", "HeaderItem")}, ${cls("Percentage")} {
 /* Bottom-bar control hints */
 ${footerCss()}
 
+/* Any Steam face-button art that slips past the footer hides becomes monochrome */
+img[src*="shared_buttons_"] { filter: grayscale(1) brightness(2.2) !important; }
+
 /* Main menu (STEAM button) */
 ${mainMenuCss()}
 
 /* Popup menus, the power submenu and shut-down screens */
 ${menusCss()}
+
+/* Gamepad context menus (the ⋯ hamburger on a poster or library tile) */
+${contextMenuCss()}
 
 /* Quick Access */
 ${quickAccessCss()}

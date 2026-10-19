@@ -88,3 +88,89 @@ ${join(focusedButton)} {
 ${join(focusedButton.map((selector) => `${selector} *`))} { color: inherit !important; }
 `;
 }
+
+/**
+ * The gamepad context menu: the (⋯) menu of a library tile and the hamburger
+ * menu of a Void Deck poster. Steam builds it as a BasicContextMenu, a class
+ * family of its own (not the MenuPopup popups above), so it needs its own
+ * block. Flat surface, one hairline, monospace rows and an inverted focus bar.
+ */
+export function contextMenuCss(): string {
+  const join = (list: string[]) => list.join(", ");
+  const of = (name: string, ...siblings: string[]) => clsList(name, ...siblings);
+  // Every name lives in the module that publishes BasicContextMenuModal: the
+  // sibling pins each class to it instead of a same-named class elsewhere.
+  const modal = "BasicContextMenuModal";
+
+  const scrim = of("contextMenu", modal);
+  const container = of("BasicContextMenuContainer", modal);
+  const contents = of("contextMenuContents", modal);
+  const header = [...of("BasicContextMenuHeader", modal), ...of("BasicContextMenuHeaderShrinkableSpacing", modal)];
+  const rows = of("contextMenuItem", modal);
+  const selected = [
+    ...rows.flatMap((selector) => [`${selector}.gpfocus`, `${selector}.gpfocuswithin`]),
+    ...of("Focused", modal),
+    ...of("Selected", modal),
+  ];
+  const separator = of("ContextMenuSeparator", modal);
+  const sectionHeader = of("MenuSectionHeader", modal);
+  const submenu = of("SubMenu", modal);
+  const arrow = of("Arrow", modal);
+  const banner = [...of("Destructive", modal), ...of("Emphasis", modal), ...of("Positive", modal)];
+
+  return `
+/* Gamepad context menu (the ⋯ menu of a poster or library tile) */
+${join(scrim)} { background-color: rgba(0, 0, 0, .62) !important; }
+${join(container)} {
+  background: var(--vd-surface) !important;
+  background-image: none !important;
+  border: 1px solid var(--vd-line) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+${join(contents)} { background: transparent !important; border: none !important; }
+${join(header)} {
+  background: transparent !important;
+  border-bottom: 1px solid var(--vd-line) !important;
+  color: var(--vd-ink) !important;
+  font-family: var(--vd-font-mono) !important;
+  font-size: 11px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+}
+${join(rows)} {
+  background: transparent !important;
+  border-radius: 0 !important;
+  color: var(--vd-ink-muted) !important;
+  font-family: var(--vd-font-mono) !important;
+  font-size: 11px !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+}
+${join(rows.map((selector) => `${selector} *`))}, ${join(selected)} { color: inherit !important; }
+${join(selected)} {
+  background: var(--vd-ink) !important;
+  color: var(--vd-on-ink) !important;
+}
+${join(separator)} { background: var(--vd-line) !important; box-shadow: none !important; }
+${join(sectionHeader)} {
+  background: transparent !important;
+  color: var(--vd-ink-faint) !important;
+  font-family: var(--vd-font-mono) !important;
+  font-size: 10px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+}
+${join(submenu)} {
+  background: var(--vd-surface) !important;
+  border: 1px solid var(--vd-line) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+${join(arrow)} { color: var(--vd-ink-muted) !important; fill: var(--vd-ink-muted) !important; }
+${join(banner)} { color: var(--vd-ink) !important; }
+
+/* Steam draws its own coloured A/B/X/Y prompts in here: force them monochrome. */
+${join(container)} img[src*="shared_buttons_"] { filter: grayscale(1) brightness(2.2) !important; }
+`;
+}
