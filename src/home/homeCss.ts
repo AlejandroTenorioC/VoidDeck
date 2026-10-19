@@ -51,14 +51,17 @@ export const homeCss = `
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 60%);
 }
 .vd-kicker { font: 14px/16px var(--vd-font-mono); letter-spacing: .08em; color: var(--vd-ink-muted); text-transform: uppercase; }
+/* One fixed title box: the type shrinks to fit long names, but the block height never
+   changes, so the kicker, playtime and buttons around it stay put. */
 .vd-gtitle {
-  position: relative; margin: 0; max-width: 900px; font: 800 96px/116px var(--vd-font-dot); letter-spacing: -.02em;
+  position: relative; margin: 0; max-width: 900px; height: 116px; box-sizing: border-box;
+  display: flex; align-items: center; font: 800 96px/116px var(--vd-font-dot); letter-spacing: -.02em;
   /* Doto's dot cells extend below the font's nominal box. Do not clip their last row. */
   text-transform: uppercase; white-space: nowrap; overflow: visible;
 }
-.vd-gtitle.is-medium { font-size: 72px; line-height: 88px; letter-spacing: 0; }
-.vd-gtitle.is-long { font-size: 52px; line-height: 66px; letter-spacing: 0; }
-.vd-gtitle.is-extra-long { font-size: 38px; line-height: 50px; letter-spacing: 0; }
+.vd-gtitle.is-medium { font-size: 72px; line-height: 116px; letter-spacing: 0; }
+.vd-gtitle.is-long { font-size: 52px; line-height: 116px; letter-spacing: 0; }
+.vd-gtitle.is-extra-long { font-size: 38px; line-height: 116px; letter-spacing: 0; }
 .vd-empty-description { position: relative; max-width: 440px; margin: calc(var(--vd-space-2) * -1) 0 0; color: var(--vd-ink-muted); font: 16px/24px var(--vd-font-sans); }
 .vd-empty-library {
   display: inline-flex; align-items: center; justify-content: center; width: max-content; height: 42px; padding: 0 var(--vd-space-5, 20px);
@@ -109,9 +112,9 @@ export const homeCss = `
 
 .vd-home.is-short .vd-page { padding-top: 80px; padding-bottom: 72px; }
 .vd-home.is-short .vd-hero { gap: var(--vd-space-3); }
-.vd-home.is-short .vd-gtitle { font-size: 80px; line-height: 96px; }
-.vd-home.is-short .vd-gtitle.is-medium { font-size: 64px; line-height: 78px; }
-.vd-home.is-short .vd-gtitle.is-long { font-size: 48px; line-height: 60px; }
-.vd-home.is-short .vd-gtitle.is-extra-long { font-size: 36px; line-height: 46px; }
+.vd-home.is-short .vd-gtitle { height: 96px; font-size: 80px; line-height: 96px; }
+.vd-home.is-short .vd-gtitle.is-medium { font-size: 64px; line-height: 96px; }
+.vd-home.is-short .vd-gtitle.is-long { font-size: 48px; line-height: 96px; }
+.vd-home.is-short .vd-gtitle.is-extra-long { font-size: 36px; line-height: 96px; }
 .vd-home.is-short .vd-empty-description { font: 15px/22px var(--vd-font-sans); }
 `;

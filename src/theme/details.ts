@@ -62,8 +62,10 @@ ${join(selector, " svg")} { fill: var(--vd-on-ink) !important; color: var(--vd-o
 ${join([...play, ...selector], ".gpfocus")} { box-shadow: none !important; outline: none !important; }
 
 /* Controller and settings: outlined circles */
-${join(menuButton)} { background: transparent !important; border: 1px solid var(--vd-line-strong) !important; border-radius: 50% !important; box-sizing: border-box !important; }
-${join(menuButton, ".gpfocus")} { box-shadow: ${ring} !important; border-color: var(--vd-ink) !important; }
+${join(menuButton)} { background: transparent !important; border: 1px solid var(--vd-line-strong) !important; border-radius: 50% !important; box-sizing: border-box !important; color: var(--vd-ink) !important; }
+${join([...menuButton.map((s) => `${s} svg`), ...menuButton.map((s) => `${s} svg *`)])} { color: inherit !important; fill: currentColor !important; }
+${join([...menuButton.map((s) => `${s}:hover`), ...menuButton.map((s) => `${s}.gpfocus`)])} { background: var(--vd-surface-raised) !important; border-color: var(--vd-ink) !important; color: var(--vd-ink) !important; }
+${join(menuButton, ".gpfocus")} { box-shadow: ${ring} !important; }
 
 /* Last session / playtime: monospaced label and dot-matrix value */
 ${join([...label, ...label.map((s) => s + " *")])} { ${mono} }

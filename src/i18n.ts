@@ -47,7 +47,7 @@ export function useLanguage(): Language {
 const copy = {
   en: {
     home: "Home", library: "Library", store: "Store", friends: "Friends", downloads: "Downloads",
-    play: "Play", details: "Details", continue: "Continue", played: "played", ready: "Ready to play",
+    play: "Play", details: "Details", menu: "Menu", properties: "Properties", continue: "Continue", played: "played", ready: "Ready to play",
     emptyLibrary: "Library empty", recentlyPlayed: "Recently played", installed: "Installed",
     games: "games", of: "of", notPlayed: "Not played", minPlayed: "min played",
     now: "now", yesterday: "yesterday", unsupported: "Unsupported on Deck", playable: "Playable on Deck",
@@ -62,7 +62,7 @@ const copy = {
   },
   es: {
     home: "Inicio", library: "Biblioteca", store: "Tienda", friends: "Amigos", downloads: "Descargas",
-    play: "Jugar", details: "Detalles", continue: "Continuar", played: "jugado", ready: "Listo para jugar",
+    play: "Jugar", details: "Detalles", menu: "Menú", properties: "Propiedades", continue: "Continuar", played: "jugado", ready: "Listo para jugar",
     emptyLibrary: "Biblioteca vacía", recentlyPlayed: "Jugados recientemente", installed: "Instalados",
     games: "juegos", of: "de", notPlayed: "Sin jugar", minPlayed: "min jugados",
     now: "ahora", yesterday: "ayer", unsupported: "No compatible con Deck", playable: "Jugable en Deck",

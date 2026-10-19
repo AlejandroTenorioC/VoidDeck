@@ -6,10 +6,12 @@ import { fontsCss } from "./fonts";
 import { footerCss } from "./footer";
 import { libraryCss } from "./library";
 import { mainMenuCss } from "./mainMenu";
+import { menusCss } from "./menus";
 import { quickAccessCss } from "./quickAccess";
 import { settingsCss } from "./settings";
 import { transitionsCss } from "./transitions";
 import { tokensCss, type Theme } from "./tokens";
+import { volumeCss } from "./volume";
 
 export function skinCss(theme: Theme): string {
   return `
@@ -44,8 +46,14 @@ ${footerCss()}
 /* Main menu (STEAM button) */
 ${mainMenuCss()}
 
+/* Popup menus, the power submenu and shut-down screens */
+${menusCss()}
+
 /* Quick Access */
 ${quickAccessCss()}
+
+/* Volume overlays */
+${volumeCss()}
 
 /* Steam Settings */
 ${settingsCss()}

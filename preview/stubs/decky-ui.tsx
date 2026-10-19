@@ -44,17 +44,20 @@ type FocusableProps = HTMLAttributes<HTMLDivElement> & {
   preferredFocus?: boolean;
   onOKActionDescription?: ReactNode;
   onSecondaryActionDescription?: ReactNode;
+  onMenuButton?: () => void;
+  onMenuActionDescription?: ReactNode;
 };
 
-// Teclado → mando: Enter = A, X = X, Q/E = L1/R1.
+// Teclado → mando: Enter = A, X = X, Q/E = L1/R1, M = ≡.
 const KEY_BUTTONS: Record<string, GamepadButton> = { q: GamepadButton.BUMPER_LEFT, e: GamepadButton.BUMPER_RIGHT };
 
 export const Focusable = forwardRef<HTMLDivElement, FocusableProps>(function Focusable(props, ref) {
   const {
     focusClassName, noFocusRing, preferredFocus, onActivate, onSecondaryButton, onButtonDown, onGamepadFocus,
-    onOKActionDescription, onSecondaryActionDescription, className, onFocus, onBlur, ...rest
+    onOKActionDescription, onSecondaryActionDescription, onMenuButton, onMenuActionDescription, className, onFocus, onBlur, ...rest
   } = props;
   void noFocusRing; void preferredFocus; void onOKActionDescription; void onSecondaryActionDescription;
+  void onMenuActionDescription;
   const [focused, setFocused] = useState(false);
   const interactive = Boolean(onActivate || onSecondaryButton);
   return (
@@ -78,6 +81,7 @@ export const Focusable = forwardRef<HTMLDivElement, FocusableProps>(function Foc
         const key = e.key.toLowerCase();
         if (e.target === e.currentTarget && key === "enter") onActivate?.();
         else if (e.target === e.currentTarget && key === "x") onSecondaryButton?.();
+        else if (e.target === e.currentTarget && key === "m") onMenuButton?.();
         else if (KEY_BUTTONS[key] && onButtonDown) {
           onButtonDown(new CustomEvent("button", { detail: { button: KEY_BUTTONS[key] } }));
         } else return;
@@ -86,6 +90,29 @@ export const Focusable = forwardRef<HTMLDivElement, FocusableProps>(function Foc
     />
   );
 });
+
+// Preview has no popup layer: the menu markup renders in place and the opener only logs.
+export function Menu(props: { label?: ReactNode; children?: ReactNode }) {
+  return (
+    <div className="stub-menu">
+      {props.label && <div className="stub-menu-label">{props.label}</div>}
+      {props.children}
+    </div>
+  );
+}
+
+export function MenuItem(props: { children?: ReactNode; onClick?: (evt: Event) => void; disabled?: boolean }) {
+  return (
+    <button type="button" className="stub-menu-item" disabled={props.disabled} onClick={(e) => props.onClick?.(e.nativeEvent)}>
+      {props.children}
+    </button>
+  );
+}
+
+export function showContextMenu(children: ReactNode, _parent?: EventTarget): { Hide(): void; Show(): void } {
+  console.info("[showContextMenu]", children);
+  return { Hide: () => {}, Show: () => {} };
+}
 
 export function PanelSection(props: { title?: string; children?: ReactNode }) {
   return (

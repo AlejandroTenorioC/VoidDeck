@@ -69,3 +69,7 @@ export function playGame(game: Game): void {
 export function openDetails(game: Game): void {
   Navigation.Navigate(`/library/app/${game.appid}`);
 }
+
+export function openProperties(game: Game): void {
+  stores().SteamClient?.Apps?.OpenAppSettingsDialog(game.appid, "general");
+}

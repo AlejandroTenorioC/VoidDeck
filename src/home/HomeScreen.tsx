@@ -1,11 +1,11 @@
 // Layer 2: Void Deck's Home screen. Measurements are in design pixels (1280×800);
 // the container scales to the actual CSS size of the Steam window.
-import { Focusable, GamepadButton, Navigation, QuickAccessTab, type GamepadEvent } from "@decky/ui";
+import { Focusable, GamepadButton, Menu, MenuItem, Navigation, QuickAccessTab, showContextMenu, type GamepadEvent } from "@decky/ui";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { strings, useLanguage, type Language } from "../i18n";
 import { skinState } from "../skin";
 import { cls } from "../steam/classes";
-import { installedGames, libraryCount, openDetails, playGame, recentGames, type Game } from "../steam/library";
+import { installedGames, libraryCount, openDetails, openProperties, playGame, recentGames, type Game } from "../steam/library";
 import { fontsCss } from "../theme/fonts";
 import { tokensCss } from "../theme/tokens";
 import { FROM_HOME_ATTR, FROM_HOME_MS, FROM_HOME_VALUE } from "../theme/transitions";
@@ -83,6 +83,19 @@ function Cover({ game }: { game: Game }) {
   );
 }
 
+/** The native game menu lived in Steam Home, which Void Deck replaces; this rebuilds it. */
+function openTileMenu(game: Game, language: Language, parent: HTMLElement | null): void {
+  const copy = strings(language);
+  showContextMenu(
+    <Menu label={game.name}>
+      <MenuItem onClick={() => playGame(game)}>{copy.play}</MenuItem>
+      <MenuItem onClick={() => openDetails(game)}>{copy.details}</MenuItem>
+      <MenuItem onClick={() => openProperties(game)}>{copy.properties}</MenuItem>
+    </Menu>,
+    parent ?? undefined,
+  );
+}
+
 function Tile(props: { game: Game; first?: boolean; language: Language; onFocus: (el: HTMLDivElement) => void }) {
   const { game, first, language, onFocus } = props;
   const ref = useRef<HTMLDivElement>(null);
@@ -98,6 +111,8 @@ function Tile(props: { game: Game; first?: boolean; language: Language; onFocus:
       onSecondaryButton={() => openDetails(game)}
       onOKActionDescription={strings(language).play}
       onSecondaryActionDescription={strings(language).details}
+      onMenuButton={() => openTileMenu(game, language, ref.current)}
+      onMenuActionDescription={strings(language).menu}
       onGamepadFocus={focus}
       onFocus={focus}
     >

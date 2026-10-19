@@ -5,7 +5,7 @@ import { disableHome, enableHome, homeEnabled } from "../home";
 import { resetLanguage, setLanguage, strings, useLanguage, type Language } from "../i18n";
 import { applySkin, removeSkin, skinState } from "../skin";
 
-const VERSION = "0.2.9";
+const VERSION = "0.2.10";
 const RELEASE_URL = "https://github.com/endoflineservice/VoidDeck/releases/latest";
 
 export function Panel() {

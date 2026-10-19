@@ -21,6 +21,11 @@ export function installMockSteam() {
     },
     // No covers: the preview shows initials over the grid, like the design.
     appStore: { GetCustomVerticalCapsuleURLs: () => [] },
-    SteamClient: { Apps: { RunGame: (id: string) => console.info(`[SteamClient] RunGame ${id}`) } },
+    SteamClient: {
+      Apps: {
+        RunGame: (id: string) => console.info(`[SteamClient] RunGame ${id}`),
+        OpenAppSettingsDialog: (id: number, section: string) => console.info(`[SteamClient] OpenAppSettingsDialog ${id} ${section}`),
+      },
+    },
   });
 }
