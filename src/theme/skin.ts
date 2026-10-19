@@ -4,6 +4,7 @@ import { statusDotsCss } from "../steam/statusDots";
 import { detailsCss } from "./details";
 import { fontsCss } from "./fonts";
 import { footerCss } from "./footer";
+import { keyboardCss } from "./keyboard";
 import { libraryCss } from "./library";
 import { mainMenuCss } from "./mainMenu";
 import { menusCss } from "./menus";
@@ -54,6 +55,9 @@ ${quickAccessCss()}
 
 /* Volume overlays */
 ${volumeCss()}
+
+/* On-screen keyboard */
+${keyboardCss()}
 
 /* Steam Settings */
 ${settingsCss()}

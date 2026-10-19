@@ -1,8 +1,22 @@
 // Resolve readable Steam class names to their minified versions.
 // Steam regenerates them in every update, so they are never written by hand.
-import { classMap, findClassModule } from "@decky/ui";
+import { classMap } from "@decky/ui";
+import { harvestedModules, type ClassModule } from "./windowClasses";
 
 const missing = new Set<string>();
+
+/**
+ * Every class map the theme can read: Steam's own, plus the ones harvested from the
+ * other Steam windows (the on-screen keyboard only loads its module when it opens).
+ */
+function allModules(): ClassModule[] {
+  return [...classMap, ...harvestedModules()];
+}
+
+/** True when the module publishes `name` and all the siblings used to pick the right one. */
+function publishes(module: ClassModule, name: string, siblings: string[]): boolean {
+  return typeof module?.[name] === "string" && siblings.every((s) => typeof module[s] === "string");
+}
 
 /**
  * CSS selector for the `name` class. If the name exists in several modules,
@@ -10,7 +24,7 @@ const missing = new Set<string>();
  * If it cannot be found, returns a selector that matches nothing.
  */
 export function cls(name: string, ...siblings: string[]): string {
-  const mod = findClassModule((m) => typeof m?.[name] === "string" && siblings.every((s) => m[s]));
+  const mod = allModules().find((m) => publishes(m, name, siblings));
   if (!mod) {
     missing.add(name);
     return ".vd-missing";
@@ -33,8 +47,8 @@ export function clsAll(name: string, suffix = "", ...siblings: string[]): string
 /** Like `clsAll`, but returns a list of separate selectors for combining with each other. */
 export function clsList(name: string, ...siblings: string[]): string[] {
   const names = new Set(
-    classMap
-      .filter((m) => typeof m?.[name] === "string" && siblings.every((s) => typeof m[s] === "string"))
+    allModules()
+      .filter((m) => publishes(m, name, siblings))
       .map((m) => m[name]),
   );
   if (names.size === 0) {

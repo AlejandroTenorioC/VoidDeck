@@ -28,6 +28,37 @@ body { display: grid; place-items: center; font-family: system-ui, sans-serif; }
 .qam-title { padding: 24px 24px 8px; font-size: 24px; font-weight: 500; }
 .qam-body { flex: 1; overflow-y: auto; }
 
+/* Simulated on-screen keyboard: layout only, every colour comes from the theme */
+.kb-mock {
+  position: absolute; left: 50%; bottom: 76px; transform: translateX(-50%);
+  width: 854px; z-index: 3;
+}
+.kb-mock * { box-sizing: border-box; }
+.kb-mock .VirtualKeyboardContainer { display: flex; flex-direction: column; gap: 8px; padding: 14px; }
+.kb-mock .KeyboardRow { display: flex; gap: 6px; align-items: stretch; }
+.kb-mock .KeyboardKey {
+  flex: 1 1 0; height: 46px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1px; overflow: hidden;
+}
+.kb-mock .KeyboardSpacebar { flex: 6 1 0; }
+.kb-mock .KeyboardCapsKey, .kb-mock .KeyboardBackspace, .kb-mock .KeyboardLeftShift,
+.kb-mock .KeyboardRightShift, .kb-mock .KeyboardTabKey, .kb-mock .KeyboardEnter { flex: 1.7 1 0; }
+.kb-mock .VirtualKeyboardTextBuffer {
+  height: 46px; display: flex; align-items: center; gap: 3px; padding: 0 14px; overflow: hidden;
+}
+.kb-mock .VirtualKeyboardTextBufferCursor { width: 8px; height: 18px; }
+.kb-mock .KeyboardActionButtonLeft, .kb-mock .KeyboardActionButtonRight,
+.kb-mock .KeyboardCategoryKeyHighlight, .kb-mock .KeyboardThemeButtons,
+.kb-mock .KeyboardLayoutOptions {
+  flex: 0 0 auto; height: 34px; padding: 0 18px; display: inline-flex;
+  align-items: center; justify-content: center; font-size: 13px; letter-spacing: .08em;
+}
+.kb-mock .KeyboardEmojiHeader { padding: 4px 2px; }
+.kb-mock .KeyboardEmojiRow { display: grid; grid-template-columns: repeat(8, 40px); gap: 6px; }
+.kb-mock .KeyboardEmojiKey { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.kb-mock .KeyboardEmojiCategoryDivider { height: 1px; }
+.kb-mock .KeyboardImePreeditText, .kb-mock .KeyboardImeAuxText { padding: 2px 0; }
+
 /* @decky/ui stubs */
 .stub-section { padding: 8px 24px 16px; }
 .stub-section-title {

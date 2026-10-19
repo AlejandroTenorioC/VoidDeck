@@ -1,11 +1,7 @@
 // Game details (/library/app/:id): restyled without replacing it, so the Play button preserves every
 // state (install, update, queued, stop, etc.). Steam CSS pixel measurements (1px = 1.5 concept pixels).
 import { clsList } from "../steam/classes";
-
-const join = (list: string[], suffix = "") => list.map((s) => s + suffix).join(", ");
-
-/** Repeats the class (".a.a") so a rule outranks Steam's own, more specific, ones. */
-const paint = (list: string[], suffix: string) => list.map((s) => `${s}${s}${suffix}`);
+import { join, paint } from "./selectors";
 
 export function detailsCss(): string {
   const of = (name: string, ...siblings: string[]) => clsList(name, ...siblings);

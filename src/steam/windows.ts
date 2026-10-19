@@ -23,3 +23,16 @@ export function steamDocuments(): Document[] {
   if (docs.size === 0) docs.add(document);
   return [...docs];
 }
+
+/**
+ * The windows behind those documents. The plugin runs in the shared context, so the
+ * class names of the on-screen keyboard have to be read from the window that draws it.
+ */
+export function steamWindows(): Window[] {
+  const wins = new Set<Window>();
+  for (const doc of steamDocuments()) {
+    const view = doc.defaultView;
+    if (view) wins.add(view);
+  }
+  return [...wins];
+}

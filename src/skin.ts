@@ -1,6 +1,7 @@
 // Layer 1: global skin. Injects Void Deck CSS into every Steam window.
 import { removeStatusDots, unwatchBattery, updateStatusDots, watchBattery } from "./steam/statusDots";
-import { steamDocuments } from "./steam/windows";
+import { harvestClasses } from "./steam/windowClasses";
+import { steamDocuments, steamWindows } from "./steam/windows";
 import { skinCss } from "./theme/skin";
 import type { Theme } from "./theme/tokens";
 
@@ -14,6 +15,9 @@ let timer: ReturnType<typeof setInterval> | undefined;
 
 function sync(): void {
   if (css === null) return;
+  // The on-screen keyboard publishes its class names only once it opens, so the theme
+  // is rebuilt as soon as new ones are found.
+  if (harvestClasses(steamWindows())) css = skinCss(theme);
   for (const doc of steamDocuments()) {
     let el = doc.getElementById(STYLE_ID);
     if (!el) {
@@ -22,6 +26,8 @@ function sync(): void {
       doc.head.appendChild(el);
     }
     if (el.textContent !== css) el.textContent = css;
+    // Steam appends its own styles after ours, so ours goes back to the end of the head.
+    if (doc.head.lastElementChild !== el) doc.head.appendChild(el);
     updateStatusDots(doc);
   }
 }

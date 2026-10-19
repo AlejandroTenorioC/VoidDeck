@@ -4,6 +4,7 @@ import { useEffect, useReducer, useState } from "react";
 import { createRoot } from "react-dom/client";
 import plugin from "../src/index";
 import { installKeyboardNav } from "./keyboard";
+import { KeyboardMock } from "./keyboardMock";
 import { installMockSteam } from "./mockSteam";
 import { onRoutesChange, previewRoute } from "./stubs/decky-api";
 
@@ -26,8 +27,13 @@ function HomeRoute() {
 
 function Screen() {
   const [qam, setQam] = useState(false);
+  const [keyboard, setKeyboard] = useState(false);
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key.toLowerCase() === "p" && setQam((v) => !v);
+    const onKey = (e: KeyboardEvent) => {
+      const key = e.key.toLowerCase();
+      if (key === "p") setQam((v) => !v);
+      if (key === "k") setKeyboard((v) => !v);
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
@@ -35,13 +41,16 @@ function Screen() {
     <>
       <div className="steam-header" />
       <HomeRoute />
-      <div className="steam-footer">P · QUICK ACCESS &nbsp; Q/E · L1/R1 &nbsp; ENTER · A &nbsp; X · X</div>
+      <div className="steam-footer">
+        P · QUICK ACCESS &nbsp; K · KEYBOARD &nbsp; Q/E · L1/R1 &nbsp; ENTER · A &nbsp; X · X
+      </div>
       {qam && (
         <aside className="qam">
           <div className="qam-title">{p.titleView ?? p.name}</div>
           <div className="qam-body">{p.content}</div>
         </aside>
       )}
+      {keyboard && <KeyboardMock />}
     </>
   );
 }

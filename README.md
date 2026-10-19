@@ -27,12 +27,15 @@ Wi-Fi in the top bar become dot meters, and the battery turns red below 20 %.
 Brightness and volume are shown as rows of dots and toggles as pills, but they work exactly as before: Void Deck
 only changes how Steam looks, never how it works.
 
+**The on-screen keyboard.** It joins the same language: a black panel, flat keys with hairline borders, Space Mono
+labels and a dot-matrix text line. The focused key inverts to solid ink, so you always know where you are typing.
+
 ## Installation
 
 You need [Decky Loader](https://decky.xyz) installed on your Steam Deck.
 
-1. Download `VoidDeck-v0.2.11.zip` from the [v0.2.11 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v0.2.11), or copy its direct URL:
-   `https://github.com/endoflineservice/VoidDeck/releases/download/v0.2.11/VoidDeck-v0.2.11.zip`
+1. Download `VoidDeck-v0.2.12.zip` from the [v0.2.12 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v0.2.12), or copy its direct URL:
+   `https://github.com/endoflineservice/VoidDeck/releases/download/v0.2.12/VoidDeck-v0.2.12.zip`
 2. On the Deck, in Game Mode, open Quick Access (the `···` button) → the **Decky** tab (plug icon) → **⚙**.
 3. Under **General**, turn on **Developer mode**.
 4. In the new **Developer** section, choose one of:
