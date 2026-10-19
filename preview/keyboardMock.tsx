@@ -8,16 +8,19 @@ const LETTERS = [
   "ZXCVBNM".split(""),
 ];
 
+const NUMBERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+
+// Steam shows the shifted symbol only on the keys that have one (the numbers).
 const SHIFTED: Record<string, string> = {
-  Q: "!", W: "@", E: "#", R: "$", T: "%", Y: "^", U: "&", I: "*", O: "(", P: ")",
-  A: "A", S: "S", D: "D", F: "F", G: "G", H: "H", J: "J", K: "K", L: "L",
-  Z: "Z", X: "X", C: "C", V: "V", B: "B", N: "N", M: "M",
+  "1": "!", "2": "@", "3": "#", "4": "$", "5": "%",
+  "6": "^", "7": "&", "8": "*", "9": "(", "0": ")",
 };
 
 function Key({ label, extra, focused }: { label: string; extra?: string; focused?: boolean }) {
   return (
     <div className={["KeyboardKey", extra, focused && "gpfocus"].filter(Boolean).join(" ")}>
-      <span className="KeyboardKeyLabel">{label}</span>
+      {/* Steam renders the main symbol as a bare span, with no class of its own. */}
+      <span>{label}</span>
       {SHIFTED[label] && <span className="ShiftedLabel">{SHIFTED[label]}</span>}
     </div>
   );
@@ -39,6 +42,11 @@ export function KeyboardMock() {
         </div>
 
         <Row>
+          {NUMBERS.map((n) => (
+            <Key key={n} label={n} />
+          ))}
+        </Row>
+        <Row>
           {LETTERS[0].map((l) => (
             <Key key={l} label={l} focused={l === "F"} />
           ))}
@@ -58,7 +66,7 @@ export function KeyboardMock() {
         <Row>
           <Key label="SHIFT" extra="KeyboardLeftShift" />
           <Key label="TAB" extra="KeyboardTabKey" />
-          <Key label="" extra="KeyboardSpacebar" />
+          <Key label="SPACE" extra="KeyboardSpacebar" />
           <Key label="ENTER" extra="KeyboardEnter" />
           <Key label="SHIFT" extra="KeyboardRightShift" />
         </Row>
