@@ -18,8 +18,10 @@ ${face}::after {
 }
 ${Object.entries(directions).map(([dir, button]) => `${glyph}:has(img[src*="shared_buttons_${dir}"])::after { background-image: url("${buttonGlyphs.steam[button]}"); }`).join("\n")}
 
-/* STEAM, Options…: Steam's white pills become outlined pills */
-${glyph} svg { filter: invert(1); border-radius: 999px; outline: 1px solid var(--vd-line-strong); outline-offset: -1px; }
+/* Every prompt Steam paints into the hint bar becomes monochrome, whatever its format:
+   the Deck serves <img src="…/steaminputglyphs/…">, while other pads (Xbox/XInput, e.g. the
+   ROG Ally) draw inline <svg> — invert() would only recolour a coloured glyph, so grayscale it. */
+${glyph} img, ${glyph} svg { filter: grayscale(1) brightness(2.2) !important; }
 
 ${label} {
   color: var(--vd-ink-muted) !important; font-size: 9.5px !important;

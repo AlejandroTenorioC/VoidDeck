@@ -19,6 +19,16 @@ body { display: grid; place-items: center; font-family: system-ui, sans-serif; }
 }
 .steam-home { display: grid; place-items: center; height: 100%; color: #888; }
 
+/* Simulated bottom control-hint bar (button prompts): preview-only, to verify monochrome prompts */
+.glyph-mock {
+  position: absolute; left: 0; right: 0; bottom: 60px; z-index: 1;
+  display: flex; align-items: center; gap: 32px; height: 40px; padding: 0 32px;
+  background: var(--vd-bg, #000); border-top: 1px solid var(--vd-line, #333);
+}
+.glyph-mock .vd-hint { display: inline-flex; align-items: center; gap: 8px; }
+.glyph-mock .ActionButtonGlyph { display: inline-flex; align-items: center; }
+.glyph-mock .ActionButtonGlyph img, .glyph-mock .ActionButtonGlyph svg { width: 21px; height: 21px; display: block; }
+
 /* Simulated Quick Access menu */
 .qam {
   position: absolute; top: 0; right: 0; bottom: 0; width: 440px; box-sizing: border-box; z-index: 2;

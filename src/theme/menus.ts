@@ -170,7 +170,7 @@ ${join(submenu)} {
 ${join(arrow)} { color: var(--vd-ink-muted) !important; fill: var(--vd-ink-muted) !important; }
 ${join(banner)} { color: var(--vd-ink) !important; }
 
-/* Steam draws its own coloured A/B/X/Y prompts in here: force them monochrome. */
-${join(container)} img[src*="shared_buttons_"] { filter: grayscale(1) brightness(2.2) !important; }
+/* Steam draws its own coloured A/B/X/Y prompts in here (as imgs or inline svg): force them monochrome. */
+${join(container)} img, ${join(container)} svg { filter: grayscale(1) brightness(2.2) !important; }
 `;
 }

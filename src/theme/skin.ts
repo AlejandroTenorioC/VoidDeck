@@ -45,8 +45,8 @@ ${cls("Clock", "HeaderItem")}, ${cls("Percentage")} {
 /* Bottom-bar control hints */
 ${footerCss()}
 
-/* Any Steam face-button art that slips past the footer hides becomes monochrome */
-img[src*="shared_buttons_"] { filter: grayscale(1) brightness(2.2) !important; }
+/* Any Steam button-prompt art anywhere (Deck, Xbox, Ally…) becomes monochrome */
+img[src*="shared_buttons_"], img[src*="/steaminputglyphs/"] { filter: grayscale(1) brightness(2.2) !important; }
 
 /* Main menu (STEAM button) */
 ${mainMenuCss()}

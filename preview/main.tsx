@@ -3,6 +3,7 @@ import type { RoutePatch } from "@decky/api/dist/types";
 import { useEffect, useReducer, useState } from "react";
 import { createRoot } from "react-dom/client";
 import plugin from "../src/index";
+import { GlyphMock } from "./glyphMock";
 import { installKeyboardNav } from "./keyboard";
 import { KeyboardMock } from "./keyboardMock";
 import { installMockSteam } from "./mockSteam";
@@ -40,6 +41,7 @@ function Screen() {
   return (
     <>
       <div className="steam-header" />
+      <GlyphMock />
       <HomeRoute />
       <div className="steam-footer">
         P · QUICK ACCESS &nbsp; K · KEYBOARD &nbsp; Q/E · L1/R1 &nbsp; ENTER · A &nbsp; X · X
