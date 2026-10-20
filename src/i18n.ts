@@ -30,10 +30,6 @@ export function setLanguage(next: Language): void {
   listeners.forEach((listener) => listener());
 }
 
-export function resetLanguage(): void {
-  setLanguage("en");
-}
-
 function subscribe(listener: () => void): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);
@@ -57,7 +53,7 @@ const copy = {
     lightTheme: "Light theme", lightThemeDescription: "For outdoor use.",
     language: "Language", languageDescription: "Choose the language used by Void Deck.",
     noInstalledGames: "No installed games", noInstalledGamesDescription: "Install a game from your Library to see it here.",
-    openLibrary: "Open Library", resetDefaults: "Reset to defaults", resetDefaultsDescription: "Restore English, dark theme, and enabled screens.",
+    openLibrary: "Open Library",
     achievementUnlocked: "Achievement unlocked",
     screensaver: "Screensaver", screensaverDescription: "Replace Steam's slideshow with clock, battery, and weather widgets.",
     city: "Weather city", cityNone: "Not set", cityPrompt: "Type your city", cityNotFound: "City not found",
@@ -68,6 +64,7 @@ const copy = {
     cancel: "Cancel", save: "Save",
     notificationStyle: "Notification style", notificationStyleDescription: "Show achievements and friend alerts as Void Deck pills.",
     version: "Version", versionDescription: "View the latest release notes and download.", releaseNotes: "Open release notes",
+    updateAvailable: "Update available", updateTo: "Update to",
   },
   es: {
     home: "Inicio", library: "Biblioteca", friends: "Amigos",
@@ -81,7 +78,7 @@ const copy = {
     lightTheme: "Tema claro", lightThemeDescription: "Para uso en exterior.",
     language: "Idioma", languageDescription: "Elige el idioma que usa Void Deck.",
     noInstalledGames: "No hay juegos instalados", noInstalledGamesDescription: "Instala un juego desde tu Biblioteca para verlo aquí.",
-    openLibrary: "Abrir Biblioteca", resetDefaults: "Restablecer valores predeterminados", resetDefaultsDescription: "Restaura inglés, tema oscuro y pantallas activadas.",
+    openLibrary: "Abrir Biblioteca",
     achievementUnlocked: "Logro desbloqueado",
     screensaver: "Salvapantallas", screensaverDescription: "Sustituye las diapositivas de Steam por widgets de hora, batería y clima.",
     city: "Ciudad del clima", cityNone: "Sin elegir", cityPrompt: "Escribe tu ciudad", cityNotFound: "No se encontró la ciudad",
@@ -92,6 +89,7 @@ const copy = {
     cancel: "Cancelar", save: "Guardar",
     notificationStyle: "Estilo de notificaciones", notificationStyleDescription: "Muestra los logros y los avisos de amigos como píldoras de Void Deck.",
     version: "Versión", versionDescription: "Consulta las notas y descarga de la última versión.", releaseNotes: "Abrir notas de versión",
+    updateAvailable: "Actualización disponible", updateTo: "Actualizar a",
   },
 } as const;
 

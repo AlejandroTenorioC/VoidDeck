@@ -1,14 +1,14 @@
 // Layer 3: Void Deck settings in the Quick Access menu.
 import { ButtonItem, DropdownItem, Navigation, PanelSection, PanelSectionRow, showModal, ToggleField } from "@decky/ui";
+import { useEffect, useState } from "react";
 import { disableHome, enableHome } from "../home";
-import { resetLanguage, setLanguage, strings, useLanguage, type Language } from "../i18n";
+import { setLanguage, strings, useLanguage, type Language } from "../i18n";
 import { version } from "../../package.json";
 import { disableScreensaver, enableScreensaver, previewScreensaver } from "../screensaver";
-import { resetSettings, setHome, setNotifications, setScreensaver, setSkin, useSettings } from "../settings";
+import { setHome, setNotifications, setScreensaver, setSkin, useSettings } from "../settings";
 import { applySkin, removeSkin, sync } from "../skin";
 import { CityModal } from "./CityModal";
-
-const RELEASE_URL = "https://github.com/AlejandroTenorioC/VoidDeck/releases/latest";
+import { checkForUpdate, installUpdate, RELEASE_URL, type Release } from "./updates";
 
 export function Panel() {
   // Stored preferences (they survive restarts); the toggles read and write them.
@@ -20,6 +20,15 @@ export function Panel() {
   const screensaverOn = settings.screensaver;
   const language = useLanguage();
   const copy = strings(language);
+  const [update, setUpdate] = useState<Release | null>(null);
+
+  useEffect(() => {
+    let open = true;
+    checkForUpdate().then((release) => open && setUpdate(release));
+    return () => {
+      open = false;
+    };
+  }, []);
 
   const updateSkin = (on: boolean, isLight: boolean) => {
     setSkin(on, isLight ? "light" : "dark");
@@ -42,14 +51,6 @@ export function Panel() {
     setScreensaver(on);
     if (on) enableScreensaver();
     else disableScreensaver();
-  };
-
-  const resetDefaults = () => {
-    resetLanguage();
-    resetSettings();
-    applySkin("dark");
-    enableHome();
-    enableScreensaver();
   };
 
   return (
@@ -123,10 +124,18 @@ export function Panel() {
           onChange={({ data }) => setLanguage(data as Language)}
         />
       </PanelSectionRow>
-      <PanelSectionRow>
-        <ButtonItem label={copy.resetDefaults} description={copy.resetDefaultsDescription} onClick={resetDefaults} />
-      </PanelSectionRow>
       <PanelSection title={copy.version}>
+        {update && (
+          <PanelSectionRow>
+            <ButtonItem
+              label={copy.updateAvailable}
+              description={`Void Deck v${version} → v${update.version}`}
+              onClick={() => installUpdate(update)}
+            >
+              {`${copy.updateTo} v${update.version}`}
+            </ButtonItem>
+          </PanelSectionRow>
+        )}
         <PanelSectionRow>
           <ButtonItem
             label={`Void Deck v${version}`}

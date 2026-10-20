@@ -16,7 +16,7 @@ export type Settings = {
 const STORAGE_KEY = "voiddeck-settings";
 const listeners = new Set<() => void>();
 
-export const defaultSettings: Settings = { skin: true, theme: "dark", home: true, notifications: true, screensaver: true, city: null };
+const defaultSettings: Settings = { skin: true, theme: "dark", home: true, notifications: true, screensaver: true, city: null };
 
 let settings: Settings = load();
 
@@ -79,11 +79,6 @@ export function setScreensaver(screensaver: boolean): void {
 
 export function setCity(city: City | null): void {
   store({ ...settings, city });
-}
-
-/** Back to the defaults, used by the panel's reset button. */
-export function resetSettings(): void {
-  store(defaultSettings);
 }
 
 function subscribe(listener: () => void): () => void {
