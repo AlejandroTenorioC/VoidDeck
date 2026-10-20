@@ -3,8 +3,8 @@ import { ButtonItem, DropdownItem, Navigation, PanelSection, PanelSectionRow, To
 import { disableHome, enableHome } from "../home";
 import { resetLanguage, setLanguage, strings, useLanguage, type Language } from "../i18n";
 import { version } from "../../package.json";
-import { resetSettings, setHome, setSkin, useSettings } from "../settings";
-import { applySkin, removeSkin } from "../skin";
+import { resetSettings, setAchievements, setHome, setSkin, useSettings } from "../settings";
+import { applySkin, removeSkin, sync } from "../skin";
 
 const RELEASE_URL = "https://github.com/AlejandroTenorioC/VoidDeck/releases/latest";
 
@@ -14,6 +14,7 @@ export function Panel() {
   const skinOn = settings.skin;
   const light = settings.theme === "light";
   const homeOn = settings.home;
+  const achievementsOn = settings.achievements;
   const language = useLanguage();
   const copy = strings(language);
 
@@ -27,6 +28,11 @@ export function Panel() {
     setHome(on);
     if (on) enableHome();
     else disableHome(true);
+  };
+
+  const updateAchievements = (on: boolean) => {
+    setAchievements(on);
+    sync();
   };
 
   const resetDefaults = () => {
@@ -61,6 +67,15 @@ export function Panel() {
           checked={light}
           disabled={!skinOn}
           onChange={(isLight) => updateSkin(skinOn, isLight)}
+        />
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <ToggleField
+          label={copy.achievementStyle}
+          description={copy.achievementStyleDescription}
+          checked={achievementsOn}
+          disabled={!skinOn}
+          onChange={updateAchievements}
         />
       </PanelSectionRow>
       <PanelSectionRow>

@@ -59,6 +59,7 @@ const copy = {
     noInstalledGames: "No installed games", noInstalledGamesDescription: "Install a game from your Library to see it here.",
     openLibrary: "Open Library", resetDefaults: "Reset to defaults", resetDefaultsDescription: "Restore English, dark theme, and enabled screens.",
     achievementUnlocked: "Achievement unlocked",
+    achievementStyle: "Achievement style", achievementStyleDescription: "Animate unlocked achievements as a Void Deck pill.",
     version: "Version", versionDescription: "View the latest release notes and download.", releaseNotes: "Open release notes",
   },
   es: {
@@ -75,6 +76,7 @@ const copy = {
     noInstalledGames: "No hay juegos instalados", noInstalledGamesDescription: "Instala un juego desde tu Biblioteca para verlo aquí.",
     openLibrary: "Abrir Biblioteca", resetDefaults: "Restablecer valores predeterminados", resetDefaultsDescription: "Restaura inglés, tema oscuro y pantallas activadas.",
     achievementUnlocked: "Logro desbloqueado",
+    achievementStyle: "Estilo de logros", achievementStyleDescription: "Anima los logros desbloqueados con la píldora de Void Deck.",
     version: "Versión", versionDescription: "Consulta las notas y descarga de la última versión.", releaseNotes: "Abrir notas de versión",
   },
 } as const;

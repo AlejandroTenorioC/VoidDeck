@@ -6,12 +6,13 @@ export type Settings = {
   skin: boolean;
   theme: Theme;
   home: boolean;
+  achievements: boolean;
 };
 
 const STORAGE_KEY = "voiddeck-settings";
 const listeners = new Set<() => void>();
 
-export const defaultSettings: Settings = { skin: true, theme: "dark", home: true };
+export const defaultSettings: Settings = { skin: true, theme: "dark", home: true, achievements: true };
 
 let settings: Settings = load();
 
@@ -25,6 +26,7 @@ function load(): Settings {
       skin: typeof parsed.skin === "boolean" ? parsed.skin : defaultSettings.skin,
       theme: parsed.theme === "light" ? "light" : "dark",
       home: typeof parsed.home === "boolean" ? parsed.home : defaultSettings.home,
+      achievements: typeof parsed.achievements === "boolean" ? parsed.achievements : defaultSettings.achievements,
     };
   } catch {
     return defaultSettings;
@@ -53,6 +55,10 @@ export function setSkin(skin: boolean, theme: Theme): void {
 
 export function setHome(home: boolean): void {
   store({ ...settings, home });
+}
+
+export function setAchievements(achievements: boolean): void {
+  store({ ...settings, achievements });
 }
 
 /** Back to the defaults, used by the panel's reset button. */

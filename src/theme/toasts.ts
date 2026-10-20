@@ -1,19 +1,25 @@
 // Notifications (window "notificationtoasts"). Every toast gets a flat surface card; achievements get the
 // Xbox 360-style unlock: a dot with the achievement icon pops in, stretches left into a pill with the label
-// and the name, and collapses back into the dot before Steam removes it (its exit starts at 5 s).
+// and the name, and collapses back into the dot before Steam removes it (its exit starts at 5 s). Friend
+// toasts share the pill shape without the animation.
 // Gamescope pins this window to its corner and size, so the pill grows from the right edge.
 import { clsAll, clsList } from "../steam/classes";
 
 /** CSS variable with the localized "Achievement unlocked" label; src/skin.ts sets it on every window. */
 export const ACHIEVEMENT_LABEL_VAR = "--vd-ach-label";
+/** Attribute on every window when the achievement style is turned off; achievements keep only the flat card. */
+export const PLAIN_ACHIEVEMENTS_ATTR = "data-vd-plain-achievements";
 
 export function toastsCss(): string {
   const cards = clsList("ShortTemplate", "TwoLine");
   const icon = clsAll("AchievementIconWrapper");
-  const achievement = cards.map((card) => `${card}:has(${icon})`);
+  const achievement = cards.map((card) => `:root:not([${PLAIN_ACHIEVEMENTS_ATTR}]) ${card}:has(${icon})`);
   // A part of the card (from the card's own module) inside an achievement toast.
   const part = (name: string, suffix = "") =>
     achievement.flatMap((a) => clsList(name, "ShortTemplate").map((p) => `${a} ${p}${suffix}`)).join(", ");
+  const friend = cards.map((card) => `${card}:has(${clsAll("AvatarStatus")})`);
+  const friendPart = (name: string, suffix = "") =>
+    friend.flatMap((f) => clsList(name, "ShortTemplate").map((p) => `${f} ${p}${suffix}`)).join(", ");
   const dot = "inset(0 0 0 calc(100% - 40px) round 20px)";
   const pill = "inset(0 0 0 0 round 20px)";
 
@@ -62,5 +68,34 @@ ${part("Content", "::before")} {
 ${achievement.flatMap((a) => clsList("Icon", "ShortTemplate").map((i) => clsList("Header", "ShortTemplate").map((h) => `${a} ${h} > ${i}`))).flat().join(", ")} { display: none !important; }
 ${part("Title")} { font: 500 12px/1.2 var(--vd-font-sans) !important; color: var(--vd-ink) !important; }
 ${part("Body")} { display: none !important; }
+
+/* Friends (online, in game): the same pill with the round avatar on the right; Steam's status bar becomes a
+   dot on the avatar, solid in game and hollow online. Steam's own enter and exit animations stay. */
+${friend.join(", ")} {
+  width: fit-content !important; max-width: 300px !important; height: 40px !important; margin-left: auto !important;
+  box-sizing: border-box !important; position: relative !important;
+  display: flex !important; flex-direction: row-reverse !important; align-items: center !important;
+  border-radius: 20px !important;
+}
+${friendPart("ShortLogoDimensions")} {
+  width: 28px !important; height: 28px !important; min-width: 0 !important; margin: 0 5px !important;
+  border-radius: 50% !important; overflow: hidden !important; flex: none !important;
+}
+${friendPart("ShortLogoDimensions", " *")} { width: 100% !important; height: 100% !important; }
+${friendPart("AvatarStatus")} {
+  position: absolute !important; right: 4px; bottom: 4px; width: 9px !important; height: 9px !important;
+  box-sizing: border-box !important; border-radius: 50% !important;
+  border: 2px solid var(--vd-ink) !important; background: var(--vd-surface) !important;
+  box-shadow: 0 0 0 2px var(--vd-surface) !important;
+}
+${friendPart("AvatarStatus", ".ingame")} { background: var(--vd-ink) !important; }
+${friendPart("Content")} { padding: 0 4px 0 16px !important; }
+${friendPart("Icon")} { display: none !important; }
+${friendPart("Title")} { font: 500 12px/1.2 var(--vd-font-sans) !important; color: var(--vd-ink) !important; }
+${friendPart("Body")} {
+  font: 400 9px/1.4 var(--vd-font-mono) !important; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--vd-ink-muted) !important;
+}
+${friendPart("Body", " span")} { color: var(--vd-ink) !important; }
 `;
 }

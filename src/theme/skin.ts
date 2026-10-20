@@ -1,5 +1,5 @@
 // CSS de la capa 1: aplica los tokens de Void Deck sobre las clases de Steam.
-import { cls } from "../steam/classes";
+import { cls, clsAll } from "../steam/classes";
 import { statusDotsCss } from "../steam/statusDots";
 import { detailsCss } from "./details";
 import { fontsCss } from "./fonts";
@@ -36,8 +36,9 @@ ${theme === "light" ? lightThemeCss : ""}
 :where(body, body *:not(.vd-home-viewport *)) { font-family: var(--vd-font-sans) !important; }
 
 /* Vacío primero: fondo negro puro. Con un juego en marcha Steam deja estas capas transparentes para que el
-   juego se vea detrás de los menús: ahí no se fuerza el negro. */
-html:not([${IN_GAME_ATTR}]) :is(body, ${cls("BasicUiRoot")}, ${cls("BasicHome")}) {
+   juego se vea detrás de los menús: ahí no se fuerza el negro. La ventana de notificaciones es transparente
+   (solo se ven las tarjetas), así que también se deja. */
+html:not([${IN_GAME_ATTR}]) :is(body:not(:has(${clsAll("GamepadToastPopup")})), ${cls("BasicUiRoot")}, ${cls("BasicHome")}) {
   background: var(--vd-bg) !important;
   background-image: none !important;
 }
