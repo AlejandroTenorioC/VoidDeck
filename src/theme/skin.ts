@@ -8,6 +8,7 @@ import { libraryCss } from "./library";
 import { mainMenuCss } from "./mainMenu";
 import { quickAccessCss } from "./quickAccess";
 import { settingsCss } from "./settings";
+import { toastsCss } from "./toasts";
 import { transitionsCss } from "./transitions";
 import { tokensCss, type Theme } from "./tokens";
 
@@ -61,6 +62,9 @@ ${mainMenuCss()}
 
 /* Acceso rápido */
 ${quickAccessCss()}
+
+/* Notificaciones y logros */
+${toastsCss()}
 
 /* Ajustes de Steam */
 ${settingsCss()}

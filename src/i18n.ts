@@ -58,6 +58,7 @@ const copy = {
     language: "Language", languageDescription: "Choose the language used by Void Deck.",
     noInstalledGames: "No installed games", noInstalledGamesDescription: "Install a game from your Library to see it here.",
     openLibrary: "Open Library", resetDefaults: "Reset to defaults", resetDefaultsDescription: "Restore English, dark theme, and enabled screens.",
+    achievementUnlocked: "Achievement unlocked",
     version: "Version", versionDescription: "View the latest release notes and download.", releaseNotes: "Open release notes",
   },
   es: {
@@ -73,6 +74,7 @@ const copy = {
     language: "Idioma", languageDescription: "Elige el idioma que usa Void Deck.",
     noInstalledGames: "No hay juegos instalados", noInstalledGamesDescription: "Instala un juego desde tu Biblioteca para verlo aquí.",
     openLibrary: "Abrir Biblioteca", resetDefaults: "Restablecer valores predeterminados", resetDefaultsDescription: "Restaura inglés, tema oscuro y pantallas activadas.",
+    achievementUnlocked: "Logro desbloqueado",
     version: "Versión", versionDescription: "Consulta las notas y descarga de la última versión.", releaseNotes: "Abrir notas de versión",
   },
 } as const;
