@@ -1,17 +1,33 @@
 // Layer 3: Void Deck settings in the Quick Access menu.
+import { useState } from "react";
+import { toaster } from "@decky/api";
 import { ButtonItem, DropdownItem, Navigation, PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
 import { disableHome, enableHome } from "../home";
 import { resetLanguage, setLanguage, strings, useLanguage, type Language } from "../i18n";
 import { resetSettings, setHome, setSkin, useSettings } from "../settings";
 import { applySkin, removeSkin } from "../skin";
+import { type UpdateCheck } from "../update/check";
+import { installUpdate } from "../update/install";
+import { useUpdateCheck } from "../update/useUpdateCheck";
 
-const VERSION = "1.1.1";
-const RELEASE_URL = "https://github.com/endoflineservice/VoidDeck/releases/latest";
+export const VERSION = "1.2.0";
+export const RELEASE_URL = "https://github.com/endoflineservice/VoidDeck/releases/latest";
+
+/** Status line under the installed version: installed, still checking, check failed, update ready, or up to date. */
+function describeVersion(update: UpdateCheck | null, copy: ReturnType<typeof strings>, installed: boolean): string {
+  if (installed) return copy.updateInstalledBody;
+  if (!update) return copy.versionDescription;
+  if (!update.success) return copy.updateCheckFailed;
+  return update.available ? copy.updateDescription : copy.upToDate;
+}
 
 export function Panel() {
   const settings = useSettings();
   const language = useLanguage();
   const copy = strings(language);
+  const update = useUpdateCheck(VERSION);
+  const [installing, setInstalling] = useState(false);
+  const [installedVersion, setInstalledVersion] = useState<string | null>(null);
 
   const updateSkin = (on: boolean, isLight: boolean) => {
     setSkin(on, isLight ? "light" : "dark");
@@ -30,6 +46,23 @@ export function Panel() {
     resetSettings();
     applySkin("dark");
     enableHome();
+  };
+
+  const runUpdate = async () => {
+    if (!update?.assetUrl || installing) return;
+    setInstalling(true);
+    const started = await installUpdate(update.assetUrl, update.latest ?? "", update.digest ?? "");
+    setInstalling(false);
+    if (started.success) {
+      setInstalledVersion(update.latest ?? "");
+      return;
+    }
+    toaster.toast({
+      title: copy.updateFailedTitle,
+      body: copy.updateFailedBody,
+      onClick: () => Navigation.NavigateToSteamWeb(RELEASE_URL),
+    });
+    Navigation.NavigateToSteamWeb(RELEASE_URL);
   };
 
   return (
@@ -75,10 +108,35 @@ export function Panel() {
         <ButtonItem label={copy.resetDefaults} description={copy.resetDefaultsDescription} onClick={resetDefaults} />
       </PanelSectionRow>
       <PanelSection title={copy.version}>
+        {installedVersion ? (
+          <PanelSectionRow>
+            <ButtonItem
+              label={`${copy.updateInstalled} — ${installedVersion}`}
+              description={copy.updateInstalledBody}
+              onClick={() => Navigation.NavigateToSteamWeb(RELEASE_URL)}
+            >
+              {copy.releaseNotes}
+            </ButtonItem>
+          </PanelSectionRow>
+        ) : (
+          update?.success &&
+          update.available &&
+          update.assetUrl && (
+            <PanelSectionRow>
+              <ButtonItem
+                label={`${copy.updateAvailable} — ${update.latest}`}
+                description={copy.updateDescription}
+                onClick={() => void runUpdate()}
+              >
+                {installing ? copy.updateInstalling : copy.updateNow}
+              </ButtonItem>
+            </PanelSectionRow>
+          )
+        )}
         <PanelSectionRow>
           <ButtonItem
             label={`Void Deck v${VERSION}`}
-            description={copy.versionDescription}
+            description={describeVersion(update, copy, installedVersion !== null)}
             onClick={() => Navigation.NavigateToSteamWeb(RELEASE_URL)}
           >
             {copy.releaseNotes}

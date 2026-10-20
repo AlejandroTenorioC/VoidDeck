@@ -1,9 +1,13 @@
-import { definePlugin } from "@decky/api";
-import { staticClasses } from "@decky/ui";
+import { definePlugin, toaster } from "@decky/api";
+import { Navigation, staticClasses } from "@decky/ui";
 import { disableHome, enableHome } from "./home";
-import { Panel } from "./qam/Panel";
+import { languageState, strings } from "./i18n";
+import { Panel, RELEASE_URL, VERSION } from "./qam/Panel";
 import { settingsState } from "./settings";
 import { applySkin, removeSkin } from "./skin";
+import { checkForUpdate } from "./update/check";
+
+const UPDATE_CHECK_DELAY_MS = 30_000;
 
 // Icon: 5×5 dot grid with the diagonal lit.
 function VoidIcon() {
@@ -41,12 +45,26 @@ export default definePlugin(() => {
     }
   }
 
+  // One quiet check after load, mirroring Decky's own update badge: toast only when something newer exists.
+  const updateTimer = setTimeout(() => {
+    void checkForUpdate(VERSION).then((result) => {
+      if (!result.success || !result.available || !result.latest) return;
+      const copy = strings(languageState());
+      toaster.toast({
+        title: `${copy.updateAvailable} — ${result.latest}`,
+        body: copy.updateDescription,
+        onClick: () => Navigation.NavigateToSteamWeb(RELEASE_URL),
+      });
+    });
+  }, UPDATE_CHECK_DELAY_MS);
+
   return {
     name: "Void Deck",
     titleView: <div className={staticClasses.Title}>Void Deck</div>,
     content: <Panel />,
     icon: <VoidIcon />,
     onDismount() {
+      clearTimeout(updateTimer);
       disableHome();
       removeSkin();
     },

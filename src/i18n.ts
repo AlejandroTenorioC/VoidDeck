@@ -59,6 +59,11 @@ const copy = {
     noInstalledGames: "No installed games", noInstalledGamesDescription: "Install a game from your Library to see it here.",
     openLibrary: "Open Library", resetDefaults: "Reset to defaults", resetDefaultsDescription: "Restore English, dark theme, and enabled screens.",
     version: "Version", versionDescription: "View the latest release notes and download.", releaseNotes: "Open release notes",
+    updateAvailable: "New version available", updateDescription: "Install it from GitHub without leaving the menu.",
+    updateNow: "Update now", upToDate: "You're up to date.", updateCheckFailed: "Couldn't check for updates.",
+    updateFailedTitle: "Update couldn't start", updateFailedBody: "Opening the release page instead.",
+    updateInstalling: "Installing…", updateInstalled: "Update installed",
+    updateInstalledBody: "Restart Steam to finish the update.",
   },
   es: {
     home: "Inicio", library: "Biblioteca", store: "Tienda", friends: "Amigos", downloads: "Descargas",
@@ -74,6 +79,11 @@ const copy = {
     noInstalledGames: "No hay juegos instalados", noInstalledGamesDescription: "Instala un juego desde tu Biblioteca para verlo aquí.",
     openLibrary: "Abrir Biblioteca", resetDefaults: "Restablecer valores predeterminados", resetDefaultsDescription: "Restaura inglés, tema oscuro y pantallas activadas.",
     version: "Versión", versionDescription: "Consulta las notas y descarga de la última versión.", releaseNotes: "Abrir notas de versión",
+    updateAvailable: "Nueva versión disponible", updateDescription: "Instálala desde GitHub sin salir del menú.",
+    updateNow: "Actualizar ahora", upToDate: "Estás actualizado.", updateCheckFailed: "No se pudo comprobar la actualización.",
+    updateFailedTitle: "No se pudo iniciar la actualización", updateFailedBody: "Abriendo la página de la versión.",
+    updateInstalling: "Instalando…", updateInstalled: "Actualización instalada",
+    updateInstalledBody: "Reinicia Steam para terminar la actualización.",
   },
 } as const;
 
