@@ -20,6 +20,40 @@ const ROW_TOP_SPACE = 136;
 // Decky art plugins rewrite Steam's capsule URLs, so the shelf re-reads them.
 const ART_REFRESH_MS = 15000;
 
+// Seeded so the dot field keeps the same scatter across re-renders.
+const FIELD_DOTS = (() => {
+  let seed = 20261020;
+  const rand = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+  return Array.from({ length: 144 }, (_, index) => ({
+    index,
+    left: Math.floor(rand() * 70) * 8 + 2.5,
+    top: Math.floor(rand() * 34) * 8 + 2.5,
+    size: rand() < 0.1 ? 5 : rand() < 0.35 ? 4 : 3,
+    duration: Math.round(380 + rand() * 1150),
+    delay: -Math.round(rand() * 4000)
+  }));
+})();
+
+const DotField = () => (
+  <div className="vd-field" aria-hidden>
+    <div className="vd-flicker">
+      {FIELD_DOTS.map((dot) => (
+        <i
+          key={dot.index}
+          style={{
+            left: dot.left,
+            top: dot.top,
+            width: dot.size,
+            height: dot.size,
+            animationDuration: `${dot.duration}ms`,
+            animationDelay: `${dot.delay}ms`
+          }}
+        />
+      ))}
+    </div>
+  </div>
+);
+
 const tabs = (language: Language): { label: string; go?: () => void }[] => {
   const copy = strings(language);
   return [
@@ -164,7 +198,7 @@ function Hero({ game, language, onFocus }: { game: Game; language: Language; onF
   );
   return (
     <section className="vd-hero">
-      <div className="vd-field" aria-hidden />
+      <DotField />
       <span className="vd-kicker">{last ? `${copy.continue} · ${copy.played} ${last}` : copy.ready}</span>
       <h1
         className={
@@ -301,7 +335,7 @@ export function HomeScreen() {
               <Hero game={hero} language={language} onFocus={scroll.toTop} />
             ) : (
               <section className="vd-hero">
-                <div className="vd-field" aria-hidden />
+                <DotField />
                 <span className="vd-kicker">{copy.noInstalledGames}</span>
                 <h1 className="vd-gtitle">VOID</h1>
                 <p className="vd-empty-description">{copy.noInstalledGamesDescription}</p>

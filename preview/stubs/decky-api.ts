@@ -3,6 +3,10 @@ import type { DefinePluginFn, RoutePatch } from "@decky/api/dist/types";
 
 export const definePlugin = (fn: DefinePluginFn) => fn;
 
+export const toaster = { toast: (_options: unknown) => Promise.resolve() };
+
+export const fetchNoCors = (url: string, request?: RequestInit) => fetch(url, request);
+
 // The preview shows the Home screen when its route has a registered patch.
 const patches = new Map<string, Set<RoutePatch>>();
 const listeners = new Set<() => void>();

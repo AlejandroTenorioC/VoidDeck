@@ -53,6 +53,33 @@ export const homeCss = `
   background-size: var(--vd-space-3) var(--vd-space-3);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 60%);
 }
+/* The wave is a slanted window sweeping right-to-left. Its body raises the dots to
+   muted ink so the shape reads; inside it, separate dots flash to full ink on their
+   own timers, so the glitch is per dot instead of the whole band pulsing at once. */
+.vd-flicker {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(circle, var(--vd-ink-muted) 1.5px, transparent 1.75px);
+  background-size: var(--vd-space-3) var(--vd-space-3);
+  -webkit-mask-image: linear-gradient(105deg, transparent 18%, #000 42%, #000 58%, transparent 82%);
+  -webkit-mask-size: 420px 100%;
+  -webkit-mask-repeat: no-repeat;
+  animation: vd-field-sweep 5.5s linear infinite;
+}
+.vd-flicker i {
+  position: absolute; border-radius: 50%; background: var(--vd-ink); opacity: 0;
+  animation-name: vd-dot-blip; animation-iteration-count: infinite; animation-timing-function: steps(1, end);
+}
+@keyframes vd-field-sweep {
+  from { -webkit-mask-position: 720px 0; }
+  to { -webkit-mask-position: -420px 0; }
+}
+/* Brief flashes with long dark gaps: combined with per-dot durations and negative
+   delays, neighbours never light at the same moment. */
+@keyframes vd-dot-blip {
+  0%, 4% { opacity: 0; } 6% { opacity: 1; } 12% { opacity: 0; } 38% { opacity: .9; } 45% { opacity: 0; }
+  70% { opacity: 1; } 77% { opacity: 0; } 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .vd-flicker { display: none; } }
 .vd-kicker { font: 14px/16px var(--vd-font-mono); letter-spacing: .08em; color: var(--vd-ink-muted); text-transform: uppercase; }
 /* One fixed title box: the type shrinks to fit long names, but the block height never
    changes, so the kicker, playtime and buttons around it stay put. */
