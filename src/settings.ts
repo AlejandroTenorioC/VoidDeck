@@ -2,33 +2,44 @@
 import { useSyncExternalStore } from "react";
 import type { Theme } from "./theme/tokens";
 
+export const DOT_EFFECTS = ["wave", "boot", "radar", "ladder", "compile", "magnet", "diamond", "rain", "none"] as const;
+
+export type DotEffect = (typeof DOT_EFFECTS)[number];
+
 export type Settings = {
   skin: boolean;
   theme: Theme;
   home: boolean;
   postersBw: boolean;
-  dotAnimation: boolean;
+  dotEffect: DotEffect;
 };
 
 const STORAGE_KEY = "voiddeck-settings";
 const listeners = new Set<() => void>();
 
-export const defaultSettings: Settings = { skin: true, theme: "dark", home: true, postersBw: true, dotAnimation: true };
+export const defaultSettings: Settings = { skin: true, theme: "dark", home: true, postersBw: true, dotEffect: "wave" };
 
 let settings: Settings = load();
+
+/** Only a stored name that matches a known effect is used; 1.2.x stored the old on/off flag instead. */
+function readDotEffect(value: unknown, legacyAnimation: unknown): DotEffect {
+  const known = DOT_EFFECTS.find((effect) => effect === value);
+  if (known) return known;
+  return legacyAnimation === false ? "none" : defaultSettings.dotEffect;
+}
 
 /** Read the stored preferences, falling back to the defaults when storage is empty or invalid. */
 function load(): Settings {
   try {
     const raw = globalThis.localStorage?.getItem(STORAGE_KEY);
     if (!raw) return defaultSettings;
-    const parsed = JSON.parse(raw) as Partial<Settings>;
+    const parsed = JSON.parse(raw) as Partial<Settings> & { dotAnimation?: unknown };
     return {
       skin: typeof parsed.skin === "boolean" ? parsed.skin : defaultSettings.skin,
       theme: parsed.theme === "light" ? "light" : "dark",
       home: typeof parsed.home === "boolean" ? parsed.home : defaultSettings.home,
       postersBw: typeof parsed.postersBw === "boolean" ? parsed.postersBw : defaultSettings.postersBw,
-      dotAnimation: typeof parsed.dotAnimation === "boolean" ? parsed.dotAnimation : defaultSettings.dotAnimation,
+      dotEffect: readDotEffect(parsed.dotEffect, parsed.dotAnimation),
     };
   } catch {
     return defaultSettings;
@@ -63,8 +74,8 @@ export function setPostersBw(postersBw: boolean): void {
   store({ ...settings, postersBw });
 }
 
-export function setDotAnimation(dotAnimation: boolean): void {
-  store({ ...settings, dotAnimation });
+export function setDotEffect(dotEffect: DotEffect): void {
+  store({ ...settings, dotEffect });
 }
 
 /** Back to the defaults: English copy aside, used by the panel's reset button. */

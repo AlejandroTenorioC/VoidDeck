@@ -34,11 +34,86 @@ const FIELD_DOTS = (() => {
   }));
 })();
 
+const BOOT_ROWS = Array.from({ length: 34 }, (_, index) => index);
+
+const LADDER_RUNGS = [
+  { top: 40, delay: 600 },
+  { top: 88, delay: 300 },
+  { top: 136, delay: 0 },
+  { top: 184, delay: 2100 },
+  { top: 232, delay: 1800 }
+];
+
+const RADAR_CENTER = { left: 380, top: 136 };
+const snap = (value: number) => Math.round((value - 4) / 8) * 8 + 4;
+const RADAR_DOTS = Array.from({ length: 16 }, (_, index) => {
+  const angle = (index / 16) * Math.PI * 2 - Math.PI / 2;
+  return {
+    index,
+    left: snap(RADAR_CENTER.left + Math.cos(angle) * 150) - 2.5,
+    top: snap(RADAR_CENTER.top + Math.sin(angle) * 95) - 2.5,
+    delay: Math.round(index * 137.5)
+  };
+});
+
+// Every step below is a multiple of 8 so each dot lands on a base-grid dot.
+const COMPILE_DOTS = Array.from({ length: 98 }, (_, index) => {
+  const column = index % 14;
+  const row = Math.floor(index / 14);
+  return {
+    index,
+    left: column * 40 + 33.5,
+    top: row * 32 + 33.5,
+    delay: (6 - row) * 90 + column * 30
+  };
+});
+
+const MAGNET_RINGS = [
+  { radius: 160, count: 24 },
+  { radius: 120, count: 18 },
+  { radius: 80, count: 12 },
+  { radius: 40, count: 6 }
+];
+const MAGNET_DOTS = MAGNET_RINGS.flatMap((ring, ringIndex) =>
+  Array.from({ length: ring.count }, (_, dotIndex) => {
+    const angle = (dotIndex / ring.count) * Math.PI * 2 - Math.PI / 2;
+    return {
+      index: ringIndex * 100 + dotIndex,
+      left: snap(RADAR_CENTER.left + Math.cos(angle) * ring.radius) - 2.5,
+      top: snap(RADAR_CENTER.top + Math.sin(angle) * ring.radius * 0.62) - 2.5,
+      delay: ringIndex * 250
+    };
+  })
+).concat([{ index: 999, left: snap(RADAR_CENTER.left) - 2.5, top: snap(RADAR_CENTER.top) - 2.5, delay: 1000 }]);
+
+const DIAMOND_DOTS = Array.from({ length: 6 }, (_, ring) =>
+  Array.from({ length: ring * 2 + 1 }, (_, step) => step - ring).flatMap((x) => {
+    const y = ring - Math.abs(x);
+    return (y === 0 ? [0] : [y, -y]).map((dy) => ({
+      left: snap(RADAR_CENTER.left + x * 24) - 2.5,
+      top: snap(RADAR_CENTER.top + dy * 24) - 2.5,
+      delay: ring * 180
+    }));
+  })
+).flat();
+
+const RAIN_PHASES = [0, 990, 360, 1350, 630, 810, 180, 1170, 450, 1260];
+const RAIN_DOTS = Array.from({ length: 80 }, (_, index) => {
+  const column = index % 10;
+  const row = Math.floor(index / 10);
+  return {
+    index,
+    left: column * 48 + 33.5,
+    top: row * 32 + 33.5,
+    delay: ((RAIN_PHASES[column] ?? 0) + row * 126) % 1800
+  };
+});
+
 const DotField = () => {
-  const { dotAnimation } = useSettings();
+  const { dotEffect } = useSettings();
   return (
     <div className="vd-field" aria-hidden>
-      {dotAnimation && (
+      {dotEffect === "wave" && (
         <>
           <div className="vd-flicker" />
           <div className="vd-dots">
@@ -55,6 +130,56 @@ const DotField = () => {
             ))}
           </div>
         </>
+      )}
+      {dotEffect === "boot" && (
+        <div className="vd-boot">
+          {BOOT_ROWS.map((row) => (
+            <i key={row} style={{ top: row * 8, animationDelay: `${row * 50}ms` }} />
+          ))}
+        </div>
+      )}
+      {dotEffect === "radar" && (
+        <div className="vd-radar">
+          <b style={{ left: snap(RADAR_CENTER.left) - 3.5, top: snap(RADAR_CENTER.top) - 3.5 }} />
+          {RADAR_DOTS.map((dot) => (
+            <i key={dot.index} style={{ left: dot.left, top: dot.top, animationDelay: `${dot.delay}ms` }} />
+          ))}
+        </div>
+      )}
+      {dotEffect === "ladder" && (
+        <div className="vd-ladder">
+          {LADDER_RUNGS.map((rung, index) => (
+            <i key={index} style={{ top: rung.top, animationDelay: `${rung.delay}ms` }} />
+          ))}
+        </div>
+      )}
+      {dotEffect === "compile" && (
+        <div className="vd-compile">
+          {COMPILE_DOTS.map((dot) => (
+            <i key={dot.index} style={{ left: dot.left, top: dot.top, animationDelay: `${dot.delay}ms` }} />
+          ))}
+        </div>
+      )}
+      {dotEffect === "magnet" && (
+        <div className="vd-magnet">
+          {MAGNET_DOTS.map((dot) => (
+            <i key={dot.index} style={{ left: dot.left, top: dot.top, animationDelay: `${dot.delay}ms` }} />
+          ))}
+        </div>
+      )}
+      {dotEffect === "diamond" && (
+        <div className="vd-diamond">
+          {DIAMOND_DOTS.map((dot, index) => (
+            <i key={index} style={{ left: dot.left, top: dot.top, animationDelay: `${dot.delay}ms` }} />
+          ))}
+        </div>
+      )}
+      {dotEffect === "rain" && (
+        <div className="vd-rain">
+          {RAIN_DOTS.map((dot) => (
+            <i key={dot.index} style={{ left: dot.left, top: dot.top, animationDelay: `${dot.delay}ms` }} />
+          ))}
+        </div>
       )}
     </div>
   );

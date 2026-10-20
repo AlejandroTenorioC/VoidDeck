@@ -4,7 +4,7 @@ import { toaster } from "@decky/api";
 import { ButtonItem, DropdownItem, Navigation, PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
 import { disableHome, enableHome } from "../home";
 import { resetLanguage, setLanguage, strings, useLanguage, type Language } from "../i18n";
-import { resetSettings, setDotAnimation, setHome, setPostersBw, setSkin, useSettings } from "../settings";
+import { resetSettings, setDotEffect, setHome, setPostersBw, setSkin, useSettings, type DotEffect } from "../settings";
 import { applyPosterColor, applySkin, removeSkin } from "../skin";
 import { type UpdateCheck } from "../update/check";
 import { installUpdate } from "../update/install";
@@ -99,12 +99,23 @@ export function Panel() {
         />
       </PanelSectionRow>
       <PanelSectionRow>
-        <ToggleField
-          label={copy.dotAnimation}
-          description={copy.dotAnimationDescription}
-          checked={settings.dotAnimation}
+        <DropdownItem
+          label={copy.dotEffect}
+          description={copy.dotEffectDescription}
+          rgOptions={[
+            { label: copy.dotWave, data: "wave" },
+            { label: copy.dotBoot, data: "boot" },
+            { label: copy.dotRadar, data: "radar" },
+            { label: copy.dotLadder, data: "ladder" },
+            { label: copy.dotCompile, data: "compile" },
+            { label: copy.dotMagnet, data: "magnet" },
+            { label: copy.dotDiamond, data: "diamond" },
+            { label: copy.dotRain, data: "rain" },
+            { label: copy.dotOff, data: "none" },
+          ]}
+          selectedOption={settings.dotEffect}
           disabled={!settings.home}
-          onChange={setDotAnimation}
+          onChange={({ data }) => setDotEffect(data as DotEffect)}
         />
       </PanelSectionRow>
       <PanelSectionRow>

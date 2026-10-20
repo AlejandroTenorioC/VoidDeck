@@ -81,7 +81,53 @@ export const homeCss = `
 @keyframes vd-dot-fade {
   0%, 100% { opacity: 0; } 35%, 60% { opacity: 1; }
 }
-@media (prefers-reduced-motion: reduce) { .vd-flicker, .vd-dots { display: none; } }
+/* Boot, radar and ladder light the grid at full ink; each layer owns its own timing. */
+.vd-boot, .vd-ladder { position: absolute; inset: 0; pointer-events: none; }
+.vd-boot i, .vd-ladder i {
+  position: absolute; left: 0; right: 0; height: 8px;
+  background-image: radial-gradient(circle, var(--vd-ink) 1.5px, transparent 1.75px);
+  background-size: var(--vd-space-3) var(--vd-space-3);
+  background-repeat: repeat-x;
+  opacity: .08;
+}
+.vd-boot i { animation: vd-boot-row 2.6s cubic-bezier(.25, 1, .5, 1) infinite both; }
+@keyframes vd-boot-row {
+  0% { opacity: .08; } 14% { opacity: 1; } 72% { opacity: .95; } 100% { opacity: .08; }
+}
+.vd-ladder i { animation: vd-ladder-rung 2.4s linear infinite both; }
+@keyframes vd-ladder-rung {
+  0% { opacity: .08; } 25% { opacity: 1; } 50% { opacity: .08; } 75% { opacity: 1; } 100% { opacity: .08; }
+}
+.vd-radar { position: absolute; inset: 0; pointer-events: none; }
+.vd-radar i, .vd-radar b {
+  position: absolute; width: 5px; height: 5px; border-radius: 50%; background: var(--vd-ink);
+  opacity: 0; animation: vd-radar-dot 2.2s linear infinite both;
+}
+.vd-radar b { width: 7px; height: 7px; }
+@keyframes vd-radar-dot {
+  0% { opacity: 0; } 4% { opacity: 1; } 26% { opacity: .08; } 100% { opacity: 0; }
+}
+.vd-compile, .vd-magnet, .vd-diamond, .vd-rain { position: absolute; inset: 0; pointer-events: none; }
+.vd-compile i, .vd-magnet i, .vd-diamond i, .vd-rain i {
+  position: absolute; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--vd-ink); opacity: 0;
+}
+.vd-compile i { animation: vd-compile-dot 2.4s cubic-bezier(.65, 0, .35, 1) infinite both; }
+.vd-magnet i { animation: vd-glow-dot 2.4s cubic-bezier(.65, 0, .35, 1) infinite both; }
+.vd-diamond i { animation: vd-glow-dot 2.2s cubic-bezier(.16, 1, .3, 1) infinite both; }
+.vd-rain i { animation: vd-rain-drop 1.8s cubic-bezier(.25, 1, .5, 1) infinite both; }
+@keyframes vd-compile-dot {
+  0% { opacity: .08; } 14% { opacity: 1; } 72% { opacity: .95; } 100% { opacity: .08; }
+}
+@keyframes vd-glow-dot {
+  0% { opacity: 0; } 10% { opacity: 1; } 55% { opacity: .85; } 100% { opacity: 0; }
+}
+@keyframes vd-rain-drop {
+  0% { opacity: 0; } 6% { opacity: 1; } 22% { opacity: .1; } 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vd-flicker, .vd-dots, .vd-boot, .vd-radar, .vd-ladder, .vd-compile, .vd-magnet, .vd-diamond, .vd-rain { display: none; }
+}
 .vd-kicker { font: 14px/16px var(--vd-font-mono); letter-spacing: .08em; color: var(--vd-ink-muted); text-transform: uppercase; }
 /* One fixed title box: the type shrinks to fit long names, but the block height never
    changes, so the kicker, playtime and buttons around it stay put. */

@@ -64,7 +64,8 @@ In Quick Access, Decky tab → **Void Deck**:
 - **Global skin**: the Void Deck style across the whole Steam interface.
 - **Home screen**: replaces Steam's Home with the Void Deck one.
 - **Black and white posters**: show covers in gray until you focus them.
-- **Dot field animation**: let the dots sweep and flicker on Home.
+- **Dot animation**: pick wave, boot, radar, ladder, compile, magnet, diamond or rain for the Home dot field, or
+  turn it off.
 - **Light theme**: inverted colors for outdoor use.
 - **Language**: select English (the default) or Spanish. The selector is ready for more languages in future releases.
 - **Reset to defaults**: restore English, the dark theme and both screens enabled.
