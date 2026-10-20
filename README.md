@@ -27,6 +27,12 @@ Wi-Fi in the top bar become dot meters, and the battery turns red below 20 %.
 Brightness and volume are shown as rows of dots and toggles as pills, but they work exactly as before: Void Deck
 only changes how Steam looks, never how it works.
 
+**Notifications.** Achievements unlock as a dot that stretches into a pill with the trophy inside, then folds back
+into the corner. Friend notifications use the same pill, with their avatar and a status dot.
+
+**A screensaver of widgets.** Instead of a slideshow of your games, the screensaver shows a large dot-matrix clock,
+the date, the battery as a row of dots and the weather for a city you choose (from [Open-Meteo](https://open-meteo.com)).
+
 > The plugin interface is available in English and Spanish.
 
 ## Installation
@@ -43,7 +49,8 @@ You need [Decky Loader](https://decky.xyz) installed on your Steam Deck.
      Desktop Mode to your Downloads folder).
 5. Confirm the installation. Void Deck applies immediately and shows up in the Decky tab.
 
-**Updating:** repeat the steps with the new version's `.zip`; it replaces the previous one.
+**Updating:** when a new version is out, the Void Deck panel shows **Update available**: press it and confirm.
+Versions before 1.0.0 don't have that button, so update them once by repeating the steps with the new `.zip`.
 
 **Uninstalling:** Decky → ⚙ → **Plugins** → Void Deck → **Uninstall**. Steam goes back to its original look
 right away.
@@ -55,8 +62,11 @@ In Quick Access, Decky tab → **Void Deck**:
 - **Global skin**: the Void Deck style across the whole Steam interface.
 - **Home screen**: replaces Steam's Home with the Void Deck one.
 - **Light theme**: inverted colors for outdoor use.
+- **Notification style**: the Void Deck look for achievement and friend notifications.
+- **Screensaver**: the clock, battery and weather widgets, with the weather city and a preview button.
 - **Language**: English or Spanish.
-- **Reset to defaults**: restores the default settings.
+
+Your choices are kept across restarts.
 
 Each part can be turned off on its own. If a Steam update breaks something, turn that part off and the rest keeps
 working.
