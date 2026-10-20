@@ -1,6 +1,6 @@
 {
   "name": "void-deck",
-  "version": "0.2.19",
+  "version": "1.1.1",
   "description": "Void Deck: an interface of dots, light, and void for the Steam Deck.",
   "type": "module",
   "private": true,

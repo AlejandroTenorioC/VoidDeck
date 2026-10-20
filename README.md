@@ -39,8 +39,8 @@ always know where you are typing.
 
 You need [Decky Loader](https://decky.xyz) installed on your Steam Deck.
 
-1. Download `VoidDeck-v0.2.19.zip` from the [v0.2.19 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v0.2.19), or copy its direct URL:
-   `https://github.com/endoflineservice/VoidDeck/releases/download/v0.2.19/VoidDeck-v0.2.19.zip`
+1. Download `VoidDeck-v1.1.1.zip` from the [v1.1.1 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v1.1.1), or copy its direct URL:
+   `https://github.com/endoflineservice/VoidDeck/releases/download/v1.1.1/VoidDeck-v1.1.1.zip`
 2. On the Deck, in Game Mode, open Quick Access (the `···` button) → the **Decky** tab (plug icon) → **⚙**.
 3. Under **General**, turn on **Developer mode**.
 4. In the new **Developer** section, choose one of:
