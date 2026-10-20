@@ -2,12 +2,18 @@
 import { useSyncExternalStore } from "react";
 import type { Theme } from "./theme/tokens";
 
-export type Settings = { skin: boolean; theme: Theme; home: boolean };
+export type Settings = {
+  skin: boolean;
+  theme: Theme;
+  home: boolean;
+  postersBw: boolean;
+  dotAnimation: boolean;
+};
 
 const STORAGE_KEY = "voiddeck-settings";
 const listeners = new Set<() => void>();
 
-export const defaultSettings: Settings = { skin: true, theme: "dark", home: true };
+export const defaultSettings: Settings = { skin: true, theme: "dark", home: true, postersBw: true, dotAnimation: true };
 
 let settings: Settings = load();
 
@@ -21,6 +27,8 @@ function load(): Settings {
       skin: typeof parsed.skin === "boolean" ? parsed.skin : defaultSettings.skin,
       theme: parsed.theme === "light" ? "light" : "dark",
       home: typeof parsed.home === "boolean" ? parsed.home : defaultSettings.home,
+      postersBw: typeof parsed.postersBw === "boolean" ? parsed.postersBw : defaultSettings.postersBw,
+      dotAnimation: typeof parsed.dotAnimation === "boolean" ? parsed.dotAnimation : defaultSettings.dotAnimation,
     };
   } catch {
     return defaultSettings;
@@ -49,6 +57,14 @@ export function setSkin(skin: boolean, theme: Theme): void {
 
 export function setHome(home: boolean): void {
   store({ ...settings, home });
+}
+
+export function setPostersBw(postersBw: boolean): void {
+  store({ ...settings, postersBw });
+}
+
+export function setDotAnimation(dotAnimation: boolean): void {
+  store({ ...settings, dotAnimation });
 }
 
 /** Back to the defaults: English copy aside, used by the panel's reset button. */

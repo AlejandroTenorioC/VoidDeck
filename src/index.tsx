@@ -4,7 +4,7 @@ import { disableHome, enableHome } from "./home";
 import { languageState, strings } from "./i18n";
 import { Panel, RELEASE_URL, VERSION } from "./qam/Panel";
 import { settingsState } from "./settings";
-import { applySkin, removeSkin } from "./skin";
+import { applyPosterColor, applySkin, removeSkin } from "./skin";
 import { checkForUpdate } from "./update/check";
 
 const UPDATE_CHECK_DELAY_MS = 30_000;
@@ -43,6 +43,11 @@ export default definePlugin(() => {
     } catch (error) {
       console.error("[Void Deck] home screen failed to mount", error);
     }
+  }
+  try {
+    applyPosterColor(settings.postersBw);
+  } catch (error) {
+    console.error("[Void Deck] poster color failed to apply", error);
   }
 
   // One quiet check after load, mirroring Decky's own update badge: toast only when something newer exists.

@@ -39,8 +39,8 @@ always know where you are typing.
 
 You need [Decky Loader](https://decky.xyz) installed on your Steam Deck.
 
-1. Download `VoidDeck-v1.2.1.zip` from the [v1.2.1 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v1.2.1), or copy its direct URL:
-   `https://github.com/endoflineservice/VoidDeck/releases/download/v1.2.1/VoidDeck-v1.2.1.zip`
+1. Download `VoidDeck-v1.2.2.zip` from the [v1.2.2 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v1.2.2), or copy its direct URL:
+   `https://github.com/endoflineservice/VoidDeck/releases/download/v1.2.2/VoidDeck-v1.2.2.zip`
 2. On the Deck, in Game Mode, open Quick Access (the `···` button) → the **Decky** tab (plug icon) → **⚙**.
 3. Under **General**, turn on **Developer mode**.
 4. In the new **Developer** section, choose one of:
@@ -63,6 +63,8 @@ In Quick Access, Decky tab → **Void Deck**:
 
 - **Global skin**: the Void Deck style across the whole Steam interface.
 - **Home screen**: replaces Steam's Home with the Void Deck one.
+- **Black and white posters**: show covers in gray until you focus them.
+- **Dot field animation**: let the dots sweep and flicker on Home.
 - **Light theme**: inverted colors for outdoor use.
 - **Language**: select English (the default) or Spanish. The selector is ready for more languages in future releases.
 - **Reset to defaults**: restore English, the dark theme and both screens enabled.

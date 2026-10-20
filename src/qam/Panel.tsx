@@ -4,13 +4,13 @@ import { toaster } from "@decky/api";
 import { ButtonItem, DropdownItem, Navigation, PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
 import { disableHome, enableHome } from "../home";
 import { resetLanguage, setLanguage, strings, useLanguage, type Language } from "../i18n";
-import { resetSettings, setHome, setSkin, useSettings } from "../settings";
-import { applySkin, removeSkin } from "../skin";
+import { resetSettings, setDotAnimation, setHome, setPostersBw, setSkin, useSettings } from "../settings";
+import { applyPosterColor, applySkin, removeSkin } from "../skin";
 import { type UpdateCheck } from "../update/check";
 import { installUpdate } from "../update/install";
 import { useUpdateCheck } from "../update/useUpdateCheck";
 
-export const VERSION = "1.2.1";
+export const VERSION = "1.2.2";
 export const RELEASE_URL = "https://github.com/endoflineservice/VoidDeck/releases/latest";
 
 /** Status line under the installed version: installed, still checking, check failed, update ready, or up to date. */
@@ -41,11 +41,17 @@ export function Panel() {
     else disableHome(true);
   };
 
+  const updatePosters = (on: boolean) => {
+    setPostersBw(on);
+    applyPosterColor(on);
+  };
+
   const resetDefaults = () => {
     resetLanguage();
     resetSettings();
     applySkin("dark");
     enableHome();
+    applyPosterColor(true);
   };
 
   const runUpdate = async () => {
@@ -81,6 +87,24 @@ export function Panel() {
           description={copy.homeScreenDescription}
           checked={settings.home}
           onChange={updateHome}
+        />
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <ToggleField
+          label={copy.postersBw}
+          description={copy.postersBwDescription}
+          checked={settings.postersBw}
+          disabled={!settings.home}
+          onChange={updatePosters}
+        />
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <ToggleField
+          label={copy.dotAnimation}
+          description={copy.dotAnimationDescription}
+          checked={settings.dotAnimation}
+          disabled={!settings.home}
+          onChange={setDotAnimation}
         />
       </PanelSectionRow>
       <PanelSectionRow>

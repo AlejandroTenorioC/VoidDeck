@@ -38,6 +38,7 @@ ${glyphs}:has(img[src*="_r1"])::after { content: "R1"; }
 ${item} { box-shadow: none !important; border-radius: 11px !important; }
 ${item} ${cls("Capsule", "CapsuleVisible")} { border-radius: 11px !important; overflow: hidden !important; filter: grayscale(1) !important; transition: filter 150ms ease !important; }
 ${item}:hover ${cls("Capsule", "CapsuleVisible")}, ${item}.gpfocus ${cls("Capsule", "CapsuleVisible")} { filter: none !important; }
+html[data-vd-bw="off"] ${item} ${cls("Capsule", "CapsuleVisible")} { filter: none !important; }
 ${item}.gpfocus { outline: none !important; box-shadow: ${ring} !important; }
 ${cls("LibraryImageBackgroundGlow")} { display: none !important; }
 `;

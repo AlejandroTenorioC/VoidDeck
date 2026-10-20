@@ -54,8 +54,8 @@ export const homeCss = `
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 60%);
 }
 /* The wave is a slanted window sweeping right-to-left. Its body raises the dots to
-   muted ink so the shape reads; inside it, separate dots flash to full ink on their
-   own timers, so the glitch is per dot instead of the whole band pulsing at once. */
+   muted ink so the shape reads. The vanishing dots are a sibling layer, not children:
+   the sweep's mask would otherwise clip them to the band and tie the two effects. */
 .vd-flicker {
   position: absolute; inset: 0; pointer-events: none;
   background-image: radial-gradient(circle, var(--vd-ink-muted) 1.5px, transparent 1.75px);
@@ -65,21 +65,23 @@ export const homeCss = `
   -webkit-mask-repeat: no-repeat;
   animation: vd-field-sweep 5.5s linear infinite;
 }
-.vd-flicker i {
-  position: absolute; border-radius: 50%; background: var(--vd-ink); opacity: 0;
-  animation-name: vd-dot-blip; animation-iteration-count: infinite; animation-timing-function: steps(1, end);
+.vd-dots { position: absolute; inset: 0; pointer-events: none; }
+/* A dot-sized disc of the page colour: at full opacity it erases the grid dot beneath
+   it, which is what makes the flicker read as absence. Centred on the 8px lattice. */
+.vd-dots i {
+  position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--vd-bg); opacity: 0;
+  animation-name: vd-dot-fade; animation-iteration-count: infinite; animation-timing-function: ease-in-out;
 }
 @keyframes vd-field-sweep {
   from { -webkit-mask-position: 720px 0; }
   to { -webkit-mask-position: -420px 0; }
 }
-/* Brief flashes with long dark gaps: combined with per-dot durations and negative
-   delays, neighbours never light at the same moment. */
-@keyframes vd-dot-blip {
-  0%, 4% { opacity: 0; } 6% { opacity: 1; } 12% { opacity: 0; } 38% { opacity: .9; } 45% { opacity: 0; }
-  70% { opacity: 1; } 77% { opacity: 0; } 100% { opacity: 0; }
+/* Present, gone, present: the hold keeps a vanished dot away long enough to notice,
+   while the smooth easing keeps the rhythm calm rather than stuttering. */
+@keyframes vd-dot-fade {
+  0%, 100% { opacity: 0; } 35%, 60% { opacity: 1; }
 }
-@media (prefers-reduced-motion: reduce) { .vd-flicker { display: none; } }
+@media (prefers-reduced-motion: reduce) { .vd-flicker, .vd-dots { display: none; } }
 .vd-kicker { font: 14px/16px var(--vd-font-mono); letter-spacing: .08em; color: var(--vd-ink-muted); text-transform: uppercase; }
 /* One fixed title box: the type shrinks to fit long names, but the block height never
    changes, so the kicker, playtime and buttons around it stay put. */
@@ -138,6 +140,7 @@ export const homeCss = `
 /* Covers are monochrome until the tile is hovered or focused. */
 .vd-tile-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: filter 150ms ease; }
 .vd-tile:hover .vd-tile-art img, .vd-tile.is-focused .vd-tile-art img { filter: none; }
+html[data-vd-bw="off"] .vd-tile-art img { filter: none; }
 .vd-tile-glyph { font: 800 72px/1 var(--vd-font-dot); color: var(--vd-ink); }
 .vd-tile-meta { display: flex; flex-direction: column; gap: 2px; padding: var(--vd-space-2) var(--vd-space-1) 0; opacity: 0; transition: opacity 150ms; }
 .vd-tile-title { font: 500 16px/22px var(--vd-font-sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

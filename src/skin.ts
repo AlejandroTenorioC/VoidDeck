@@ -12,7 +12,13 @@ const RESYNC_MS = 2000;
 
 let css: string | null = null;
 let theme: Theme = "dark";
+let postersBw = true;
 let timer: ReturnType<typeof setInterval> | undefined;
+
+function setPosters(doc: Document): void {
+  if (postersBw) delete doc.documentElement.dataset.vdBw;
+  else doc.documentElement.dataset.vdBw = "off";
+}
 
 function sync(): void {
   if (css === null) return;
@@ -33,6 +39,7 @@ function sync(): void {
     // Steam appends its own styles after ours, so ours goes back to the end of the head.
     if (doc.head.lastElementChild !== el) doc.head.appendChild(el);
     updateStatusDots(doc);
+    setPosters(doc);
   }
   // Steam does not always have the battery hook ready when the skin applies.
   watchBattery(sync);
@@ -44,6 +51,11 @@ export function applySkin(next: Theme): void {
   warnMissingClasses();
   sync();
   timer ??= setInterval(sync, RESYNC_MS);
+}
+
+export function applyPosterColor(bw: boolean): void {
+  postersBw = bw;
+  for (const doc of steamDocuments()) setPosters(doc);
 }
 
 export function removeSkin(): void {

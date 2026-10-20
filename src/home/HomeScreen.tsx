@@ -4,6 +4,7 @@ import { Focusable, GamepadButton, Menu, MenuItem, Navigation, QuickAccessTab, s
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { strings, useLanguage, type Language } from "../i18n";
 import { skinState } from "../skin";
+import { useSettings } from "../settings";
 import { cls } from "../steam/classes";
 import { installedGames, libraryCount, openDetails, openProperties, playGame, recentGames, type Game } from "../steam/library";
 import { fontsCss } from "../theme/fonts";
@@ -24,35 +25,40 @@ const ART_REFRESH_MS = 15000;
 const FIELD_DOTS = (() => {
   let seed = 20261020;
   const rand = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
-  return Array.from({ length: 144 }, (_, index) => ({
+  return Array.from({ length: 28 }, (_, index) => ({
     index,
-    left: Math.floor(rand() * 70) * 8 + 2.5,
-    top: Math.floor(rand() * 34) * 8 + 2.5,
-    size: rand() < 0.1 ? 5 : rand() < 0.35 ? 4 : 3,
-    duration: Math.round(380 + rand() * 1150),
-    delay: -Math.round(rand() * 4000)
+    left: Math.floor(rand() * 70) * 8 + 0.5,
+    top: Math.floor(rand() * 34) * 8 + 0.5,
+    duration: Math.round(6000 + rand() * 5000),
+    delay: -Math.round(rand() * 9000)
   }));
 })();
 
-const DotField = () => (
-  <div className="vd-field" aria-hidden>
-    <div className="vd-flicker">
-      {FIELD_DOTS.map((dot) => (
-        <i
-          key={dot.index}
-          style={{
-            left: dot.left,
-            top: dot.top,
-            width: dot.size,
-            height: dot.size,
-            animationDuration: `${dot.duration}ms`,
-            animationDelay: `${dot.delay}ms`
-          }}
-        />
-      ))}
+const DotField = () => {
+  const { dotAnimation } = useSettings();
+  return (
+    <div className="vd-field" aria-hidden>
+      {dotAnimation && (
+        <>
+          <div className="vd-flicker" />
+          <div className="vd-dots">
+            {FIELD_DOTS.map((dot) => (
+              <i
+                key={dot.index}
+                style={{
+                  left: dot.left,
+                  top: dot.top,
+                  animationDuration: `${dot.duration}ms`,
+                  animationDelay: `${dot.delay}ms`
+                }}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
-  </div>
-);
+  );
+};
 
 const tabs = (language: Language): { label: string; go?: () => void }[] => {
   const copy = strings(language);
