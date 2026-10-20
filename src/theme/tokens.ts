@@ -37,7 +37,7 @@ const accents: Record<Theme, Record<Accent, Record<string, string>>> = {
     violet: { signal: "#7657d9", "signal-text": "#b5a0ff", "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #b5a0ff" },
   },
   light: {
-    red: { signal: "#ffffff", "signal-text": "#ffffff", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 5px #ffffff" },
+    red: { signal: "#ffffff", "signal-text": "#ffffff", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 5px #000000" },
     cyan: { signal: "#007a99", "signal-text": "#007a99", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #007a99" },
     amber: { signal: "#a65a00", "signal-text": "#a65a00", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #a65a00" },
     violet: { signal: "#6d4ad6", "signal-text": "#6d4ad6", "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #6d4ad6" },

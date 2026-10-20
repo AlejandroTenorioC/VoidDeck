@@ -12,17 +12,23 @@ export function mainMenuCss(): string {
   const cross = (a: string[], b: string[], sep: string) => a.flatMap((x) => b.map((y) => x + sep + y));
 
   return `
-${join(of("Menu"))} { background: var(--vd-surface) !important; }
+${join(of("Menu"))} {
+  background: var(--vd-surface) !important;
+  border: none !important; border-radius: 0 !important; box-shadow: none !important;
+}
 
 ${join(items)} {
   transform: none !important; position: relative !important;
-  background: transparent !important; color: var(--vd-ink-muted) !important;
+  background: transparent !important; border-radius: 0 !important; color: var(--vd-ink-muted) !important;
 }
 ${join([...cross(items, of("ItemLabel"), " "), ...cross(items, of("ItemLabel"), " ").map((s) => s + " *")])} {
   font-family: var(--vd-font-mono) !important; font-size: 10px !important;
   letter-spacing: .08em !important; text-transform: uppercase !important; color: inherit !important;
 }
 ${join(of("ItemIcon").map((s) => s + " svg"))} { width: 16px !important; height: 16px !important; }
+
+/* Section separators: one hairline instead of Steam's bevel */
+${join(of("Separator"))} { background: var(--vd-line) !important; box-shadow: none !important; }
 
 /* Current section: lit text and a dot instead of the blue pill */
 ${join(cross(items, of("Active"), ""))} { color: var(--vd-ink) !important; }

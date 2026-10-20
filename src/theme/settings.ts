@@ -43,7 +43,7 @@ export function settingsCss(): string {
 
 /* Setting rows become a precise ruled form rather than floating cards. */
 ${join(field)} {
-  background: rgba(0, 0, 0, .72) !important;
+  background: var(--vd-bg) !important;
   border-bottom: 1px solid var(--vd-line) !important;
   border-radius: 0 !important;
 }
@@ -66,7 +66,7 @@ ${join(fieldLabel)}, ${join(fieldLabel.map((selector) => `${selector} *`))} {
 }
 .DialogTextInputBase:focus, input.DialogInput:focus, .DialogTextInputBase.gpfocus, input.DialogInput.gpfocus {
   border-color: var(--vd-ink) !important;
-  box-shadow: 0 0 0 2px var(--vd-bg), 0 0 0 4px var(--vd-ink) !important;
+  box-shadow: var(--vd-focus-ring) !important;
 }
 ${join(button)} {
   background: transparent !important;
@@ -80,7 +80,7 @@ ${join(button)} {
 ${join(focusedButton)} {
   background: var(--vd-ink) !important;
   border-color: var(--vd-ink) !important;
-  box-shadow: 0 0 0 2px var(--vd-bg), 0 0 0 4px var(--vd-ink) !important;
+  box-shadow: var(--vd-focus-ring) !important;
   color: var(--vd-on-ink) !important;
 }
 ${join(focusedButton.map((selector) => `${selector} *`))} { color: inherit !important; }

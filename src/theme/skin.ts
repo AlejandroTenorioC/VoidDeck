@@ -9,6 +9,7 @@ import { libraryCss } from "./library";
 import { mainMenuCss } from "./mainMenu";
 import { contextMenuCss, menusCss } from "./menus";
 import { quickAccessCss } from "./quickAccess";
+import { scrollbarsCss } from "./scrollbars";
 import { settingsCss } from "./settings";
 import { sliderCss } from "./slider";
 import { transitionsCss } from "./transitions";
@@ -47,6 +48,9 @@ ${footerCss()}
 
 /* Any Steam button-prompt art anywhere (Deck, Xbox, Ally…) becomes monochrome */
 img[src*="shared_buttons_"], img[src*="/steaminputglyphs/"] { filter: grayscale(1) brightness(2.2) !important; }
+
+/* Scrollbars: one flat hairline treatment on every surface Steam scrolls */
+${scrollbarsCss()}
 
 /* Main menu (STEAM button) */
 ${mainMenuCss()}

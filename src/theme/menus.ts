@@ -82,7 +82,7 @@ ${join(dialogButton)} {
 ${join(focusedButton)} {
   background: var(--vd-ink) !important;
   border-color: var(--vd-ink) !important;
-  box-shadow: 0 0 0 2px var(--vd-bg), 0 0 0 4px var(--vd-ink) !important;
+  box-shadow: var(--vd-focus-ring) !important;
   color: var(--vd-on-ink) !important;
 }
 ${join(focusedButton.map((selector) => `${selector} *`))} { color: inherit !important; }

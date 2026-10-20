@@ -5,8 +5,15 @@ import { join, paint } from "./selectors";
 /** Dot grid behind the text buffer, like the dot meters in Quick Access. */
 const dots = (color: string) => `radial-gradient(circle, ${color} 1.4px, transparent 1.8px) 0 0 / 6px 6px repeat`;
 
-/** Selectors for a Steam class, without the placeholder used when Steam has not published it. */
-const of = (name: string): string[] => clsList(name).filter((c) => c !== ".vd-missing");
+/** Selectors for a Steam class: the Decky class map when the Deck publishes it, plus the hashed
+    CSS-module form other pads and SteamOS use (`virtualkeyboard_KeyboardKey_2KhPX`). The hash is
+    rewritten on every Steam update, so match the readable name and its `_` delimiter and let the
+    hash be whatever the update made it. */
+const of = (name: string): string[] => [
+  ...clsList(name).filter((c) => c !== ".vd-missing"),
+  `[class~="${name}"]`,
+  `[class*="${name}_"]`,
+];
 
 /** A rule, or nothing when Steam has not published the classes it needs. */
 const rule = (selectors: string[], body: string): string =>
@@ -21,6 +28,8 @@ const pairs = (list: string[], others: string[]): string[] =>
 
 export function keyboardCss(): string {
   const panel = [
+    // The keyboard root itself, which carries `DefaultTheme` and `virtualkeyboard_Keyboard_<hash>`.
+    '[class*="Keyboard_"]',
     ...of("VirtualKeyboardContainer"),
     ...of("ModalVirtualKeyboardContainer"),
     ...of("VirtualKeyboardStandaloneContainer"),
@@ -31,6 +40,9 @@ export function keyboardCss(): string {
     ...of("VRVirtualKeyboardContents"),
   ];
   const key = of("KeyboardKey");
+  // The keyboard root and the extended keys, matched by their stable readable names.
+  const root = ['.DefaultTheme[class*="Keyboard_"]', '[class*="Keyboard_"]'];
+  const extended = ['[class*="KeyboardExtendedKey_"]'];
   const wide = [
     ...of("KeyboardSpacebar"),
     ...of("KeyboardTabKey"),
@@ -62,6 +74,12 @@ export function keyboardCss(): string {
   return `
 /* Panel: a black slab with a hairline frame, square like the matrix of keys inside it */
 ${rule(panel, "background-color: var(--vd-bg) !important; background-image: none !important; border: 1px solid var(--vd-line) !important; border-radius: 0 !important; box-shadow: none !important; backdrop-filter: none !important;")}
+
+/* Steam paints the keyboard through its own custom properties rather than through backgrounds.
+   Set them here so the panel and every key come out black whatever Steam's own rules declare. */
+${rule(root, "--background-color: var(--vd-bg) !important; --foreground-color: var(--vd-ink) !important; --key-color: var(--vd-ink) !important; --key-focused-color: var(--vd-on-ink) !important;")}
+${rule(key, "--key-background-color: transparent !important; --key-focused-background-color: var(--vd-ink) !important; --key-spacebar-background-color: transparent !important; --key-caps-background-color: transparent !important; --key-shift-background-color: transparent !important; --key-tab-background-color: transparent !important; --key-enter-background-color: transparent !important; --key-backspace-background-color: transparent !important; --key-meta-background-color: transparent !important;")}
+${rule(extended, "--key-extendedkey-background-color: transparent !important; --key-extendedkey-focused-background-color: var(--vd-ink) !important;")}
 
 /* Keys: square cells of a matrix — black, hairline border, no rounded keycap */
 ${rule(key, "background: transparent !important; border: 1px solid var(--vd-line) !important; border-radius: 0 !important; box-shadow: none !important; color: var(--vd-ink) !important; padding: var(--vd-space-1) var(--vd-space-2) !important; min-width: 0 !important;")}

@@ -17,7 +17,7 @@ export function quickAccessCss(): string {
   const rail = cls("ToggleRail", "ToggleSwitch");
   // Repeated to override the position specificity set by Steam.
   const knob = cls("ToggleSwitch", "ToggleRail").repeat(2);
-  const ring = "0 0 0 2px var(--vd-surface), 0 0 0 4px var(--vd-ink)";
+  const ring = "var(--vd-focus-ring)";
 
   return `
 /* Panel */
