@@ -1,38 +1,37 @@
 // Layer 3: Void Deck settings in the Quick Access menu.
 import { ButtonItem, DropdownItem, Navigation, PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
-import { useState } from "react";
-import { disableHome, enableHome, homeEnabled } from "../home";
+import { disableHome, enableHome } from "../home";
 import { resetLanguage, setLanguage, strings, useLanguage, type Language } from "../i18n";
 import { version } from "../../package.json";
-import { applySkin, removeSkin, skinState } from "../skin";
+import { resetSettings, setHome, setSkin, useSettings } from "../settings";
+import { applySkin, removeSkin } from "../skin";
 
 const RELEASE_URL = "https://github.com/AlejandroTenorioC/VoidDeck/releases/latest";
 
 export function Panel() {
-  const [skinOn, setSkinOn] = useState(() => skinState().on);
-  const [light, setLight] = useState(() => skinState().theme === "light");
-  const [homeOn, setHomeOn] = useState(homeEnabled);
+  // Stored preferences (they survive restarts); the toggles read and write them.
+  const settings = useSettings();
+  const skinOn = settings.skin;
+  const light = settings.theme === "light";
+  const homeOn = settings.home;
   const language = useLanguage();
   const copy = strings(language);
 
   const updateSkin = (on: boolean, isLight: boolean) => {
-    setSkinOn(on);
-    setLight(isLight);
+    setSkin(on, isLight ? "light" : "dark");
     if (on) applySkin(isLight ? "light" : "dark");
     else removeSkin();
   };
 
   const updateHome = (on: boolean) => {
-    setHomeOn(on);
+    setHome(on);
     if (on) enableHome();
     else disableHome(true);
   };
 
   const resetDefaults = () => {
     resetLanguage();
-    setSkinOn(true);
-    setLight(false);
-    setHomeOn(true);
+    resetSettings();
     applySkin("dark");
     enableHome();
   };

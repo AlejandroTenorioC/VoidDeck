@@ -2,6 +2,7 @@ import { definePlugin } from "@decky/api";
 import { staticClasses } from "@decky/ui";
 import { disableHome, enableHome } from "./home";
 import { Panel } from "./qam/Panel";
+import { settingsState } from "./settings";
 import { applySkin, removeSkin } from "./skin";
 
 // Icono: retícula de puntos 5×5 con la diagonal encendida.
@@ -22,8 +23,23 @@ function VoidIcon() {
 }
 
 export default definePlugin(() => {
-  applySkin("dark");
-  enableHome();
+  // The plugin mounts again after every Steam restart, so the stored choices are restored here.
+  const settings = settingsState();
+  // Each part stands alone: a failure in one must never stop the other from applying.
+  if (settings.skin) {
+    try {
+      applySkin(settings.theme);
+    } catch (error) {
+      console.error("[Void Deck] skin failed to apply", error);
+    }
+  }
+  if (settings.home) {
+    try {
+      enableHome();
+    } catch (error) {
+      console.error("[Void Deck] home screen failed to mount", error);
+    }
+  }
 
   return {
     name: "Void Deck",
