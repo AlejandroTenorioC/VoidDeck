@@ -49,8 +49,10 @@ export const homeCss = `
 .vd-hero > * { flex: none; }
 .vd-field {
   position: absolute; right: -32px; top: 0; width: 560px; height: 100%; pointer-events: none;
+  --vd-dot-step: 8px;
+  overflow: hidden;
   background-image: radial-gradient(circle, var(--vd-ink-faint) 1.5px, transparent 1.75px);
-  background-size: var(--vd-space-3) var(--vd-space-3);
+  background-size: var(--vd-dot-step) var(--vd-dot-step);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 60%);
 }
 /* The wave is a slanted window sweeping right-to-left. Its body raises the dots to
@@ -59,7 +61,7 @@ export const homeCss = `
 .vd-flicker {
   position: absolute; inset: 0; pointer-events: none;
   background-image: radial-gradient(circle, var(--vd-ink-muted) 1.5px, transparent 1.75px);
-  background-size: var(--vd-space-3) var(--vd-space-3);
+  background-size: var(--vd-dot-step) var(--vd-dot-step);
   -webkit-mask-image: linear-gradient(105deg, transparent 18%, #000 42%, #000 58%, transparent 82%);
   -webkit-mask-size: 420px 100%;
   -webkit-mask-repeat: no-repeat;
@@ -84,9 +86,9 @@ export const homeCss = `
 /* Boot, radar and ladder light the grid at full ink; each layer owns its own timing. */
 .vd-boot, .vd-ladder { position: absolute; inset: 0; pointer-events: none; }
 .vd-boot i, .vd-ladder i {
-  position: absolute; left: 0; right: 0; height: 8px;
+  position: absolute; left: 0; right: 0; height: var(--vd-dot-step);
   background-image: radial-gradient(circle, var(--vd-ink) 1.5px, transparent 1.75px);
-  background-size: var(--vd-space-3) var(--vd-space-3);
+  background-size: var(--vd-dot-step) var(--vd-dot-step);
   background-repeat: repeat-x;
   opacity: .08;
 }
@@ -105,7 +107,7 @@ export const homeCss = `
 }
 .vd-radar b { width: 7px; height: 7px; }
 @keyframes vd-radar-dot {
-  0% { opacity: 0; } 4% { opacity: 1; } 26% { opacity: .08; } 100% { opacity: 0; }
+  0% { opacity: .14; } 3% { opacity: 1; } 16% { opacity: .5; } 42% { opacity: .22; } 100% { opacity: .14; }
 }
 .vd-compile, .vd-magnet, .vd-diamond, .vd-rain { position: absolute; inset: 0; pointer-events: none; }
 .vd-compile i, .vd-magnet i, .vd-diamond i, .vd-rain i {
@@ -115,7 +117,16 @@ export const homeCss = `
 .vd-compile i { animation: vd-compile-dot 2.4s cubic-bezier(.65, 0, .35, 1) infinite both; }
 .vd-magnet i { animation: vd-glow-dot 2.4s cubic-bezier(.65, 0, .35, 1) infinite both; }
 .vd-diamond i { animation: vd-glow-dot 2.2s cubic-bezier(.16, 1, .3, 1) infinite both; }
-.vd-rain i { animation: vd-rain-drop 1.8s cubic-bezier(.25, 1, .5, 1) infinite both; }
+/* A drop is a short vertical trail: repeated grid dots whose top fades out through a mask,
+   falling the whole field and fading in at the top, out at the bottom. */
+.vd-rain i {
+  height: 72px; border-radius: 0; background-color: transparent;
+  background-image: radial-gradient(circle, var(--vd-ink) 1.5px, transparent 1.75px);
+  background-size: var(--vd-dot-step) var(--vd-dot-step);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, .25) 45%, #000);
+  mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, .25) 45%, #000);
+  animation: vd-rain-drop 4.6s linear infinite both;
+}
 @keyframes vd-compile-dot {
   0% { opacity: .08; } 14% { opacity: 1; } 72% { opacity: .95; } 100% { opacity: .08; }
 }
@@ -123,7 +134,10 @@ export const homeCss = `
   0% { opacity: 0; } 10% { opacity: 1; } 55% { opacity: .85; } 100% { opacity: 0; }
 }
 @keyframes vd-rain-drop {
-  0% { opacity: 0; } 6% { opacity: 1; } 22% { opacity: .1; } 100% { opacity: 0; }
+  0% { transform: translateY(-96px); opacity: 0; }
+  8% { opacity: 1; }
+  84% { opacity: 1; }
+  100% { transform: translateY(520px); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .vd-flicker, .vd-dots, .vd-boot, .vd-radar, .vd-ladder, .vd-compile, .vd-magnet, .vd-diamond, .vd-rain { display: none; }

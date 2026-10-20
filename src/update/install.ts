@@ -30,7 +30,8 @@ export async function installUpdate(
   if (!backend) return { success: false, error: "Decky install route unavailable" };
   try {
     // install_type is omitted so Decky's own default (fresh install) applies.
-    await backend.call("utilities/install_plugin", assetUrl, "Void Deck", version, bareDigest(digest));
+    // Decky matches the folder by plugin.json's name, not the display name.
+    await backend.call("utilities/install_plugin", assetUrl, "VoidDeck", version, bareDigest(digest));
     return { success: true };
   } catch (error) {
     return { success: false, error: String(error) };

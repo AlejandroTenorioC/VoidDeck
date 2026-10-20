@@ -21,91 +21,110 @@ const ROW_TOP_SPACE = 136;
 // Decky art plugins rewrite Steam's capsule URLs, so the shelf re-reads them.
 const ART_REFRESH_MS = 15000;
 
+// The field is a 560px-wide window on an 8px lattice. Effects are generated for the
+// tallest hero they can meet and clipped by the field, so they reach every edge instead
+// of gathering in the middle.
+const FIELD_WIDTH = 560;
+const FIELD_HEIGHT = 400;
+const DOT_STEP = 8;
+const FIELD_COLUMNS = FIELD_WIDTH / DOT_STEP;
+const FIELD_ROWS = FIELD_HEIGHT / DOT_STEP;
+
 // Seeded so the dot field keeps the same scatter across re-renders.
 const FIELD_DOTS = (() => {
   let seed = 20261020;
   const rand = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
   return Array.from({ length: 28 }, (_, index) => ({
     index,
-    left: Math.floor(rand() * 70) * 8 + 0.5,
-    top: Math.floor(rand() * 34) * 8 + 0.5,
+    left: Math.floor(rand() * FIELD_COLUMNS) * DOT_STEP + 0.5,
+    top: Math.floor(rand() * FIELD_ROWS) * DOT_STEP + 0.5,
     duration: Math.round(6000 + rand() * 5000),
     delay: -Math.round(rand() * 9000)
   }));
 })();
 
-const BOOT_ROWS = Array.from({ length: 34 }, (_, index) => index);
+const BOOT_ROWS = Array.from({ length: FIELD_ROWS }, (_, index) => index);
 
-const LADDER_RUNGS = [
-  { top: 40, delay: 600 },
-  { top: 88, delay: 300 },
-  { top: 136, delay: 0 },
-  { top: 184, delay: 2100 },
-  { top: 232, delay: 1800 }
+const LADDER_RUNGS = Array.from({ length: 7 }, (_, index) => ({
+  top: index * DOT_STEP * 7,
+  delay: (index % 3) * 700
+}));
+
+const RADAR_CENTER = { left: FIELD_WIDTH / 2, top: 136 };
+const snap = (value: number) => Math.round((value - 4) / DOT_STEP) * DOT_STEP + 4;
+const RADAR_RINGS = [
+  { left: 268, top: 188, count: 30, delay: 0 },
+  { left: 180, top: 126, count: 22, delay: 350 },
+  { left: 96, top: 68, count: 16, delay: 700 }
 ];
+const RADAR_DOTS = RADAR_RINGS.flatMap((ring, ringIndex) =>
+  Array.from({ length: ring.count }, (_, dotIndex) => {
+    const angle = (dotIndex / ring.count) * Math.PI * 2 - Math.PI / 2;
+    return {
+      index: ringIndex * 100 + dotIndex,
+      left: snap(RADAR_CENTER.left + Math.cos(angle) * ring.left) - 2.5,
+      top: snap(RADAR_CENTER.top + Math.sin(angle) * ring.top) - 2.5,
+      delay: ring.delay + Math.round((dotIndex / ring.count) * 2200)
+    };
+  })
+);
 
-const RADAR_CENTER = { left: 380, top: 136 };
-const snap = (value: number) => Math.round((value - 4) / 8) * 8 + 4;
-const RADAR_DOTS = Array.from({ length: 16 }, (_, index) => {
-  const angle = (index / 16) * Math.PI * 2 - Math.PI / 2;
-  return {
-    index,
-    left: snap(RADAR_CENTER.left + Math.cos(angle) * 150) - 2.5,
-    top: snap(RADAR_CENTER.top + Math.sin(angle) * 95) - 2.5,
-    delay: Math.round(index * 137.5)
-  };
-});
-
-// Every step below is a multiple of 8 so each dot lands on a base-grid dot.
-const COMPILE_DOTS = Array.from({ length: 98 }, (_, index) => {
-  const column = index % 14;
-  const row = Math.floor(index / 14);
+// Compile lights one cell every 40×32px, from the bottom row upwards.
+const COMPILE_COLUMNS = FIELD_WIDTH / 40;
+const COMPILE_ROWS = Math.floor(FIELD_HEIGHT / 32);
+const COMPILE_DOTS = Array.from({ length: COMPILE_COLUMNS * COMPILE_ROWS }, (_, index) => {
+  const column = index % COMPILE_COLUMNS;
+  const row = Math.floor(index / COMPILE_COLUMNS);
   return {
     index,
     left: column * 40 + 33.5,
     top: row * 32 + 33.5,
-    delay: (6 - row) * 90 + column * 30
+    delay: (COMPILE_ROWS - 1 - row) * 90 + column * 30
   };
 });
 
 const MAGNET_RINGS = [
-  { radius: 160, count: 24 },
-  { radius: 120, count: 18 },
-  { radius: 80, count: 12 },
-  { radius: 40, count: 6 }
+  { left: 260, top: 184, count: 34 },
+  { left: 196, top: 138, count: 26 },
+  { left: 132, top: 94, count: 18 },
+  { left: 68, top: 48, count: 10 }
 ];
 const MAGNET_DOTS = MAGNET_RINGS.flatMap((ring, ringIndex) =>
   Array.from({ length: ring.count }, (_, dotIndex) => {
     const angle = (dotIndex / ring.count) * Math.PI * 2 - Math.PI / 2;
     return {
       index: ringIndex * 100 + dotIndex,
-      left: snap(RADAR_CENTER.left + Math.cos(angle) * ring.radius) - 2.5,
-      top: snap(RADAR_CENTER.top + Math.sin(angle) * ring.radius * 0.62) - 2.5,
+      left: snap(RADAR_CENTER.left + Math.cos(angle) * ring.left) - 2.5,
+      top: snap(RADAR_CENTER.top + Math.sin(angle) * ring.top) - 2.5,
       delay: ringIndex * 250
     };
   })
 ).concat([{ index: 999, left: snap(RADAR_CENTER.left) - 2.5, top: snap(RADAR_CENTER.top) - 2.5, delay: 1000 }]);
 
-const DIAMOND_DOTS = Array.from({ length: 6 }, (_, ring) =>
+// Diamond rings grow outward until they reach the field edges.
+const DIAMOND_STEP = 32;
+const DIAMOND_RINGS = 8;
+const DIAMOND_DOTS = Array.from({ length: DIAMOND_RINGS }, (_, ring) =>
   Array.from({ length: ring * 2 + 1 }, (_, step) => step - ring).flatMap((x) => {
     const y = ring - Math.abs(x);
     return (y === 0 ? [0] : [y, -y]).map((dy) => ({
-      left: snap(RADAR_CENTER.left + x * 24) - 2.5,
-      top: snap(RADAR_CENTER.top + dy * 24) - 2.5,
+      left: snap(RADAR_CENTER.left + x * DIAMOND_STEP) - 2.5,
+      top: snap(RADAR_CENTER.top + dy * DIAMOND_STEP) - 2.5,
       delay: ring * 180
     }));
   })
 ).flat();
 
-const RAIN_PHASES = [0, 990, 360, 1350, 630, 810, 180, 1170, 450, 1260];
-const RAIN_DOTS = Array.from({ length: 80 }, (_, index) => {
-  const column = index % 10;
-  const row = Math.floor(index / 10);
+// One drop per 24px column. Each drop is a short trail that falls the whole field and
+// fades in at the top, out at the bottom; the trail's own tail fades in CSS.
+const RAIN_COLUMNS = FIELD_WIDTH / 24;
+const RAIN_DOTS = Array.from({ length: RAIN_COLUMNS }, (_, index) => {
+  const duration = 4200 + (index % 5) * 420;
   return {
     index,
-    left: column * 48 + 33.5,
-    top: row * 32 + 33.5,
-    delay: ((RAIN_PHASES[column] ?? 0) + row * 126) % 1800
+    left: index * 24 + 1.5,
+    duration,
+    delay: -Math.round((index * 613) % duration)
   };
 });
 
@@ -177,7 +196,14 @@ const DotField = () => {
       {dotEffect === "rain" && (
         <div className="vd-rain">
           {RAIN_DOTS.map((dot) => (
-            <i key={dot.index} style={{ left: dot.left, top: dot.top, animationDelay: `${dot.delay}ms` }} />
+            <i
+              key={dot.index}
+              style={{
+                left: dot.left,
+                animationDuration: `${dot.duration}ms`,
+                animationDelay: `${dot.delay}ms`
+              }}
+            />
           ))}
         </div>
       )}
