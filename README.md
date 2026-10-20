@@ -39,8 +39,8 @@ always know where you are typing.
 
 You need [Decky Loader](https://decky.xyz) installed on your Steam Deck.
 
-1. Download `VoidDeck-v1.1.1.zip` from the [v1.1.1 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v1.1.1), or copy its direct URL:
-   `https://github.com/endoflineservice/VoidDeck/releases/download/v1.1.1/VoidDeck-v1.1.1.zip`
+1. Download `VoidDeck-v1.2.0.zip` from the [v1.2.0 release](https://github.com/endoflineservice/VoidDeck/releases/tag/v1.2.0), or copy its direct URL:
+   `https://github.com/endoflineservice/VoidDeck/releases/download/v1.2.0/VoidDeck-v1.2.0.zip`
 2. On the Deck, in Game Mode, open Quick Access (the `···` button) → the **Decky** tab (plug icon) → **⚙**.
 3. Under **General**, turn on **Developer mode**.
 4. In the new **Developer** section, choose one of:
@@ -50,7 +50,9 @@ You need [Decky Loader](https://decky.xyz) installed on your Steam Deck.
      Desktop Mode to your Downloads folder).
 5. Confirm the installation. Void Deck applies immediately and shows up in the Decky tab.
 
-**Updating:** repeat the steps with the new version's `.zip`; it replaces the previous one.
+**Updating:** open the Void Deck panel in Quick Access. When a newer release exists it offers **Update now**, and
+Decky installs it for you; restart Steam to finish. You can still repeat the steps above with the new version's
+`.zip`, which replaces the previous one.
 
 **Uninstalling:** Decky → ⚙ → **Plugins** → Void Deck → **Uninstall**. Steam goes back to its original look
 right away.
@@ -64,7 +66,8 @@ In Quick Access, Decky tab → **Void Deck**:
 - **Light theme**: inverted colors for outdoor use.
 - **Language**: select English (the default) or Spanish. The selector is ready for more languages in future releases.
 - **Reset to defaults**: restore English, the dark theme and both screens enabled.
-- **Version**: shows the installed plugin version and opens the latest release notes.
+- **Version**: shows the installed plugin version, offers updates when a newer one exists, and opens the latest
+  release notes.
 
 Each part can be turned off on its own. If a Steam update breaks something, turn that part off and the rest keeps
 working.
