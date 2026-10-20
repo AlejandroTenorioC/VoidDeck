@@ -14,10 +14,21 @@ import { tokensCss, type Theme } from "./tokens";
 /** Atributo que `src/skin.ts` pone en cada documento mientras hay un juego en marcha. */
 export const IN_GAME_ATTR = "data-vd-ingame";
 
+/**
+ * Light theme: the dark skin, inverted. The near-monochrome palette inverts almost exactly onto the
+ * concept light tokens (line #2a2a2a → #d5d5d5, muted #9a9a9a → #656565), and the filter also covers
+ * every Steam color Void Deck never restyles. Photos and art are inverted back to their real colors.
+ */
+const lightThemeCss = `
+html { filter: invert(1) hue-rotate(180deg); }
+img, video, canvas, picture { filter: invert(1) hue-rotate(180deg); }
+`;
+
 export function skinCss(theme: Theme): string {
   return `
 ${fontsCss}
-${tokensCss(theme)}
+${tokensCss()}
+${theme === "light" ? lightThemeCss : ""}
 
 /* Tipografía: Space Grotesk para todo el texto (las pantallas propias gestionan la suya) */
 /* :where() deja la regla sin especificidad para que las reglas concretas (reloj, etiquetas) ganen */

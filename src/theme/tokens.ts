@@ -2,37 +2,22 @@
 
 export type Theme = "dark" | "light";
 
-const colors: Record<Theme, Record<string, string>> = {
-  dark: {
-    bg: "#000000",
-    surface: "#111111",
-    "surface-raised": "#1c1c1c",
-    line: "#2a2a2a",
-    "line-strong": "#6b6b6b",
-    ink: "#ffffff",
-    "ink-muted": "#9a9a9a",
-    "ink-faint": "#4a4a4a",
-    "on-ink": "#000000",
-    signal: "#d71921",
-    "signal-text": "#ff5a60",
-    "on-signal": "#ffffff",
-    "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #ffffff",
-  },
-  light: {
-    bg: "#f2f2f2",
-    surface: "#ffffff",
-    "surface-raised": "#e6e6e6",
-    line: "#d4d4d4",
-    "line-strong": "#8a8a8a",
-    ink: "#000000",
-    "ink-muted": "#5e5e5e",
-    "ink-faint": "#b5b5b5",
-    "on-ink": "#ffffff",
-    signal: "#d71921",
-    "signal-text": "#c0121a",
-    "on-signal": "#ffffff",
-    "focus-ring": "0 0 0 3px #f2f2f2, 0 0 0 6px #000000",
-  },
+// Only the dark palette: the light theme inverts the whole window (see lightThemeCss in skin.ts),
+// which also covers the Steam colors Void Deck never restyles.
+const colors: Record<string, string> = {
+  bg: "#000000",
+  surface: "#111111",
+  "surface-raised": "#1c1c1c",
+  line: "#2a2a2a",
+  "line-strong": "#6b6b6b",
+  ink: "#ffffff",
+  "ink-muted": "#9a9a9a",
+  "ink-faint": "#4a4a4a",
+  "on-ink": "#000000",
+  signal: "#d71921",
+  "signal-text": "#ff5a60",
+  "on-signal": "#ffffff",
+  "focus-ring": "0 0 0 3px #000000, 0 0 0 6px #ffffff",
 };
 
 const scale: Record<string, string> = {
@@ -57,7 +42,7 @@ const declare = (vars: Record<string, string>) =>
     .map(([name, value]) => `--vd-${name}: ${value};`)
     .join(" ");
 
-/** Bloque `selector { ... }` con todas las variables `--vd-*` del tema dado. */
-export function tokensCss(theme: Theme, selector = ":root"): string {
-  return `${selector} { ${declare(colors[theme])} ${declare(scale)} }`;
+/** A `selector { ... }` block with every `--vd-*` variable. */
+export function tokensCss(selector = ":root"): string {
+  return `${selector} { ${declare(colors)} ${declare(scale)} }`;
 }

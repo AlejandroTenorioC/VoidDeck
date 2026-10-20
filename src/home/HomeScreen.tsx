@@ -231,7 +231,7 @@ export function HomeScreen() {
   const css = useMemo(
     () =>
       // Fonts only when the global skin is off: otherwise it has already loaded them in this window.
-      `${skinState().on ? "" : fontsCss}\n${tokensCss(skinState().theme, ".vd-home-viewport")}\n${homeCss}\n` +
+      `${skinState().on ? "" : fontsCss}\n${tokensCss(".vd-home-viewport")}\n${homeCss}\n` +
       // Steam Home enabled the top bar (clock, battery); without it, it stays transparent.
       `${cls("Header", "OverrideHeaderBackground")} { opacity: 1 !important; }`,
     [],
