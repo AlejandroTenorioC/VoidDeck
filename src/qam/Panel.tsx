@@ -1,10 +1,12 @@
 // Layer 3: Void Deck settings in the Quick Access menu.
-import { ButtonItem, DropdownItem, Navigation, PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
+import { ButtonItem, DropdownItem, Navigation, PanelSection, PanelSectionRow, showModal, ToggleField } from "@decky/ui";
 import { disableHome, enableHome } from "../home";
 import { resetLanguage, setLanguage, strings, useLanguage, type Language } from "../i18n";
 import { version } from "../../package.json";
-import { resetSettings, setAchievements, setHome, setSkin, useSettings } from "../settings";
+import { disableScreensaver, enableScreensaver, previewScreensaver } from "../screensaver";
+import { resetSettings, setHome, setNotifications, setScreensaver, setSkin, useSettings } from "../settings";
 import { applySkin, removeSkin, sync } from "../skin";
+import { CityModal } from "./CityModal";
 
 const RELEASE_URL = "https://github.com/AlejandroTenorioC/VoidDeck/releases/latest";
 
@@ -14,7 +16,8 @@ export function Panel() {
   const skinOn = settings.skin;
   const light = settings.theme === "light";
   const homeOn = settings.home;
-  const achievementsOn = settings.achievements;
+  const notificationsOn = settings.notifications;
+  const screensaverOn = settings.screensaver;
   const language = useLanguage();
   const copy = strings(language);
 
@@ -30,9 +33,15 @@ export function Panel() {
     else disableHome(true);
   };
 
-  const updateAchievements = (on: boolean) => {
-    setAchievements(on);
+  const updateNotifications = (on: boolean) => {
+    setNotifications(on);
     sync();
+  };
+
+  const updateScreensaver = (on: boolean) => {
+    setScreensaver(on);
+    if (on) enableScreensaver();
+    else disableScreensaver();
   };
 
   const resetDefaults = () => {
@@ -40,6 +49,7 @@ export function Panel() {
     resetSettings();
     applySkin("dark");
     enableHome();
+    enableScreensaver();
   };
 
   return (
@@ -71,12 +81,35 @@ export function Panel() {
       </PanelSectionRow>
       <PanelSectionRow>
         <ToggleField
-          label={copy.achievementStyle}
-          description={copy.achievementStyleDescription}
-          checked={achievementsOn}
+          label={copy.notificationStyle}
+          description={copy.notificationStyleDescription}
+          checked={notificationsOn}
           disabled={!skinOn}
-          onChange={updateAchievements}
+          onChange={updateNotifications}
         />
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <ToggleField
+          label={copy.screensaver}
+          description={copy.screensaverDescription}
+          checked={screensaverOn}
+          onChange={updateScreensaver}
+        />
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <ButtonItem
+          label={copy.city}
+          description={settings.city ? `${settings.city.name}, ${settings.city.country}` : copy.cityNone}
+          disabled={!screensaverOn}
+          onClick={() => showModal(<CityModal />)}
+        >
+          {copy.cityPrompt}
+        </ButtonItem>
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <ButtonItem disabled={!screensaverOn} onClick={previewScreensaver}>
+          {copy.previewScreensaver}
+        </ButtonItem>
       </PanelSectionRow>
       <PanelSectionRow>
         <DropdownItem

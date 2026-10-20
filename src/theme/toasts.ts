@@ -7,17 +7,19 @@ import { clsAll, clsList } from "../steam/classes";
 
 /** CSS variable with the localized "Achievement unlocked" label; src/skin.ts sets it on every window. */
 export const ACHIEVEMENT_LABEL_VAR = "--vd-ach-label";
-/** Attribute on every window when the achievement style is turned off; achievements keep only the flat card. */
-export const PLAIN_ACHIEVEMENTS_ATTR = "data-vd-plain-achievements";
+/** Attribute on every window when the notification style is turned off; toasts keep only the flat card. */
+export const PLAIN_NOTIFICATIONS_ATTR = "data-vd-plain-notifications";
 
 export function toastsCss(): string {
   const cards = clsList("ShortTemplate", "TwoLine");
   const icon = clsAll("AchievementIconWrapper");
-  const achievement = cards.map((card) => `:root:not([${PLAIN_ACHIEVEMENTS_ATTR}]) ${card}:has(${icon})`);
+  // The pill styles below apply only while the notification style is on.
+  const styled = `:root:not([${PLAIN_NOTIFICATIONS_ATTR}])`;
+  const achievement = cards.map((card) => `${styled} ${card}:has(${icon})`);
   // A part of the card (from the card's own module) inside an achievement toast.
   const part = (name: string, suffix = "") =>
     achievement.flatMap((a) => clsList(name, "ShortTemplate").map((p) => `${a} ${p}${suffix}`)).join(", ");
-  const friend = cards.map((card) => `${card}:has(${clsAll("AvatarStatus")})`);
+  const friend = cards.map((card) => `${styled} ${card}:has(${clsAll("AvatarStatus")})`);
   const friendPart = (name: string, suffix = "") =>
     friend.flatMap((f) => clsList(name, "ShortTemplate").map((p) => `${f} ${p}${suffix}`)).join(", ");
   const dot = "inset(0 0 0 calc(100% - 40px) round 20px)";

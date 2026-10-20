@@ -1,20 +1,30 @@
 // Layer 3: Void Deck preferences that survive a Steam or Decky restart.
 import { useSyncExternalStore } from "react";
+import type { City } from "./screensaver/weather";
 import type { Theme } from "./theme/tokens";
 
 export type Settings = {
   skin: boolean;
   theme: Theme;
   home: boolean;
-  achievements: boolean;
+  notifications: boolean;
+  screensaver: boolean;
+  /** City for the screensaver weather; null until the user picks one. */
+  city: City | null;
 };
 
 const STORAGE_KEY = "voiddeck-settings";
 const listeners = new Set<() => void>();
 
-export const defaultSettings: Settings = { skin: true, theme: "dark", home: true, achievements: true };
+export const defaultSettings: Settings = { skin: true, theme: "dark", home: true, notifications: true, screensaver: true, city: null };
 
 let settings: Settings = load();
+
+const isCity = (value: unknown): value is City =>
+  !!value &&
+  typeof (value as City).name === "string" &&
+  typeof (value as City).latitude === "number" &&
+  typeof (value as City).longitude === "number";
 
 /** Read the stored preferences, falling back to the defaults when storage is empty or invalid. */
 function load(): Settings {
@@ -26,7 +36,9 @@ function load(): Settings {
       skin: typeof parsed.skin === "boolean" ? parsed.skin : defaultSettings.skin,
       theme: parsed.theme === "light" ? "light" : "dark",
       home: typeof parsed.home === "boolean" ? parsed.home : defaultSettings.home,
-      achievements: typeof parsed.achievements === "boolean" ? parsed.achievements : defaultSettings.achievements,
+      notifications: typeof parsed.notifications === "boolean" ? parsed.notifications : defaultSettings.notifications,
+      screensaver: typeof parsed.screensaver === "boolean" ? parsed.screensaver : defaultSettings.screensaver,
+      city: isCity(parsed.city) ? parsed.city : null,
     };
   } catch {
     return defaultSettings;
@@ -57,8 +69,16 @@ export function setHome(home: boolean): void {
   store({ ...settings, home });
 }
 
-export function setAchievements(achievements: boolean): void {
-  store({ ...settings, achievements });
+export function setNotifications(notifications: boolean): void {
+  store({ ...settings, notifications });
+}
+
+export function setScreensaver(screensaver: boolean): void {
+  store({ ...settings, screensaver });
+}
+
+export function setCity(city: City | null): void {
+  store({ ...settings, city });
 }
 
 /** Back to the defaults, used by the panel's reset button. */

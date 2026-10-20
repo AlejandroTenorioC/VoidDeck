@@ -4,7 +4,7 @@ import { steamDocuments } from "./steam/windows";
 import { languageState, strings } from "./i18n";
 import { settingsState } from "./settings";
 import { IN_GAME_ATTR, skinCss } from "./theme/skin";
-import { ACHIEVEMENT_LABEL_VAR, PLAIN_ACHIEVEMENTS_ATTR } from "./theme/toasts";
+import { ACHIEVEMENT_LABEL_VAR, PLAIN_NOTIFICATIONS_ATTR } from "./theme/toasts";
 import type { Theme } from "./theme/tokens";
 
 const STYLE_ID = "voiddeck-skin";
@@ -20,11 +20,11 @@ const gameRunning = () => ((window as any).SteamUIStore?.RunningApps?.length ?? 
 export function sync(): void {
   if (css === null) return;
   const inGame = gameRunning();
-  const plainAchievements = !settingsState().achievements;
+  const plainNotifications = !settingsState().notifications;
   const achievementLabel = JSON.stringify(strings(languageState()).achievementUnlocked);
   for (const doc of steamDocuments()) {
     doc.documentElement.toggleAttribute(IN_GAME_ATTR, inGame);
-    doc.documentElement.toggleAttribute(PLAIN_ACHIEVEMENTS_ATTR, plainAchievements);
+    doc.documentElement.toggleAttribute(PLAIN_NOTIFICATIONS_ATTR, plainNotifications);
     doc.documentElement.style.setProperty(ACHIEVEMENT_LABEL_VAR, achievementLabel);
     let el = doc.getElementById(STYLE_ID);
     if (!el) {
@@ -53,7 +53,7 @@ export function removeSkin(): void {
   for (const doc of steamDocuments()) {
     doc.getElementById(STYLE_ID)?.remove();
     doc.documentElement.removeAttribute(IN_GAME_ATTR);
-    doc.documentElement.removeAttribute(PLAIN_ACHIEVEMENTS_ATTR);
+    doc.documentElement.removeAttribute(PLAIN_NOTIFICATIONS_ATTR);
     doc.documentElement.style.removeProperty(ACHIEVEMENT_LABEL_VAR);
     removeStatusDots(doc);
   }
