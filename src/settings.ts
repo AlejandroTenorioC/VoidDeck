@@ -18,13 +18,14 @@ const listeners = new Set<() => void>();
 
 const defaultSettings: Settings = { skin: true, theme: "dark", home: true, notifications: true, screensaver: true, city: null };
 
-let settings: Settings = load();
-
+// Declared before load() runs below: a const used before its line throws, and load() would fall back to the defaults.
 const isCity = (value: unknown): value is City =>
   !!value &&
   typeof (value as City).name === "string" &&
   typeof (value as City).latitude === "number" &&
   typeof (value as City).longitude === "number";
+
+let settings: Settings = load();
 
 /** Read the stored preferences, falling back to the defaults when storage is empty or invalid. */
 function load(): Settings {
