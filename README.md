@@ -30,8 +30,23 @@ only changes how Steam looks, never how it works.
 **Notifications.** Achievements unlock as a dot that stretches into a pill with the trophy inside, then folds back
 into the corner. Friend notifications use the same pill, with their avatar and a status dot.
 
+![Achievement notification](docs/screenshots/logro.png)
+
 **A screensaver of widgets.** Instead of a slideshow of your games, the screensaver shows a large dot-matrix clock,
 the date, the battery as a row of dots and the weather for a city you choose (from [Open-Meteo](https://open-meteo.com)).
+
+![Void Deck screensaver](docs/screenshots/salvapantallas.png)
+
+**A light theme.** For outdoor use, the whole interface flips to black on light gray, while game art keeps its real
+colors.
+
+![Home screen in the light theme](docs/screenshots/inicio-claro.png)
+
+| Library | Quick Access | Main menu |
+|---|---|---|
+| ![Library in the light theme](docs/screenshots/biblioteca-claro.png) | ![Quick Access in the light theme](docs/screenshots/acceso-rapido-claro.png) | ![Main menu in the light theme](docs/screenshots/menu-claro.png) |
+
+![Achievement notification in the light theme](docs/screenshots/logro-claro.png)
 
 > The plugin interface is available in English and Spanish.
 
